@@ -3,22 +3,20 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import React,{useState} from 'react'
 import { Context } from "./Context";
+import Form from "./components/Form";
+import {BrowserRouter as Router,Route,Switch} from 'react-router-dom'
+import Login from "./components/Login";
+
 
 function App() {
-
   return (
     <Context>
-      <div>
-      <div id="wrapper">
-        <Sidebar></Sidebar>
-        <div id="content-wrapper" class="d-flex flex-column">
-          <div id="content">
-            <Header/>
-          </div>
-          <Footer />
-        </div>
-      </div>
-    </div>
+      <Router>
+        <Switch>
+        <Route component={Login} path="/login" exact/>
+        <Route component = {Form} path="/products" exact/>
+        </Switch>
+      </Router>
     </Context>
   );
 }

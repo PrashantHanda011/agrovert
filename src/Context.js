@@ -1,8 +1,14 @@
 import React,{createContext,useReducer} from 'react'
 import AppReducer from './AppReducer'
+// import { db } from './Firebase'
 
+// console.log(db)
 const initialState = {
     toggle: false,
+    user:null,
+    products: [],
+    pincodes:[],
+    orders:[]
 }
 
 export const AppContext = createContext(initialState)
