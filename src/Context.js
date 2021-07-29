@@ -23,8 +23,15 @@ export const Context = ({children}) =>{
         })
     }
 
+    function addUser(user){
+        dispatch({
+            type:"ADD_USER",
+            payload:user
+        })
+    }
+
     return (
-        <AppContext.Provider value={{appState:state,toggleSideBar}}>
+        <AppContext.Provider value={{appState:state,toggleSideBar,addUser}}>
             {children}
         </AppContext.Provider>
     )

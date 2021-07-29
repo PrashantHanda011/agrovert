@@ -1,8 +1,16 @@
 import React, { useContext } from "react";
 import { AppContext } from "../Context";
-
-const Sidebar = () => {
+import { Link, withRouter } from "react-router-dom";
+const Sidebar = ({ history }) => {
   const { appState, toggleSideBar } = useContext(AppContext);
+
+  const currentTab = (history, path) => {
+    if (history.location.pathname === path) {
+      return "nav-item active";
+    } else {
+      return "nav-item";
+    }
+  };
   return (
     <ul
       className={
@@ -11,49 +19,46 @@ const Sidebar = () => {
           : "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled"
       }
       id="accordionSidebar">
-      <a
+      <Link
         className="sidebar-brand d-flex align-items-center justify-content-center"
-        href="index.html">
+        to="/">
         <div className="sidebar-brand-icon rotate-n-15"></div>
         <div className="sidebar-brand-text mx-3">Admin Panel</div>
-      </a>
-      <hr className=""/>
+      </Link>
+      <hr className="" />
 
-      <li className="nav-item active">
-        <a className="nav-link" href="index.html">
+      <Link to="/" className={currentTab(history, "/")}>
+        <li className="nav-link">
           <i className="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
-        </a>
-      </li>
-
-      <li className="nav-item">
-        <a
-          className="nav-link"
-          href="#"
-          aria-expanded="true"
-          aria-controls="collapseTwo">
+        </li>
+      </Link>
+      <Link to="/products" className={currentTab(history, "/products")}>
+        {" "}
+        <li className="nav-link">
           <i className="fas fa-fw fa-cog"></i>
           <span>Products</span>
-        </a>
-      </li>
-
-      <li className="nav-item">
-        <a
-          className="nav-link"
-          href="#"
-          aria-expanded="true"
-          aria-controls="collapsePages">
+        </li>
+      </Link>
+      <Link to="/products" className={currentTab(history, "/orders")}>
+        {" "}
+        <li className="nav-link">
           <i className="fas fa-fw fa-folder"></i>
           <span>Orders</span>
-        </a>
-      </li>
+        </li>
+      </Link>
 
-      <li className="nav-item">
-        <a className="nav-link" href="charts.html">
+      <Link to="/products" className={currentTab(history, "/profile")}>
+        {" "}
+        <li className="nav-link">
           <i className="fas fa-fw fa-user"></i>
           <span>Profile</span>
-        </a>
-      </li>
+        </li>
+      </Link>
+
+      
+
+      
 
       <div className="text-center d-none d-md-inline">
         <button
@@ -67,4 +72,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default withRouter(Sidebar);

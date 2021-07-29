@@ -1,7 +1,7 @@
 import React from "react";
-import Footer from "./Footer";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 
 const Base = ({children}) => {
   return (

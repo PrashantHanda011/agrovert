@@ -5,5 +5,11 @@ export default (state,action) =>{
                 ...state,
                 toggle:!state.toggle
             }
+            case 'ADD_USER':
+                return {
+                    ...state,
+                    user:action.payload
+                }
+        }
     }
-}
+    

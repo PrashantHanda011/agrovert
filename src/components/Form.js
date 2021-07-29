@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { auth, storage } from "../Firebase";
 import { uploadData } from "../utils";
-import Base from "./Base";
 import { Modal } from "react-bootstrap";
 import Loading from "./Loading";
 
-const Form = () => {
-  console.log(auth.currentUser)
+const Form = ({ show, handleClose }) => {
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -32,8 +29,6 @@ const Form = () => {
       slab2: false,
     },
   });
-  const [show, setShow] = useState(false);
-  const [showLoading, setShowLoading] = useState(false);
 
   const {
     name,
@@ -89,12 +84,8 @@ const Form = () => {
     }
   };
 
-  const handleSpinner = () => setShowLoading(false);
-  const handlShowSpinner = () => setShowLoading(true);
-
   const onSubmit = async (event) => {
     event.preventDefault();
-    handlShowSpinner()
     if (checkMissing()) {
       console.log("this section");
       setValues({ ...values, error: checkMissing() });
@@ -110,8 +101,7 @@ const Form = () => {
         margin,
       };
       uploadData(photo, product, values, setValues);
-      handleSpinner()
-      handleClose()
+      handleClose();
       return;
     }
   };
@@ -286,37 +276,21 @@ const Form = () => {
     </form>
   );
 
-  const handleClose = () => setShow(false);
-  const handlShow = () => setShow(true);
-  
-
-  const modal = () => {
-    return (
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add a Product</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{createProductForm()}</Modal.Body>
-        <Modal.Footer>
-          <button className="btn btn-secondary" onClick={handleClose}>
-            Close
-          </button>
-          <button className="btn btn-primary" onClick={handleClose}>
-            Submit
-          </button>
-        </Modal.Footer>
-      </Modal>
-    );
-  };
-
   return (
-    <Base>
-      <button className="btn btn-primary ml-2" onClick={handlShow}>
-        Add Product
-      </button>
-      {showLoading && <Loading/>}
-      {modal()}
-    </Base>
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Add a Product</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>{createProductForm()}</Modal.Body>
+      <Modal.Footer>
+        <button className="btn btn-secondary" onClick={handleClose}>
+          Close
+        </button>
+        <button className="btn btn-primary" onClick={handleClose}>
+          Submit
+        </button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

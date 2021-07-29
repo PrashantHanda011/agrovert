@@ -5,7 +5,9 @@ import React,{useState} from 'react'
 import { Context } from "./Context";
 import Form from "./components/Form";
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom'
-import Login from "./components/Login";
+import Login from "./pages/Login";
+import Products from "./pages/Products";
+import PrivateRoute from "./components/PrivateRoute";
 
 
 function App() {
@@ -14,7 +16,7 @@ function App() {
       <Router>
         <Switch>
         <Route component={Login} path="/login" exact/>
-        <Route component = {Form} path="/products" exact/>
+        <PrivateRoute component = {Products} path="/products" exact/>
         </Switch>
       </Router>
     </Context>
