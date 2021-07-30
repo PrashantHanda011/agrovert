@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { uploadData } from "../utils";
+import { uploadProduct } from "./utils";
 import { Modal } from "react-bootstrap";
-import Loading from "./Loading";
+import Loading from "../Loading";
 
-const Form = ({ show, handleClose }) => {
+const ProductForm = ({ show, handleClose }) => {
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -100,7 +100,7 @@ const Form = ({ show, handleClose }) => {
         weight,
         margin,
       };
-      uploadData(photo, product, values, setValues);
+      uploadProduct(photo, product, values, setValues);
       handleClose();
       return;
     }
@@ -141,7 +141,7 @@ const Form = ({ show, handleClose }) => {
         <input
           type="text"
           name="name"
-          className="form-control"
+          className="form-control form-control-user"
           value={name}
           placeholder="Name"
           onChange={changeHandler("name")}
@@ -157,7 +157,7 @@ const Form = ({ show, handleClose }) => {
       <div className="form-group my-3">
         <textarea
           name="description"
-          className="form-control"
+          className="form-control form-control-user"
           value={description}
           placeholder="Description ..."
           onChange={changeHandler("description")}
@@ -171,9 +171,9 @@ const Form = ({ show, handleClose }) => {
       </span>
       <div className="form-group my-3">
         <input
-          type="text"
+          type="number"
           name="quantity"
-          className="form-control"
+          className="form-control form-control-user"
           value={quantity}
           placeholder="Quantity"
           onChange={changeHandler("quantity")}
@@ -190,7 +190,7 @@ const Form = ({ show, handleClose }) => {
           type="number"
           name="price"
           step={0.01}
-          className="form-control"
+          className="form-control form-control-user"
           value={price}
           placeholder="MRP"
           onChange={changeHandler("price")}
@@ -207,7 +207,7 @@ const Form = ({ show, handleClose }) => {
           type="number"
           name="margin"
           step={0.01}
-          className="form-control"
+          className="form-control form-control-user"
           value={margin}
           placeholder="Margin (only numeric)"
           onChange={changeHandler("margin")}
@@ -223,7 +223,7 @@ const Form = ({ show, handleClose }) => {
         <input
           type="number"
           name="weight"
-          className="form-control"
+          className="form-control form-control-user"
           value={weight}
           placeholder="Weight (gm)"
           onChange={changeHandler("weight")}
@@ -241,7 +241,7 @@ const Form = ({ show, handleClose }) => {
           type="number"
           name="slab1"
           step={0.01}
-          className="form-control"
+          className="form-control form-control-user"
           value={slab1}
           placeholder="Slab1 Price"
           onChange={changeHandler("slab1")}
@@ -256,7 +256,7 @@ const Form = ({ show, handleClose }) => {
           type="number"
           name="slab2"
           step={0.01}
-          className="form-control"
+          className="form-control form-control-user"
           value={slab2}
           placeholder="Slab2 Price"
           onChange={changeHandler("slab2")}
@@ -267,12 +267,7 @@ const Form = ({ show, handleClose }) => {
           </div>
         )}
       </div>
-      <button
-        type="submit"
-        onClick={onSubmit}
-        className="btn btn-success my-3 mb-3">
-        Create Product
-      </button>
+     
     </form>
   );
 
@@ -286,12 +281,15 @@ const Form = ({ show, handleClose }) => {
         <button className="btn btn-secondary" onClick={handleClose}>
           Close
         </button>
-        <button className="btn btn-primary" onClick={handleClose}>
-          Submit
-        </button>
+        <button
+        type="submit"
+        onClick={onSubmit}
+        className="btn btn-success my-3 mb-3">
+        Create Product
+      </button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default Form;
+export default ProductForm;

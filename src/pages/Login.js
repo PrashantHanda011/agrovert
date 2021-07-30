@@ -24,7 +24,6 @@ const Login = () => {
   };
 
   const setUpRecaptcha = () => {
-    console.log("HEY");
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
       "recaptcha-container",
       {

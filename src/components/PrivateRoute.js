@@ -1,6 +1,7 @@
 import React,{useContext} from 'react'
 import {Route,Redirect} from 'react-router-dom'
 import { AppContext } from '../Context';
+import { auth } from '../Firebase';
 
 const PrivateRoute = ({ component:Component, ...rest }) =>{
     const {appState} = useContext(AppContext);
@@ -8,7 +9,7 @@ const PrivateRoute = ({ component:Component, ...rest }) =>{
       <Route
         {...rest}
         render={props =>
-          appState.user ? (
+          auth.currentUser ? (
             <Component {...props}/>
           ) : (
             <Redirect

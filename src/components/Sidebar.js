@@ -56,10 +56,6 @@ const Sidebar = ({ history }) => {
         </li>
       </Link>
 
-      
-
-      
-
       <div className="text-center d-none d-md-inline">
         <button
           className="rounded-circle border-0"

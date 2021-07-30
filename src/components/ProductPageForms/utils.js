@@ -1,5 +1,5 @@
-import { storage,firestore } from "./Firebase";
-const uploadData = (photo,product,values,setValues) =>{
+import { storage,firestore } from "../../Firebase";
+const uploadProduct = (photo,product,values,setValues) =>{
     const storageRef = storage.ref(photo.name);
     const uploadTask = storageRef.put(photo)
     uploadTask.on("state_changed",console.log(),console.error,()=>{
@@ -24,8 +24,8 @@ const uploadData = (photo,product,values,setValues) =>{
     })
   }
 
- 
-
-
-
-export {uploadData}
+  const uploadCategory = (category,setCategory) =>{
+      firestore.collection("categories").add({categoryName:category})
+      setCategory("")
+  }
+export {uploadProduct,uploadCategory}
