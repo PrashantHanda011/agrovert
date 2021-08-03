@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { uploadProduct } from "./utils";
+import { uploadProduct } from "../../utils/utils";
 import { Modal } from "react-bootstrap";
 import Loading from "../Loading";
 
-const ProductForm = ({ show, handleClose }) => {
+const ProductForm = ({ show, handleClose,categories }) => {
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -16,6 +16,7 @@ const ProductForm = ({ show, handleClose }) => {
     photo: "",
     slab1: "",
     slab2: "",
+    category_id: "",
     error: {
       isthere: false,
       name: false,
@@ -43,6 +44,7 @@ const ProductForm = ({ show, handleClose }) => {
     slab1,
     slab2,
     error,
+    category_id
   } = values;
 
   const changeHandler = (name) => (event) => {
@@ -79,6 +81,9 @@ const ProductForm = ({ show, handleClose }) => {
     if (slab2 === "") {
       return "slab2";
     }
+    if (category_id===""){
+      return "category"
+    }
     if (description === "") {
       return "description";
     }
@@ -99,6 +104,7 @@ const ProductForm = ({ show, handleClose }) => {
         image_url: "",
         weight,
         margin,
+        category_id
       };
       uploadProduct(photo, product, values, setValues);
       handleClose();
@@ -128,6 +134,7 @@ const ProductForm = ({ show, handleClose }) => {
             name="photo"
             accept="image"
             placeholder="choose a file"
+            className="form-control form-control-user"
           />
           {!photo && error === "photo" && (
             <div className="text-danger text-sm">Please upload a photo</div>
@@ -181,6 +188,19 @@ const ProductForm = ({ show, handleClose }) => {
         {!quantity && error === "quantity" && (
           <div className="text-danger text-sm">Please add quantity</div>
         )}
+      </div>
+      <span>Category</span>
+      <div className="form-group my-3">
+      <select
+              onChange={changeHandler("category_id")}
+              className="form-control"
+              placeholder="Category"
+            >
+              <option>Select</option>
+              {categories && categories.map((cate,index)=>(
+                <option id={index} value={cate.id}>{cate.category_name}</option>
+              ))}
+            </select>
       </div>
       <span>
         <h6>MRP</h6>

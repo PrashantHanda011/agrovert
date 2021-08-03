@@ -1,5 +1,6 @@
 import React,{createContext,useReducer} from 'react'
 import AppReducer from './AppReducer'
+import { fetchCategories, fetchProducts } from './utils/utils'
 // import { db } from './Firebase'
 
 // console.log(db)
@@ -30,8 +31,37 @@ export const Context = ({children}) =>{
         })
     }
 
+    function addProduct(product){
+        dispatch({
+            type:"ADD_PRODUCT",
+            payload:product
+        })
+    }
+
+    function addCategory(category){
+        dispatch({
+            type:"ADD_CATEGORY",
+            payload:category
+        })
+    }
+
+    async function getProductsFromBackend(){
+        let products = await fetchProducts()
+        dispatch({
+            type:"GET_PRODUCTS",
+            payload:products
+        })
+    }
+    async function getCategoriesFromBackend(){
+        let categories = await fetchCategories()
+        dispatch({
+            type:"GET_CATEGORIES",
+            payload:categories
+        })
+    }
+
     return (
-        <AppContext.Provider value={{appState:state,toggleSideBar,addUser}}>
+        <AppContext.Provider value={{appState:state,addCategory,addProduct,addUser,getProductsFromBackend,getCategoriesFromBackend,toggleSideBar}}>
             {children}
         </AppContext.Provider>
     )
