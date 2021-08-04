@@ -1,10 +1,6 @@
 import React, { useState,useEffect } from "react";
 import {  Tab, Tabs } from "react-bootstrap";
-import styles from "./productpagecomponents.module.css";
-
 import ProductList from "./ProductList";
-
-import { fetchCategories, fetchProducts } from "../../utils/utils";
 import CategoryList from "./CategoryList";
 import { useContext } from "react";
 import { AppContext } from "../../Context";
