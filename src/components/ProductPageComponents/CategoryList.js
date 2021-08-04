@@ -22,7 +22,7 @@ const CategoryList = ({categories}) => {
         return (
             <>
             <AddButton className="mb-5" name="Add Cagtegory" handleShowProduct = {openForm}/>
-            <div className="row">
+            <div className="row mt-5">
                 
                 {categories.map(category=>{
                 return <div className="col-lg-4 col-md-12 my-2"><CategoryTile category_name={category.category_name} image_url={category.image_url} className="mt-3"/> </div>

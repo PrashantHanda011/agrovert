@@ -19,8 +19,8 @@ const ProductList = ({products,categories}) => {
     const makeUI = () =>{
         return (
             <>
-            <AddButton className="mb-5" handleShowProduct = {openForm}/>
-            <div className="row">
+            <AddButton className="mb-5" handleShowProduct = {openForm} name="Add Products"/>
+            <div className="row mt-5">
                 
                 {products.map(product=>{
                 return <div className="col-lg-4 col-md-6 my-2"><ProductTile className="mt-3" productName={product.name} imageUrl={product.image_url} price={product.price} description={product.description}/> </div>
