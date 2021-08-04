@@ -24,6 +24,16 @@ const uploadProduct = (photo,product,values,setValues) =>{
     })
   }
 
+  const fetchProducts = async () =>{
+    const snapshot = await firestore.collection('products').get()
+    return snapshot.docs.map(doc=>{return {id:doc.id,...doc.data()}});
+}
+
+const deleteProductWithId = async (id) =>{
+  const res = await firestore.collection("products").doc(id).delete();
+  return res
+}
+
   const uploadCategory = (image,category,setCategory,setFile) =>{
       const storageRef = storage.ref(image.name)
       const uploadTask = storageRef.put(image)
@@ -39,10 +49,7 @@ const uploadProduct = (photo,product,values,setValues) =>{
 
   }
 
-  const fetchProducts = async () =>{
-    const snapshot = await firestore.collection('products').get()
-    return snapshot.docs.map(doc=>{return {id:doc.id,...doc.data()}});
-}
+
 
 const fetchCategories = async () =>{
   const snapshot = await firestore.collection('categories').get()
@@ -51,4 +58,6 @@ const fetchCategories = async () =>{
 
 
 
-export {uploadProduct,uploadCategory,fetchProducts,fetchCategories}
+
+
+export {uploadProduct,uploadCategory,fetchProducts,fetchCategories,deleteProductWithId}

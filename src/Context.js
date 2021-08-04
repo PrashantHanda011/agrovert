@@ -1,6 +1,6 @@
 import React,{createContext,useReducer} from 'react'
 import AppReducer from './AppReducer'
-import { fetchCategories, fetchProducts } from './utils/utils'
+import { deleteProductWithId, fetchCategories, fetchProducts } from './utils/utils'
 // import { db } from './Firebase'
 
 // console.log(db)
@@ -60,8 +60,18 @@ export const Context = ({children}) =>{
         })
     }
 
+    async function deleteProductWithGivenId(id){
+        let res = await deleteProductWithId(id)
+        if(res){
+            dispatch({
+                type:"DELETE_PRODUCT",
+                payload:id
+            })
+        }
+    }
+
     return (
-        <AppContext.Provider value={{appState:state,addCategory,addProduct,addUser,getProductsFromBackend,getCategoriesFromBackend,toggleSideBar}}>
+        <AppContext.Provider value={{appState:state,addCategory,addProduct,addUser,getProductsFromBackend,getCategoriesFromBackend,toggleSideBar,deleteProductWithGivenId}}>
             {children}
         </AppContext.Provider>
     )

@@ -1,7 +1,9 @@
-import React from "react";
+import React,{useContext} from "react";
 import { Card, Button } from "react-bootstrap";
 import styles from './productpagecomponents.module.css'
-const ProductTile = ({imageUrl,productName,price,description}) => {
+import { AppContext } from "../../Context";
+const ProductTile = ({id,imageUrl,productName,price,description}) => {
+  const {appState,deleteProductWithGivenId} = useContext(AppContext)
   return (
     <Card style={{ width: "18rem" }} className={styles.productCard}>
       <Card.Img variant="top" src={imageUrl} style={{height:"200px"}}/>
@@ -10,7 +12,7 @@ const ProductTile = ({imageUrl,productName,price,description}) => {
         <Card.Text>
           {description}
         </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+        <Button variant="primary" onClick={()=>{deleteProductWithGivenId(id)}}>Go somewhere</Button>
       </Card.Body>
     </Card>
   );
