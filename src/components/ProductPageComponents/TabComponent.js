@@ -10,22 +10,10 @@ import { useContext } from "react";
 import { AppContext } from "../../Context";
 
 const TabComponent = () => {
-  const [products,setProducts] = useState(null)
-  const [categories,setCategories] = useState(null)
+  const {appState} = useContext(AppContext)
 
   
 
-  useEffect(()=>{
-      const preload = async () =>{
-        const products_ = await fetchProducts()
-        const categories_ = await fetchCategories()
-        setProducts(products_)
-        setCategories(categories_)
-       
-      }
-      preload()
-      console.log(products,categories)
-  },[])
   const [key, setKey] = useState("Products");
   return (
     <div className="container mx-3 my-3">
@@ -35,10 +23,10 @@ const TabComponent = () => {
         onSelect={(k) => setKey(k)}
         className="mb-3 mx-3">
         <Tab eventKey="Products" title="Products">
-          <ProductList products={products} categories={categories} />
+          <ProductList products={appState.products} categories={appState.categories} />
         </Tab>
         <Tab eventKey="Categories" title="Categories">
-          <CategoryList categories={categories}/>
+          <CategoryList categories={appState.categories}/>
         </Tab>
       </Tabs>
     </div>
