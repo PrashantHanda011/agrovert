@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { AppContext } from "../Context";
+import { AppContext } from "../context/Context";
 import { Link, withRouter } from "react-router-dom";
 const Sidebar = ({ history }) => {
   const { appState, toggleSideBar } = useContext(AppContext);

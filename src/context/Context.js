@@ -4,7 +4,7 @@ import {
   deleteProductWithId,
   fetchCategories,
   fetchProducts,
-} from "./utils/utils";
+} from "../utils/utils";
 // import { db } from './Firebase'
 
 // console.log(db)
