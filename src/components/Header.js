@@ -1,5 +1,5 @@
 import React,{useContext} from "react";
-import { AppContext } from "../Context";
+import { AppContext } from "../context/Context";
 const Header = () => {
   const {appState,toggleSideBar} = useContext(AppContext);
   return (
