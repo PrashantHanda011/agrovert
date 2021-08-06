@@ -1,42 +1,63 @@
-import React,{useEffect,useState} from 'react'
-import { firestore } from '../../Firebase'
-import Loading from '../Loading'
-import ProductTile from './ProductTile'
-import AddButton from './AddButton'
-import ProductForm from './ProductForm'
-const ProductList = ({products,categories}) => {
-    const [productForm,setShowProductForm] = useState(false)
+import React, { useEffect, useState } from "react";
+import { firestore } from "../../Firebase";
+import Loading from "../Loading";
+import ProductTile from "./ProductTile";
+import AddButton from "./AddButton";
+import ProductForm from "./ProductForm";
+const ProductList = ({ products, categories }) => {
+  const [productForm, setShowProductForm] = useState(false);
 
-    const openForm = () =>{
-        console.log(productForm)
-        setShowProductForm(true)
-    }
+  useEffect(() => {}, [products]);
 
-    const closeForm = () =>{
-        setShowProductForm(false)
-    }
+  const openForm = () => {
+    console.log(productForm);
+    setShowProductForm(true);
+  };
 
-    const makeUI = () =>{
-        return (
-            <>
-            <AddButton className="mb-5" handleShowProduct = {openForm} name="Add Products"/>
-            <div className="row mt-5">
-                
-                {products.map(product=>{
-                return <div className="col-lg-4 col-md-6 my-2"><ProductTile className="mt-3" id = {product.id} productName={product.name} imageUrl={product.image_url} price={product.price} description={product.description}/> </div>
-            })}
-               
-            </div>
-            </>
-        )
-    }
+  const closeForm = () => {
+    setShowProductForm(false);
+  };
+
+  const makeUI = () => {
     return (
-        <div>
-            {/* <AddButton className="mb-5" handleShowProduct = {openForm}/> */}
-            {products ? makeUI(): <Loading/>}
-            {productForm && <ProductForm show={productForm} handleClose={closeForm} categories={categories}/>}
+      <>
+        <AddButton
+          className="mb-5"
+          handleShowProduct={openForm}
+          name="Add Products"
+        />
+        <div className="row mt-5">
+          {products.map((product) => {
+            return (
+              <div className="col-lg-4 col-md-6 my-2">
+                <ProductTile
+                  className="mt-3"
+                  id={product.id}
+                  productName={product.name}
+                  imageUrl={product.image_url}
+                  price={product.price}
+                  description={product.description}
+                />{" "}
+              </div>
+            );
+          })}
         </div>
-    )
-}
+      </>
+    );
+  };
+  return (
+    <div>
+      {/* <AddButton className="mb-5" handleShowProduct = {openForm}/> */}
+      {products ? makeUI() : <Loading />}
+      {productForm && (
+        <ProductForm
+          show={productForm}
+          handleClose={closeForm}
+          categories={categories}
+        />
+      )}
+    </div>
+  );
+};
 
-export default ProductList
+export default ProductList;

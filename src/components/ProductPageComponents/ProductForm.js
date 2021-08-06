@@ -3,7 +3,7 @@ import { uploadProduct } from "../../utils/utils";
 import { Modal } from "react-bootstrap";
 import Loading from "../Loading";
 
-const ProductForm = ({ show, handleClose,categories }) => {
+const ProductForm = ({ show, handleClose, categories }) => {
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -44,7 +44,7 @@ const ProductForm = ({ show, handleClose,categories }) => {
     slab1,
     slab2,
     error,
-    category_id
+    category_id,
   } = values;
 
   const changeHandler = (name) => (event) => {
@@ -81,8 +81,8 @@ const ProductForm = ({ show, handleClose,categories }) => {
     if (slab2 === "") {
       return "slab2";
     }
-    if (category_id===""){
-      return "category"
+    if (category_id === "") {
+      return "category";
     }
     if (description === "") {
       return "description";
@@ -104,7 +104,7 @@ const ProductForm = ({ show, handleClose,categories }) => {
         image_url: "",
         weight,
         margin,
-        category_id
+        category_id,
       };
       uploadProduct(photo, product, values, setValues);
       handleClose();
@@ -191,16 +191,18 @@ const ProductForm = ({ show, handleClose,categories }) => {
       </div>
       <span>Category</span>
       <div className="form-group my-3">
-      <select
-              onChange={changeHandler("category_id")}
-              className="form-control"
-              placeholder="Category"
-            >
-              <option>Select</option>
-              {categories && categories.map((cate,index)=>(
-                <option id={index} value={cate.id}>{cate.category_name}</option>
-              ))}
-            </select>
+        <select
+          onChange={changeHandler("category_id")}
+          className="form-control"
+          placeholder="Category">
+          <option>Select</option>
+          {categories &&
+            categories.map((cate, index) => (
+              <option id={index} value={cate.id}>
+                {cate.category_name}
+              </option>
+            ))}
+        </select>
       </div>
       <span>
         <h6>MRP</h6>
@@ -287,7 +289,6 @@ const ProductForm = ({ show, handleClose,categories }) => {
           </div>
         )}
       </div>
-     
     </form>
   );
 
@@ -302,11 +303,11 @@ const ProductForm = ({ show, handleClose,categories }) => {
           Close
         </button>
         <button
-        type="submit"
-        onClick={onSubmit}
-        className="btn btn-success my-3 mb-3">
-        Create Product
-      </button>
+          type="submit"
+          onClick={onSubmit}
+          className="btn btn-success my-3 mb-3">
+          Create Product
+        </button>
       </Modal.Footer>
     </Modal>
   );

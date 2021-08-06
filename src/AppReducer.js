@@ -31,6 +31,7 @@ export default (state, action) => {
         categories: action.payload.map(category=>category),
       };
     case "DELETE_PRODUCT":
+      console.log(state,action.payload)
       return{
         ...state,
         products: state.products.filter(product=> product.id!==action.payload)

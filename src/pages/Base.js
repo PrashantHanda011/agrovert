@@ -1,19 +1,19 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { AppContext } from "../Context";
 
-const Base = ({children}) => {
+const Base = ({ children }) => {
   return (
     <div>
       <div id="wrapper">
         <Sidebar></Sidebar>
         <div id="content-wrapper" class="d-flex flex-column">
           <div id="content">
-            <Header/>
-           {children}
+            <Header />
+            {children}
           </div>
           <Footer />
         </div>

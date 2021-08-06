@@ -1,79 +1,91 @@
-import React,{createContext,useReducer} from 'react'
-import AppReducer from './AppReducer'
-import { deleteProductWithId, fetchCategories, fetchProducts } from './utils/utils'
+import React, { createContext, useReducer } from "react";
+import AppReducer from "./AppReducer";
+import {
+  deleteProductWithId,
+  fetchCategories,
+  fetchProducts,
+} from "./utils/utils";
 // import { db } from './Firebase'
 
 // console.log(db)
 const initialState = {
-    toggle: false,
-    user:null,
-    products: [],
-    pincodes:[],
-    orders:[]
-}
+  toggle: false,
+  user: null,
+  products: [],
+  pincodes: [],
+  orders: [],
+};
 
-export const AppContext = createContext(initialState)
+export const AppContext = createContext(initialState);
 
-export const Context = ({children}) =>{
-    const [state,dispatch] = useReducer(AppReducer,initialState)
-    
-    function toggleSideBar(state_){
-        dispatch({
-            type:"TOGGLE",
-            payload:state_
-        })
-    }
+export const Context = ({ children }) => {
+  const [state, dispatch] = useReducer(AppReducer, initialState);
 
-    function addUser(user){
-        dispatch({
-            type:"ADD_USER",
-            payload:user
-        })
-    }
+  function toggleSideBar(state_) {
+    dispatch({
+      type: "TOGGLE",
+      payload: state_,
+    });
+  }
 
-    function addProduct(product){
-        dispatch({
-            type:"ADD_PRODUCT",
-            payload:product
-        })
-    }
+  function addUser(user) {
+    dispatch({
+      type: "ADD_USER",
+      payload: user,
+    });
+  }
 
-    function addCategory(category){
-        dispatch({
-            type:"ADD_CATEGORY",
-            payload:category
-        })
-    }
+  function addProduct(product) {
+    dispatch({
+      type: "ADD_PRODUCT",
+      payload: product,
+    });
+  }
 
-    async function getProductsFromBackend(){
-        let products = await fetchProducts()
-        dispatch({
-            type:"GET_PRODUCTS",
-            payload:products
-        })
-    }
-    async function getCategoriesFromBackend(){
-        let categories = await fetchCategories()
-        dispatch({
-            type:"GET_CATEGORIES",
-            payload:categories
-        })
-    }
+  function addCategory(category) {
+    dispatch({
+      type: "ADD_CATEGORY",
+      payload: category,
+    });
+  }
 
-    async function deleteProductWithGivenId(id){
-        let res = await deleteProductWithId(id)
-        if(res){
-            dispatch({
-                type:"DELETE_PRODUCT",
-                payload:id
-            })
-        }
-    }
+  async function getProductsFromBackend() {
+    let products = await fetchProducts();
+    dispatch({
+      type: "GET_PRODUCTS",
+      payload: products,
+    });
+  }
+  async function getCategoriesFromBackend() {
+    let categories = await fetchCategories();
+    dispatch({
+      type: "GET_CATEGORIES",
+      payload: categories,
+    });
+  }
 
-    return (
-        <AppContext.Provider value={{appState:state,addCategory,addProduct,addUser,getProductsFromBackend,getCategoriesFromBackend,toggleSideBar,deleteProductWithGivenId}}>
-            {children}
-        </AppContext.Provider>
-    )
-}
+  async function deleteProductWithGivenId(id) {
+    await deleteProductWithId(id);
 
+    dispatch({
+      type: "DELETE_PRODUCT",
+      payload: id,
+    });
+  }
+
+  return (
+    <AppContext.Provider
+      value={{
+        appState: state,
+        addCategory,
+        addProduct,
+        addUser,
+        getProductsFromBackend,
+        getCategoriesFromBackend,
+        toggleSideBar,
+        deleteProductWithGivenId,
+      }}>
+      {children}
+    </AppContext.Provider>
+  );
+};
