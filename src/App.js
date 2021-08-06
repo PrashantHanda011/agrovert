@@ -2,7 +2,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import React,{useState,useEffect,useContext} from 'react'
-import { AppContext, Context } from "./Context";
+import { AppContext, Context } from "./context/Context";
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom'
 import Login from "./pages/Login";
 import Products from "./pages/Products/Products";

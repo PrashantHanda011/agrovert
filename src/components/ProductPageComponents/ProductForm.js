@@ -3,20 +3,20 @@ import { uploadProduct } from "../../utils/utils";
 import { Modal } from "react-bootstrap";
 import Loading from "../Loading";
 
-const ProductForm = ({ show, handleClose, categories }) => {
+const ProductForm = ({ show, handleClose, product, categories }) => {
   const [values, setValues] = useState({
-    name: "",
-    description: "",
-    price: "",
-    quantity: "",
-    margin: "",
+    name: product.name?product.name:"",
+    description: product.description?product.description:"",
+    price: product.price?product.price:"",
+    quantity: product.quantity?product.quantity:"",
+    margin: product.margin?product.margin:"",
     slabs: [],
-    weight: "",
-    image_url: "",
+    weight: product.weight?product.weight:"",
+    image_url: product.image_url?product.image_url:"",
     photo: "",
-    slab1: "",
-    slab2: "",
-    category_id: "",
+    slab1: product.slab.slab1?product.slab.slab1:"",
+    slab2: product.slab.slab2?product.slab.slab2:"",
+    category_id: product.category_id?product.category_id:"",
     error: {
       isthere: false,
       name: false,

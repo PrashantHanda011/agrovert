@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Card, Button } from "react-bootstrap";
 import styles from "./productpagecomponents.module.css";
-import { AppContext } from "../../Context";
+import { AppContext } from "../../context/Context"
 const ProductTile = ({ id, imageUrl, productName, price, description }) => {
   const { appState, deleteProductWithGivenId } = useContext(AppContext);
   return (

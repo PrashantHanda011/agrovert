@@ -4,6 +4,7 @@ import {
   deleteProductWithId,
   fetchCategories,
   fetchProducts,
+  updateProductWithId,
 } from "../utils/utils";
 // import { db } from './Firebase'
 
@@ -73,6 +74,14 @@ export const Context = ({ children }) => {
     });
   }
 
+  async function updateProductWithGivenId(id,product) {
+    await updateProductWithId(id,product)
+    dispatch({
+      type: "UPDATE_PRODUCT",
+      payload: {id,product},
+    });
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -84,6 +93,7 @@ export const Context = ({ children }) => {
         getCategoriesFromBackend,
         toggleSideBar,
         deleteProductWithGivenId,
+        updateProductWithGivenId,
       }}>
       {children}
     </AppContext.Provider>

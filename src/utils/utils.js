@@ -34,6 +34,11 @@ const deleteProductWithId = async (id) =>{
   return res
 }
 
+const updateProductWithId = async (id,updatedProduct) =>{
+  const res = await firestore.collection("products").doc(id).update({updatedProduct})
+  return res    
+}
+
   const uploadCategory = (image,category,setCategory,setFile) =>{
       const storageRef = storage.ref(image.name)
       const uploadTask = storageRef.put(image)
@@ -60,4 +65,4 @@ const fetchCategories = async () =>{
 
 
 
-export {uploadProduct,uploadCategory,fetchProducts,fetchCategories,deleteProductWithId}
+export {uploadProduct,uploadCategory,fetchProducts,fetchCategories,deleteProductWithId,updateProductWithId}

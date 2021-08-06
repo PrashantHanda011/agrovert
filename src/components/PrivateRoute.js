@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { AppContext } from "../Context";
+import { AppContext } from "../context/Context";
 import { auth } from "../Firebase";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
