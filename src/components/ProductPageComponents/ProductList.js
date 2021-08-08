@@ -28,6 +28,7 @@ const ProductList = ({ products, categories }) => {
         />
         <div className="row mt-5">
           {products.map((product) => {
+             console.log(product.file_name)
             return (
               <div className="col-lg-4 col-md-6 my-2">
                 <ProductTile
@@ -37,6 +38,7 @@ const ProductList = ({ products, categories }) => {
                   imageUrl={product.image_url}
                   price={product.price}
                   description={product.description}
+                  file_name={product.file_name}
                 />{" "}
               </div>
             );

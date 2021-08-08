@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from "react";
-import AppReducer from "./AppReducer";
+import reducer from "./AppReducer";
 import {
   deleteProductWithId,
   fetchCategories,
@@ -20,7 +20,7 @@ const initialState = {
 export const AppContext = createContext(initialState);
 
 export const Context = ({ children }) => {
-  const [state, dispatch] = useReducer(AppReducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   function toggleSideBar(state_) {
     dispatch({

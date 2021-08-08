@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { uploadProduct } from "../../utils/utils";
+import { uploadProduct} from "../../utils/utils";
 import { Modal } from "react-bootstrap";
 import Loading from "../Loading";
+import { AppContext } from "../../context/Context";
+import { useContext } from "react";
+import { storage } from "../../Firebase";
 
-const ProductForm = ({ show, handleClose, product, categories }) => {
+const ProductForm = ({ show, handleClose, product={}, categories }) => {
+  const {appState,addProduct} = useContext(AppContext)
   const [values, setValues] = useState({
     name: product.name?product.name:"",
     description: product.description?product.description:"",
@@ -14,8 +18,8 @@ const ProductForm = ({ show, handleClose, product, categories }) => {
     weight: product.weight?product.weight:"",
     image_url: product.image_url?product.image_url:"",
     photo: "",
-    slab1: product.slab.slab1?product.slab.slab1:"",
-    slab2: product.slab.slab2?product.slab.slab2:"",
+    slab1: product.slab?product.slab.slab1:"",
+    slab2: product.slab?product.slab.slab2:"",
     category_id: product.category_id?product.category_id:"",
     error: {
       isthere: false,
@@ -30,6 +34,8 @@ const ProductForm = ({ show, handleClose, product, categories }) => {
       slab2: false,
     },
   });
+
+  const [imageUrl,setImageUrl] = useState("")
 
   const {
     name,
@@ -102,12 +108,13 @@ const ProductForm = ({ show, handleClose, product, categories }) => {
         price,
         slabs: [{ slab1: slab1 }, { slab2: slab2 }],
         image_url: "",
+        file_name:photo.name,
         weight,
         margin,
         category_id,
       };
-      uploadProduct(photo, product, values, setValues);
-      handleClose();
+      uploadProduct(photo, product,addProduct);
+      handleClose()
       return;
     }
   };
