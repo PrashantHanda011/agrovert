@@ -26,11 +26,12 @@ const OrderTable = ({orders}) => {
                   <th>Order Status</th>
                   <th></th>
                   <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {orders.map(order => {
-                    return <TableRow order={order} />
+                    return <TableRow Order={order} />
                 })}
               </tbody>
             </table>

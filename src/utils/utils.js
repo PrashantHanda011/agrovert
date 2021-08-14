@@ -106,3 +106,14 @@ export const getProductsFromId = async (productIds) =>{
   console.log(products)
   return products
 }
+
+export const updateOrderStatus = async (updatedOrder,id,status) =>{
+  console.log(id)
+  delete updatedOrder.id
+  console.log(updatedOrder)
+  
+  
+  await firestore.collection("orders").doc(id).update({
+    status:status
+  })
+}
