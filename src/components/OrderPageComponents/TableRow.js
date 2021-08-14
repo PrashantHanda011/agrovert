@@ -40,8 +40,8 @@ const TableRow = ({Order}) => {
             <td>₹{order.amount}</td>
             <td>{order.status}</td>
             <td><Button className="btn btn-primary" onClick = {()=>{handleOpen()}}>Show</Button></td>
-            <td><Button className="btn btn-success" onClick= {()=>{approveOrder()}}>Approve</Button></td>
-            <td><Button className="btn btn-danger" onClick= {()=>{cancelOrder()}}>Cancel</Button></td>
+            <td><Button className="btn btn-success" disabled={order.status==="DELIVERED"?true:false} onClick= {()=>{approveOrder()}}>Approve</Button></td>
+            <td><Button className="btn btn-danger" disabled={order.status==="CANCELLED"?true:false} onClick= {()=>{cancelOrder()}}>Cancel</Button></td>
           </tr>}
           {open && <FullOrderPage order={order} user={user} show={open} handleClose={handleClose}/>}
         </>
