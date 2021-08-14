@@ -3,6 +3,7 @@ import reducer from "./AppReducer";
 import {
   deleteProductWithId,
   fetchCategories,
+  fetchOrders,
   fetchProducts,
   updateProductWithId,
 } from "../utils/utils";
@@ -81,6 +82,13 @@ export const Context = ({ children }) => {
       payload: {id,product},
     });
   }
+
+  // async function getOrders(){
+  //   await fetchOrders()
+  //   dispatch({
+  //     type: ""
+  //   })
+  // }
 
   return (
     <AppContext.Provider

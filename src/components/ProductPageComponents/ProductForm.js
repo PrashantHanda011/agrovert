@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { uploadProduct} from "../../utils/utils";
 import { Modal } from "react-bootstrap";
-import Loading from "../Loading";
+import Loading from "../Base/Loading";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 import { storage } from "../../Firebase";
@@ -34,8 +34,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
       slab2: false,
     },
   });
-
-  const [imageUrl,setImageUrl] = useState("")
+  const [close,setClose] = useState(false)
 
   const {
     name,
@@ -51,6 +50,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     slab2,
     error,
     category_id,
+
   } = values;
 
   const changeHandler = (name) => (event) => {
@@ -95,27 +95,50 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     }
   };
 
+  useEffect(()=>{
+    if(close===true){
+      handleClose()
+    }
+  },[close])
+
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (checkMissing()) {
-      console.log("this section");
-      setValues({ ...values, error: checkMissing() });
-    } else {
-      const product = {
+    if(Object.keys(product).length===0){
+      if (checkMissing()) {
+        console.log("this section");
+        setValues({ ...values, error: checkMissing() });
+      } else {
+        const product = {
+          name,
+          description,
+          quantity,
+          price,
+          slabs: [{ slab1: slab1 }, { slab2: slab2 }],
+          image_url: "",
+          file_name:photo.name,
+          weight,
+          margin,
+          category_id,
+        };
+        await uploadProduct(photo, product,addProduct,setClose);
+        
+        return;
+    }}
+    else{
+      const updatedProduct = {
         name,
         description,
         quantity,
         price,
         slabs: [{ slab1: slab1 }, { slab2: slab2 }],
         image_url: "",
-        file_name:photo.name,
+        file_name:photo?photo.name:"",
         weight,
         margin,
         category_id,
       };
-      uploadProduct(photo, product,addProduct);
-      handleClose()
-      return;
+      await uploadProduct(photo, product,addProduct);
+      
     }
   };
 

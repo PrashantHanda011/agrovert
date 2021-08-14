@@ -5,6 +5,7 @@ import { AppContext } from "../../context/Context"
 const ProductTile = ({ id, imageUrl, productName, price, description, file_name }) => {
   const { appState, deleteProductWithGivenId } = useContext(AppContext);
  console.log(file_name)
+ const image_url = imageUrl
   return (
     <Card style={{ width: "18rem" }} className={styles.productCard}>
       <Card.Img variant="top" src={imageUrl} style={{ height: "200px" }} />
@@ -20,7 +21,7 @@ const ProductTile = ({ id, imageUrl, productName, price, description, file_name 
         <div className="col-6"><Button
           variant="danger"
           onClick={() => {
-            deleteProductWithGivenId(id,file_name);
+            deleteProductWithGivenId(id,image_url);
           }}>
           Delete
         </Button></div>

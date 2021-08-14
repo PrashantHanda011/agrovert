@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Loading from "../Loading";
+import Loading from "../Base/Loading";
 import AddButton from "./AddButton";
 import CategoryForm from "./CategoryForm";
 import CategoryTile from "./CategoryTile";

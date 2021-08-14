@@ -1,14 +1,12 @@
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
 import React, { useState, useEffect, useContext } from "react";
 import { AppContext, Context } from "./context/Context";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./pages/Login";
 import Products from "./pages/Products/Products";
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./components/Base/PrivateRoute";
 import Home from "./pages/Home";
 import { getRefToImageInStorage } from "./utils/utils";
+import Orders from "./pages/Orders/Orders"
 
 function App() {
   const { appState, getProductsFromBackend, getCategoriesFromBackend } =
@@ -28,6 +26,7 @@ function App() {
         <Route component={Login} path="/login" exact />
         <Route component={Home} path="/" exact />
         <Route component={Products} path="/products" exact />
+        <Route component={Orders} path="/orders" exact />
       </Switch>
     </Router>
   );
