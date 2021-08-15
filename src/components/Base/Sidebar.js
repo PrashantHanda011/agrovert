@@ -56,11 +56,11 @@ const Sidebar = ({ history }) => {
         </li>
       </Link>
 
-      <Link to="/profile" className={currentTab(history, "/profile")}>
+      <Link to="/users" className={currentTab(history, "/users")}>
         {" "}
         <li className="nav-link">
           <i className="fas fa-fw fa-user"></i>
-          <span>Profile</span>
+          <span>Users</span>
         </li>
       </Link>
 

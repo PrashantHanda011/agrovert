@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Loading from "../../components/Base/Loading";
 import AddButton from "../../components/PincodePageComponents/AddButton";
-import PincodeForm from "../../components/PincodePageComponents/PincodeForm";
 import { fetchPincodes } from "../../utils/utils";
 import Base from "../Base";
 import { addPincode } from "../../utils/utils";

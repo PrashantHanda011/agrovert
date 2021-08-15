@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import { getRefToImageInStorage } from "./utils/utils";
 import Orders from "./pages/Orders/Orders"
 import Pincodes from "./pages/Pincodes/Pincodes";
+import Users from "./pages/Users/Users";
 
 function App() {
   const { appState, getProductsFromBackend, getCategoriesFromBackend } =
@@ -29,6 +30,7 @@ function App() {
         <Route component={Products} path="/products" exact />
         <Route component={Orders} path="/orders" exact />
         <Route component={Pincodes} path="/pincodes" exact />
+        <Route component={Users} path="/users" exact />
       </Switch>
     </Router>
   );
