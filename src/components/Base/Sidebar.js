@@ -48,6 +48,14 @@ const Sidebar = ({ history }) => {
         </li>
       </Link>
 
+      <Link to="/pincodes" className={currentTab(history, "/pincodes")}>
+        {" "}
+        <li className="nav-link">
+          <i className="fas fa-fw fa-map-pin"></i>
+          <span>Pincodes</span>
+        </li>
+      </Link>
+
       <Link to="/profile" className={currentTab(history, "/profile")}>
         {" "}
         <li className="nav-link">

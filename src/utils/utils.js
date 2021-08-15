@@ -117,3 +117,23 @@ export const updateOrderStatus = async (updatedOrder,id,status) =>{
     status:status
   })
 }
+
+//* Logic for Pincodes
+
+export const addPincode = async (pincodeData) =>{
+  await firestore.collection("pincodes").add(pincodeData)
+
+}
+
+export const fetchPincodes = async () =>{
+  var pincodesRef = firestore.collection("pincodes")
+  var pincodes = []
+  var allPincodes = await pincodesRef.get()
+  allPincodes.forEach(doc=>{
+    const id = doc.id
+    const data = doc.data()
+    pincodes.push({id,...data})
+  })
+
+  return pincodes
+}

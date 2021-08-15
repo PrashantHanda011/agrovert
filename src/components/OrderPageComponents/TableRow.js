@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { Button } from 'react-bootstrap'
+import { Badge, Button } from 'react-bootstrap'
 import { getUserFromUserId, updateOrderStatus } from '../../utils/utils'
 import FullOrderPage from './FullOrderPage'
 
@@ -38,10 +38,10 @@ const TableRow = ({Order}) => {
             <td>{user.name}</td>
             <td>{user.phone_number}</td>
             <td>₹{order.amount}</td>
-            <td>{order.status}</td>
-            <td><Button className="btn btn-primary" onClick = {()=>{handleOpen()}}>Show</Button></td>
-            <td><Button className="btn btn-success" disabled={order.status==="DELIVERED"?true:false} onClick= {()=>{approveOrder()}}>Approve</Button></td>
-            <td><Button className="btn btn-danger" disabled={order.status==="CANCELLED"?true:false} onClick= {()=>{cancelOrder()}}>Cancel</Button></td>
+            <td><Badge className={order.status==="DELIVERED"?"badge-success":order.status==="CANCELLED"?"badge-danger":"badge-primary"}>{order.status}</Badge></td>
+            <td><button className="btn btn-primary" onClick = {()=>{handleOpen()}}>Show</button></td>
+            <td><button className="btn btn-success" disabled={order.status==="DELIVERED"?true:false} onClick= {()=>{approveOrder()}}>Approve</button></td>
+            <td><button className="btn btn-danger" disabled={order.status==="CANCELLED"?true:false} onClick= {()=>{cancelOrder()}}>Cancel</button></td>
           </tr>}
           {open && <FullOrderPage order={order} user={user} show={open} handleClose={handleClose}/>}
         </>

@@ -1,0 +1,61 @@
+.pill {
+  display: inline-block; /* inline-block so we can set a width */
+  width: 0;
+  white-space: nowrap; /* keep text one line */
+  direction: ltr; /* change direction so the text overflow on the left */
+  color: rgba(255, 255, 255, 0);
+  transition: 0.5s;
+  transform: translateX(-30px); /* put the value you want here */
+  pointer-events: none;
+  font-size: 18px;
+  margin-left:-1%;
+  font-weight: bold;
+}
+
+.add_product_icon {
+  display: flex;
+  background-color: #4e73df;
+  color: #F8F9FC;
+  padding: 10px;
+  width: 40px;
+  justify-content: center;
+  border-radius: 80%;
+
+}
+
+.hover_btn {
+  display: flex;
+  align-items: center;
+}
+/* 
+.hover_btn:hover .add_product_icon {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+} */
+.hover_btn:hover .pill {
+  color: #4e73df;
+  transform: translateX(0);
+  
+}
+
+.productCard{
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+  cursor: pointer;
+  transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s 
+}
+
+.productCard:hover{
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+.categoryCard{
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+  cursor: pointer;
+  transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s 
+}
+
+.categoryCard:hover{
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
