@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import './Firebase'
-import {Context} from './Context';
+import {Context} from './context/Context';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { uploadProduct } from "../../utils/utils";
+import { uploadProduct} from "../../utils/utils";
 import { Modal } from "react-bootstrap";
-import Loading from "../Loading";
+import Loading from "../Base/Loading";
+import { AppContext } from "../../context/Context";
+import { useContext } from "react";
+import { storage } from "../../Firebase";
 
-const ProductForm = ({ show, handleClose, categories }) => {
+const ProductForm = ({ show, handleClose, product={}, categories }) => {
+  const {appState,addProduct} = useContext(AppContext)
   const [values, setValues] = useState({
-    name: "",
-    description: "",
-    price: "",
-    quantity: "",
-    margin: "",
+    name: product.name?product.name:"",
+    description: product.description?product.description:"",
+    price: product.price?product.price:"",
+    quantity: product.quantity?product.quantity:"",
+    margin: product.margin?product.margin:"",
     slabs: [],
-    weight: "",
-    image_url: "",
+    weight: product.weight?product.weight:"",
+    image_url: product.image_url?product.image_url:"",
     photo: "",
-    slab1: "",
-    slab2: "",
-    category_id: "",
+    slab1: product.slab?product.slab.slab1:"",
+    slab2: product.slab?product.slab.slab2:"",
+    category_id: product.category_id?product.category_id:"",
     error: {
       isthere: false,
       name: false,
@@ -30,6 +34,7 @@ const ProductForm = ({ show, handleClose, categories }) => {
       slab2: false,
     },
   });
+  const [close,setClose] = useState(false)
 
   const {
     name,
@@ -45,6 +50,7 @@ const ProductForm = ({ show, handleClose, categories }) => {
     slab2,
     error,
     category_id,
+
   } = values;
 
   const changeHandler = (name) => (event) => {
@@ -89,26 +95,50 @@ const ProductForm = ({ show, handleClose, categories }) => {
     }
   };
 
+  useEffect(()=>{
+    if(close===true){
+      handleClose()
+    }
+  },[close])
+
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (checkMissing()) {
-      console.log("this section");
-      setValues({ ...values, error: checkMissing() });
-    } else {
-      const product = {
+    if(Object.keys(product).length===0){
+      if (checkMissing()) {
+        console.log("this section");
+        setValues({ ...values, error: checkMissing() });
+      } else {
+        const product = {
+          name,
+          description,
+          quantity,
+          price,
+          slabs: [{ slab1: slab1 }, { slab2: slab2 }],
+          image_url: "",
+          file_name:photo.name,
+          weight,
+          margin,
+          category_id,
+        };
+        await uploadProduct(photo, product,addProduct,setClose);
+        
+        return;
+    }}
+    else{
+      const updatedProduct = {
         name,
         description,
         quantity,
         price,
         slabs: [{ slab1: slab1 }, { slab2: slab2 }],
         image_url: "",
+        file_name:photo?photo.name:"",
         weight,
         margin,
         category_id,
       };
-      uploadProduct(photo, product, values, setValues);
-      handleClose();
-      return;
+      await uploadProduct(photo, product,addProduct);
+      
     }
   };
 

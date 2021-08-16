@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { AppContext } from "../context/Context";
+import { AppContext } from "../../context/Context";
 import { Link, withRouter } from "react-router-dom";
 const Sidebar = ({ history }) => {
   const { appState, toggleSideBar } = useContext(AppContext);
@@ -40,7 +40,7 @@ const Sidebar = ({ history }) => {
           <span>Products</span>
         </li>
       </Link>
-      <Link to="/products" className={currentTab(history, "/orders")}>
+      <Link to="/orders" className={currentTab(history, "/orders")}>
         {" "}
         <li className="nav-link">
           <i className="fas fa-fw fa-folder"></i>
@@ -48,11 +48,19 @@ const Sidebar = ({ history }) => {
         </li>
       </Link>
 
-      <Link to="/products" className={currentTab(history, "/profile")}>
+      <Link to="/pincodes" className={currentTab(history, "/pincodes")}>
+        {" "}
+        <li className="nav-link">
+          <i className="fas fa-fw fa-map-pin"></i>
+          <span>Pincodes</span>
+        </li>
+      </Link>
+
+      <Link to="/users" className={currentTab(history, "/users")}>
         {" "}
         <li className="nav-link">
           <i className="fas fa-fw fa-user"></i>
-          <span>Profile</span>
+          <span>Users</span>
         </li>
       </Link>
 

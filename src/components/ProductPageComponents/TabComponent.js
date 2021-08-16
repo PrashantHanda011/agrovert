@@ -3,7 +3,8 @@ import { Tab, Tabs } from "react-bootstrap";
 import ProductList from "./ProductList";
 import CategoryList from "./CategoryList";
 import { useContext } from "react";
-import { AppContext } from "../../Context";
+import { AppContext } from "../../context/Context";
+
 
 const TabComponent = () => {
   const { appState } = useContext(AppContext);

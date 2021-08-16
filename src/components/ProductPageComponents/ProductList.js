@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { firestore } from "../../Firebase";
-import Loading from "../Loading";
+import Loading from "../Base/Loading";
 import ProductTile from "./ProductTile";
 import AddButton from "./AddButton";
 import ProductForm from "./ProductForm";
@@ -28,8 +28,9 @@ const ProductList = ({ products, categories }) => {
         />
         <div className="row mt-5">
           {products.map((product) => {
+             console.log(product.file_name)
             return (
-              <div className="col-lg-4 col-md-6 my-2">
+              <div className="col-xl-3 col-md-6 mb-2 my-2">
                 <ProductTile
                   className="mt-3"
                   id={product.id}
@@ -37,6 +38,7 @@ const ProductList = ({ products, categories }) => {
                   imageUrl={product.image_url}
                   price={product.price}
                   description={product.description}
+                  file_name={product.file_name}
                 />{" "}
               </div>
             );

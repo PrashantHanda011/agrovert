@@ -72,7 +72,7 @@ const CategoryForm = ({ show, handleClose }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add a Product</Modal.Title>
+        <Modal.Title>Add a Category</Modal.Title>
       </Modal.Header>
       <Modal.Body>{createCategoryForm()}</Modal.Body>
       <Modal.Footer>

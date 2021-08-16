@@ -1,0 +1,51 @@
+import React,{useState,useEffect} from 'react'
+import { Badge, Button } from 'react-bootstrap'
+import { getUserFromUserId, updateOrderStatus } from '../../utils/utils'
+import FullOrderPage from './FullOrderPage'
+
+const TableRow = ({Order}) => {
+    const [order,setOrder] = useState(Order)
+    const [user,setUser] = useState(null)
+    const [open,setOpen] = useState(false)
+    const handleOpen = () =>{
+        setOpen(true)
+    }
+    const handleClose = () =>{
+        setOpen(false)
+    }
+    const approveOrder = () =>{
+        setOrder({...order,status:"DELIVERED"})
+        console.log(order)
+        updateOrderStatus(order,order.id,"DELIVERED")
+    }
+    const cancelOrder = () =>{
+        setOrder({...order,status:"CANCELLED"})
+        console.log(order)
+        updateOrderStatus(order,order.id,"CANCELLED")
+    }
+    useEffect(()=>{
+        const getUser = async (id) =>{
+            const data = await getUserFromUserId(id)
+            setUser(data)
+        }
+        getUser(order.user_id)
+    },[])
+    return (
+        <>
+        {user && <tr className="align-items-center">
+            <td>{order.id}</td>
+            <td>{order.timestamp.toDate().toDateString()}</td>
+            <td>{user.name}</td>
+            <td>{user.phone_number}</td>
+            <td>₹{order.amount}</td>
+            <td><Badge className={order.status==="DELIVERED"?"badge-success":order.status==="CANCELLED"?"badge-danger":"badge-primary"}>{order.status}</Badge></td>
+            <td><button className="btn btn-primary" onClick = {()=>{handleOpen()}}>Show</button></td>
+            <td><button className="btn btn-success" disabled={order.status==="DELIVERED"?true:false} onClick= {()=>{approveOrder()}}>Approve</button></td>
+            <td><button className="btn btn-danger" disabled={order.status==="CANCELLED"?true:false} onClick= {()=>{cancelOrder()}}>Cancel</button></td>
+          </tr>}
+          {open && <FullOrderPage order={order} user={user} show={open} handleClose={handleClose}/>}
+        </>
+    )
+}
+
+export default TableRow

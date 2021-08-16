@@ -1,9 +1,11 @@
 import React, { createContext, useReducer } from "react";
-import AppReducer from "./AppReducer";
+import reducer from "./AppReducer";
 import {
   deleteProductWithId,
   fetchCategories,
+  fetchOrders,
   fetchProducts,
+  updateProductWithId,
 } from "../utils/utils";
 // import { db } from './Firebase'
 
@@ -19,7 +21,7 @@ const initialState = {
 export const AppContext = createContext(initialState);
 
 export const Context = ({ children }) => {
-  const [state, dispatch] = useReducer(AppReducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   function toggleSideBar(state_) {
     dispatch({
@@ -73,6 +75,21 @@ export const Context = ({ children }) => {
     });
   }
 
+  async function updateProductWithGivenId(id,product) {
+    await updateProductWithId(id,product)
+    dispatch({
+      type: "UPDATE_PRODUCT",
+      payload: {id,product},
+    });
+  }
+
+  // async function getOrders(){
+  //   await fetchOrders()
+  //   dispatch({
+  //     type: ""
+  //   })
+  // }
+
   return (
     <AppContext.Provider
       value={{
@@ -84,6 +101,7 @@ export const Context = ({ children }) => {
         getCategoriesFromBackend,
         toggleSideBar,
         deleteProductWithGivenId,
+        updateProductWithGivenId,
       }}>
       {children}
     </AppContext.Provider>

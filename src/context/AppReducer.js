@@ -1,4 +1,4 @@
-export default (state, action) => {
+export default function reducer(state, action){
   switch (action.type) {
     case "TOGGLE":
       return {
@@ -36,5 +36,19 @@ export default (state, action) => {
         ...state,
         products: state.products.filter(product=> product.id!==action.payload)
       }
+
+      case "UPDATE_PRODUCT":
+        return{
+          ...state,
+          products: state.products.map(product=>{
+            if(product.id===action.payload.id){
+              product = action.payload.product
+            }
+            return product
+          })
+        }
+
+      default:
+        return {...state}
   }
 };
