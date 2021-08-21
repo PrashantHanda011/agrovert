@@ -1,6 +1,7 @@
 import { storage, firestore, auth } from "../Firebase";
 import firebase from 'firebase'
 
+
 //* Logic For Products
 export const uploadProduct = async (photo, product, addProduct, setClose) => {
   const storageRef = storage.ref(photo.name);
@@ -175,5 +176,5 @@ export const fetchAdmins = async () => {
 
 export const deleteAdmin = async (uid) => {
   console.log(uid)
-  firestore.collection("admins").doc(uid).delete();
+  await firestore.collection("admins").doc(uid).delete();
 }

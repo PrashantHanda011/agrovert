@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import Loading from "../Base/Loading";
-import { auth } from "../../Firebase";
+import { auth,firestore } from "../../Firebase";
 import firebase from "firebase";
 import { makeAdminFirestore } from "../../utils/utils";
 
@@ -74,11 +74,12 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
       .confirm(otpInput)
       .then(async function (result) {
         let user = result.user;
-        if (result.additionalUserInfo.isNewUser) {
+        const doc = await firestore.collection("admins").doc(user.uid)
+        if (result.additionalUserInfo.isNewUser||!doc.exists) {
           await makeAdminFirestore(user.uid, name, number);
         }
         setLoading(false)
-        const id = user.id
+        const id = user.uid
         updateAdmins([...admins,{id,name,number,type:"ADMIN"}])
         handleClose()
       })
@@ -130,7 +131,7 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
                           <button
                             className="btn btn-primary btn-user btn-block"
                             onClick={onSignInSubmit}>
-                            Login
+                            Add Admin
                           </button>
                         </div>
                       </div>
