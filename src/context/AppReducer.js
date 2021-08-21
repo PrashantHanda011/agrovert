@@ -42,7 +42,8 @@ export default function reducer(state, action){
           ...state,
           products: state.products.map(product=>{
             if(product.id===action.payload.id){
-              product = action.payload.product
+              const id = action.payload.id
+              product = {id,...action.payload.product}
             }
             return product
           })

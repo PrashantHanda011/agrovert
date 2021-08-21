@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { storage } from "../../Firebase";
 
 const ProductForm = ({ show, handleClose, product={}, categories }) => {
-  const {appState,addProduct} = useContext(AppContext)
+  const {appState,addProduct,updateProductWithGivenId} = useContext(AppContext)
   const [values, setValues] = useState({
     name: product.name?product.name:"",
     description: product.description?product.description:"",
@@ -18,8 +18,8 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     weight: product.weight?product.weight:"",
     image_url: product.image_url?product.image_url:"",
     photo: "",
-    slab1: product.slab?product.slab.slab1:"",
-    slab2: product.slab?product.slab.slab2:"",
+    slab1: product.slabs?product.slabs[0].slab1:"",
+    slab2: product.slabs?product.slabs[1].slab2:"",
     category_id: product.category_id?product.category_id:"",
     error: {
       isthere: false,
@@ -108,7 +108,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         console.log("this section");
         setValues({ ...values, error: checkMissing() });
       } else {
-        const product = {
+        const newProduct = {
           name,
           description,
           quantity,
@@ -120,7 +120,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
           margin,
           category_id,
         };
-        await uploadProduct(photo, product,addProduct,setClose);
+        await uploadProduct(photo, newProduct,addProduct,setClose);
         
         return;
     }}
@@ -131,13 +131,13 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         quantity,
         price,
         slabs: [{ slab1: slab1 }, { slab2: slab2 }],
-        image_url: "",
+        image_url: image_url?"":image_url,
         file_name:photo?photo.name:"",
         weight,
         margin,
         category_id,
       };
-      await uploadProduct(photo, product,addProduct);
+      await uploadProduct(product.id,photo, updatedProduct,updateProductWithGivenId,setClose);
       
     }
   };
@@ -224,7 +224,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         <select
           onChange={changeHandler("category_id")}
           className="form-control"
-          placeholder="Category">
+          placeholder="Category" value={category_id}>
           <option>Select</option>
           {categories &&
             categories.map((cate, index) => (

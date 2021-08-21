@@ -20,19 +20,21 @@ const Sidebar = ({ history }) => {
       }
       id="accordionSidebar">
       <Link
-        className="sidebar-brand d-flex align-items-center justify-content-center"
+        className="sidebar-brand d-flex align-items-center justify-content-center mb-5"
         to="/">
-        <div className="sidebar-brand-icon rotate-n-15"></div>
-        <div className="sidebar-brand-text mx-3">Admin Panel</div>
+        <img className="sidebar-brand-icon mt-3" src="https://firebasestorage.googleapis.com/v0/b/ecommerce-app-d0b68.appspot.com/o/Company%20logo.png?alt=media&token=6671bc0c-e991-4375-b595-dbc15032f491" style={{width:"140px",height:"140px", marginRight:"-10%", marginLeft:"-30%"}} alt="" />
+        <div className="sidebar-brand-text">Panwari</div>
       </Link>
-      <hr className="" />
+    
 
       <Link to="/" className={currentTab(history, "/")}>
+        {" "}
         <li className="nav-link">
-          <i className="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span>
+          <i className="fas fa-fw fa-user"></i>
+          <span>Users</span>
         </li>
       </Link>
+      
       <Link to="/products" className={currentTab(history, "/products")}>
         {" "}
         <li className="nav-link">
@@ -53,14 +55,6 @@ const Sidebar = ({ history }) => {
         <li className="nav-link">
           <i className="fas fa-fw fa-map-pin"></i>
           <span>Pincodes</span>
-        </li>
-      </Link>
-
-      <Link to="/users" className={currentTab(history, "/users")}>
-        {" "}
-        <li className="nav-link">
-          <i className="fas fa-fw fa-user"></i>
-          <span>Users</span>
         </li>
       </Link>
 

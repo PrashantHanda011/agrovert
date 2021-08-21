@@ -1,7 +1,8 @@
-import { storage, firestore } from "../Firebase";
+import { storage, firestore, auth } from "../Firebase";
+import firebase from 'firebase'
 
 //* Logic For Products
-export const uploadProduct = async (photo, product, addProduct,setClose) => {
+export const uploadProduct = async (photo, product, addProduct, setClose) => {
   const storageRef = storage.ref(photo.name);
   const uploadTask = storageRef.put(photo);
   uploadTask.on("state_changed", console.log(), console.error, () => {
@@ -17,7 +18,7 @@ export const uploadProduct = async (photo, product, addProduct,setClose) => {
               const id = product.id;
               const data = product.data();
               addProduct({ id, ...data });
-              setClose(true)
+              setClose(true);
             })
         );
     });
@@ -31,15 +32,23 @@ export const fetchProducts = async () => {
   });
 };
 
-export const updateProductWithId = async (id, updatedProduct) => {
-  if (updatedProduct.photo) {
-
+export const updateProductWithId = async (
+  id,
+  photo,
+  updatedProduct,
+  updateProductWithGivenId,
+  setClose
+) => {
+  if (photo) {
   } else {
-    const res = await firestore
+    firestore
       .collection("products")
       .doc(id)
-      .update({ updatedProduct });
-    return res;
+      .update({ updatedProduct })
+      .then((fUpdateProduct) => {
+        updateProductWithGivenId(id, fUpdateProduct);
+        setClose();
+      });
   }
 };
 
@@ -70,70 +79,101 @@ export const fetchCategories = async () => {
 
 //* Logic For Orders
 
-export const fetchOrders = async () =>{
-  var ordersRef = firestore.collection("orders")
-  var orders = []
-  var allOrders = await ordersRef.get()
-  allOrders.forEach(doc=>{
-    const id = doc.id
-    const data = doc.data()
-    orders.push({id,...data})
-  })
+export const fetchOrders = async () => {
+  var ordersRef = firestore.collection("orders");
+  var orders = [];
+  var allOrders = await ordersRef.get();
+  allOrders.forEach((doc) => {
+    const id = doc.id;
+    const data = doc.data();
+    orders.push({ id, ...data });
+  });
 
-  return orders
-}
+  return orders;
+};
 
-export const getUserFromUserIdPromise = async (userId) =>{
-  const res = await firestore.collection("users").where("uid","==",userId).get()
-  const data = await res.docs.map(doc=>{const id=doc.id;const data=doc.data();return {id, ...data}})
-  return data[0]
-}
+export const getUserFromUserIdPromise = async (userId) => {
+  const res = await firestore
+    .collection("users")
+    .where("uid", "==", userId)
+    .get();
+  const data = await res.docs.map((doc) => {
+    const id = doc.id;
+    const data = doc.data();
+    return { id, ...data };
+  });
+  return data[0];
+};
 
+export const getUserFromUserId = (userId) => {
+  return getUserFromUserIdPromise(userId).then((data) => {
+    return data;
+  });
+};
 
-export const getUserFromUserId = (userId) =>{
-  return getUserFromUserIdPromise(userId).then(data=>{return data})
-}
-
-export const getProductsFromId = async (productIds) =>{
-  console.log(productIds)
-  let products = []
-  for(let productId of productIds){
-    await firestore.collection("products").doc(productId).get().then(data=>{
-      console.log(data.data())
-      products.push(data.data())
-    })
+export const getProductsFromId = async (productIds) => {
+  console.log(productIds);
+  let products = [];
+  for (let productId of productIds) {
+    await firestore
+      .collection("products")
+      .doc(productId)
+      .get()
+      .then((data) => {
+        console.log(data.data());
+        products.push(data.data());
+      });
   }
-  console.log(products)
-  return products
-}
+  console.log(products);
+  return products;
+};
 
-export const updateOrderStatus = async (updatedOrder,id,status) =>{
-  console.log(id)
-  delete updatedOrder.id
-  console.log(updatedOrder)
-  
-  
+export const updateOrderStatus = async (updatedOrder, id, status) => {
+  console.log(id);
+  delete updatedOrder.id;
+  console.log(updatedOrder);
+
   await firestore.collection("orders").doc(id).update({
-    status:status
-  })
-}
+    status: status,
+  });
+};
 
 //* Logic for Pincodes
 
-export const addPincode = async (pincodeData) =>{
-  await firestore.collection("pincodes").add(pincodeData)
+export const addPincode = async (pincodeData) => {
+  await firestore.collection("pincodes").add(pincodeData);
+};
 
+export const fetchPincodes = async () => {
+  var pincodesRef = firestore.collection("pincodes");
+  var pincodes = [];
+  var allPincodes = await pincodesRef.get();
+  allPincodes.forEach((doc) => {
+    const id = doc.id;
+    const data = doc.data();
+    pincodes.push({ id, ...data });
+  });
+
+  return pincodes;
+};
+
+//* Adding Admin
+
+export const makeAdminFirestore = async (uid,name,number) => {
+  await firestore.collection("admins").doc(uid).set({id:uid,name,number,type:"ADMIN"})
+};
+
+export const fetchAdmins = async () => {
+  let admins = []
+  const adminsDocs = await firestore.collection("admins").get()
+  adminsDocs.forEach((doc)=>{
+    const data = doc.data()
+    admins.push({...data})
+  })
+  return admins
 }
 
-export const fetchPincodes = async () =>{
-  var pincodesRef = firestore.collection("pincodes")
-  var pincodes = []
-  var allPincodes = await pincodesRef.get()
-  allPincodes.forEach(doc=>{
-    const id = doc.id
-    const data = doc.data()
-    pincodes.push({id,...data})
-  })
-
-  return pincodes
+export const deleteAdmin = async (uid) => {
+  console.log(uid)
+  firestore.collection("admins").doc(uid).delete();
 }
