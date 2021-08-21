@@ -81,7 +81,7 @@ export const fetchCategories = async () => {
 //* Logic For Orders
 
 export const fetchOrders = async () => {
-  var ordersRef = firestore.collection("orders");
+  var ordersRef = firestore.collection("orders").orderBy("timestamp","desc");
   var orders = [];
   var allOrders = await ordersRef.get();
   allOrders.forEach((doc) => {

@@ -15,9 +15,9 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
     order.products.forEach((product) => {
       productIds.push(product.product_id);
     });
-
     const getProducts = async () => {
       let fetchedProducts = await getProductsFromId(productIds);
+      console.log(fetchedProducts)
       setProducts(fetchedProducts);
     };
     getProducts();
