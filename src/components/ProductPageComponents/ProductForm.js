@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { uploadProduct} from "../../utils/utils";
+import { uploadProduct,updateProductWithId} from "../../utils/utils";
 import { Modal } from "react-bootstrap";
 import Loading from "../Base/Loading";
 import { AppContext } from "../../context/Context";
@@ -105,7 +105,6 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     event.preventDefault();
     if(Object.keys(product).length===0){
       if (checkMissing()) {
-        console.log("this section");
         setValues({ ...values, error: checkMissing() });
       } else {
         const newProduct = {
@@ -131,14 +130,13 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         quantity,
         price,
         slabs: [{ slab1: slab1 }, { slab2: slab2 }],
-        image_url: image_url?"":image_url,
-        file_name:photo?photo.name:"",
+        image_url: image_url,
         weight,
         margin,
         category_id,
       };
-      await uploadProduct(product.id,photo, updatedProduct,updateProductWithGivenId,setClose);
-      
+      await updateProductWithId(product.id,photo, updatedProduct,updateProductWithGivenId,setClose);
+      return;
     }
   };
 
@@ -336,7 +334,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
           type="submit"
           onClick={onSubmit}
           className="btn btn-success my-3 mb-3">
-          Create Product
+          {Object.keys(product).length>0? "Update Product":"Add Product"}
         </button>
       </Modal.Footer>
     </Modal>

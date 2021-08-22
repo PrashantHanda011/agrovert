@@ -13,26 +13,23 @@ const OrderTable = ({ orders, ordersPerPage, setOrdersPerPage }) => {
           <h6 className="m-0 font-weight-bold text-primary">Orders</h6>
         </div>
         <div className="card-body">
-          
-            Per Page Records:
-         
-
-          <select className="ml-2" width="10%"
-                onChange={(e) => {
-                  setOrdersPerPage(e.target.value);
-                }}
-                
-                placeholder="Category"
-                value={ordersPerPage}>
-                <option>Select</option>
-                {recordsList &&
-                  recordsList.map((numRecords, index) => (
-                    <option id={index} value={numRecords}>
-                      {numRecords}
-                    </option>
-                  ))}
-              </select>
-
+          Per Page Records:
+          <select
+            className="ml-2"
+            width="10%"
+            onChange={(e) => {
+              setOrdersPerPage(e.target.value);
+            }}
+            placeholder="Category"
+            value={ordersPerPage}>
+            <option>Select</option>
+            {recordsList &&
+              recordsList.map((numRecords, index) => (
+                <option id={index} value={numRecords}>
+                  {numRecords}
+                </option>
+              ))}
+          </select>
           <div className="table-responsive">
             <table className="table" width="100%">
               <thead>

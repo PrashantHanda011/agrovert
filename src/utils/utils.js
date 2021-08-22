@@ -1,6 +1,5 @@
 import { storage, firestore, auth } from "../Firebase";
-import firebase from 'firebase'
-
+import firebase from "firebase";
 
 //* Logic For Products
 export const uploadProduct = async (photo, product, addProduct, setClose) => {
@@ -40,16 +39,19 @@ export const updateProductWithId = async (
   updateProductWithGivenId,
   setClose
 ) => {
+  const updateProduct = updatedProduct
+
+  console.log(updatedProduct)
+  console.log(updateProduct)
   if (photo) {
   } else {
-    firestore
+    await firestore
       .collection("products")
       .doc(id)
-      .update({ updatedProduct })
-      .then((fUpdateProduct) => {
-        updateProductWithGivenId(id, fUpdateProduct);
-        setClose();
-      });
+      .update(updateProduct)
+    
+      updateProductWithGivenId(id, updateProduct);
+      setClose(true);
   }
 };
 
@@ -81,7 +83,7 @@ export const fetchCategories = async () => {
 //* Logic For Orders
 
 export const fetchOrders = async () => {
-  var ordersRef = firestore.collection("orders").orderBy("timestamp","desc");
+  var ordersRef = firestore.collection("orders").orderBy("timestamp", "desc");
   var orders = [];
   var allOrders = await ordersRef.get();
   allOrders.forEach((doc) => {
@@ -160,21 +162,24 @@ export const fetchPincodes = async () => {
 
 //* Adding Admin
 
-export const makeAdminFirestore = async (uid,name,number) => {
-  await firestore.collection("admins").doc(uid).set({id:uid,name,number,type:"ADMIN"})
+export const makeAdminFirestore = async (uid, name, number) => {
+  await firestore
+    .collection("admins")
+    .doc(uid)
+    .set({ id: uid, name, number, type: "ADMIN" });
 };
 
 export const fetchAdmins = async () => {
-  let admins = []
-  const adminsDocs = await firestore.collection("admins").get()
-  adminsDocs.forEach((doc)=>{
-    const data = doc.data()
-    admins.push({...data})
-  })
-  return admins
-}
+  let admins = [];
+  const adminsDocs = await firestore.collection("admins").get();
+  adminsDocs.forEach((doc) => {
+    const data = doc.data();
+    admins.push({ ...data });
+  });
+  return admins;
+};
 
 export const deleteAdmin = async (uid) => {
-  console.log(uid)
+  console.log(uid);
   await firestore.collection("admins").doc(uid).delete();
-}
+};
