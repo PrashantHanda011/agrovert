@@ -61,7 +61,7 @@ export const uploadCategory = (photo, category, addCategory, setClose) => {
     storageRef.getDownloadURL().then((url) => {
       return firestore
         .collection("categories")
-        .add({ category_name:category, image_url: url })
+        .add({ category_name: category, image_url: url })
         .then(
           async (category) =>
             await category.get(category.id).then((category) => {
@@ -166,8 +166,18 @@ export const updateOrderStatus = async (updatedOrder, id, status) => {
 
 //* Logic for Pincodes
 
-export const addPincode = async (pincodeData) => {
-  await firestore.collection("pincodes").add(pincodeData);
+export const addPincode = async (pincodeData, setPincodes, values) => {
+  await firestore
+    .collection("pincodes")
+    .add(pincodeData)
+    .then((data) => {
+      data.get().then((data) => {
+        setPincodes([
+          ...values,
+          { id: data.id, pincode: data.data().pincode, type: data.data().type },
+        ]);
+      });
+    });
 };
 
 export const fetchPincodes = async () => {
@@ -181,6 +191,14 @@ export const fetchPincodes = async () => {
   });
 
   return pincodes;
+};
+
+export const updatePinCode = async (id, data) => {
+  await firestore.collection("pincodes").doc(id).update(data);
+};
+
+export const deletePinCode = async (id) => {
+  await firestore.collection("pincodes").doc(id).delete();
 };
 
 //* Adding Admin

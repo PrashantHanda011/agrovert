@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Loading from "../../components/Base/Loading";
 import AddButton from "../../components/PincodePageComponents/AddButton";
-import { fetchPincodes } from "../../utils/utils";
+import { deletePinCode, fetchPincodes } from "../../utils/utils";
 import Base from "../Base";
 import { addPincode } from "../../utils/utils";
 import { Modal } from "react-bootstrap";
@@ -18,10 +18,15 @@ const Pincodes = () => {
 
   const formSubmit = (event) =>{
       event.preventDefault()
-      setPincodes([...pincodes,values])
       console.log(pincodes)
       handleClose()
-      addPincode(values)
+      addPincode(values,setPincodes,pincodes)
+  }
+
+  const deletePincode = (id) => {
+    const updatedPincodes = pincodes.filter(pincode=>pincode.id!==id)
+    setPincodes(updatedPincodes)
+    deletePinCode(id)
   }
 
   const makeForm = () =>{
@@ -100,7 +105,9 @@ const makeModal = ()  =>{
                     <tr>
                       <th>Pincode</th>
                       <th>Pincode Status</th>
+                      <th></th>
                     </tr>
+                    
                   </thead>
                   <tbody>
                     {pincodes.length>0 &&
@@ -118,6 +125,7 @@ const makeModal = ()  =>{
                                 {pincode.type}
                               </div>
                             </td>
+                            <td><div className="btn btn-danger" onClick={()=>{deletePincode(pincode.id)}}><i class="fa fa-trash" aria-hidden="true"></i></div></td>
                           </tr>
                         );
                       })}
