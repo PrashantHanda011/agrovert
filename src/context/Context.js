@@ -1,6 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import reducer from "./AppReducer";
 import {
+  deleteCategoryWithId,
   deleteProductWithId,
   fetchCategories,
   fetchOrders,
@@ -76,19 +77,31 @@ export const Context = ({ children }) => {
   }
 
   async function updateProductWithGivenId(id,product) {
-    await updateProductWithId(id,product)
     dispatch({
       type: "UPDATE_PRODUCT",
       payload: {id,product},
     });
   }
 
-  // async function getOrders(){
-  //   await fetchOrders()
-  //   dispatch({
-  //     type: ""
-  //   })
-  // }
+  async function deleteCategoryWithGivenId(index,id) {
+    console.log(id)
+    dispatch({
+      type: "DELETE_CATEGORY",
+      payload: index,
+    });
+    await deleteCategoryWithId(id);
+
+    
+  }
+  
+  async function updateCategoryWithId(id,category) {
+    dispatch({
+      type: "UPDATE_CATEGORY",
+      payload: {id,category},
+    });
+
+    
+  }
 
   return (
     <AppContext.Provider
@@ -102,6 +115,8 @@ export const Context = ({ children }) => {
         toggleSideBar,
         deleteProductWithGivenId,
         updateProductWithGivenId,
+        deleteCategoryWithGivenId,
+        updateCategoryWithId,
       }}>
       {children}
     </AppContext.Provider>

@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { uploadCategory } from "../../utils/utils";
+import { uploadCategory,updateCategory } from "../../utils/utils";
+import { AppContext } from "../../context/Context";
+import { useContext } from "react";
 
-const CategoryForm = ({ show, handleClose }) => {
-  const [category, setCategory] = useState("");
+const CategoryForm = ({ show, handleClose, category_={} }) => {
+  const [category, setCategory] = useState(!category_.category_name?"":category_.category_name);
   const [file, setFile] = useState("");
   const [error, setError] = useState({ image: false, category_name: false });
+  const [close, setClose] = useState(false);
+  const [imageUrl, setImageUrl] = useState(!category_.image_url?"":category_.image_url);
+  const { appState, addCategory,updateCategoryWithId } = useContext(AppContext);
+
+  
   const handleInput = (e) => {
     setCategory(e.target.value);
   };
@@ -25,14 +32,27 @@ const CategoryForm = ({ show, handleClose }) => {
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    checkMissing();
-    if (!(error.image && error.category_name)) {
-      uploadCategory(file, category, setCategory, setFile);
-      handleClose();
-    } else {
-      return;
+    if (Object.keys(category_).length < 1) {
+      checkMissing();
+      if (!(error.image && error.category_name)) {
+        uploadCategory(file, category, addCategory, setClose);
+      } else {
+        return;
+      }
+    }else{
+      if(file){}
+      else{
+        const newCategory = {category_name:category,image_url:imageUrl}
+        updateCategory(category_.id,file,newCategory,updateCategoryWithId,setClose)
+      }
     }
   };
+
+  useEffect(() => {
+    if (close === true) {
+      handleClose();
+    }
+  }, [close]);
 
   const createCategoryForm = () => {
     return (
@@ -83,7 +103,7 @@ const CategoryForm = ({ show, handleClose }) => {
           type="submit"
           onClick={onSubmit}
           className="btn btn-success my-3 mb-3">
-          Create Product
+          {category_?"Update Category":"Create Category"}
         </button>
       </Modal.Footer>
     </Modal>

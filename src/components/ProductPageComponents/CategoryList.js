@@ -5,14 +5,20 @@ import CategoryForm from "./CategoryForm";
 import CategoryTile from "./CategoryTile";
 
 const CategoryList = ({ categories }) => {
-  const [categoryForm, setShowCategoryForm] = useState(false);
+  const [handleCategoryForm,setHandleCategoryForm] = useState({show:0,category:null})
+
+  useEffect(() => {}, [categories]);
 
   const openForm = () => {
-    setShowCategoryForm(true);
+    setHandleCategoryForm({...handleCategoryForm,show:1});
+  };
+
+  const openUpdateForm = (category) => {
+    setHandleCategoryForm({...handleCategoryForm,show:2,category:category});
   };
 
   const closeForm = () => {
-    setShowCategoryForm(false);
+    setHandleCategoryForm({...handleCategoryForm,show:0});
   };
 
   const makeUI = () => {
@@ -24,12 +30,15 @@ const CategoryList = ({ categories }) => {
           handleShowProduct={openForm}
         />
         <div className="row mt-5">
-          {categories.map((category) => {
+          {categories.map((category,index) => {
             return (
               <div className="col-lg-4 col-md-12 my-2">
                 <CategoryTile
+                  id={category.id}
+                  index={index}
                   category_name={category.category_name}
                   image_url={category.image_url}
+                  handleShowCategory={()=>{openUpdateForm(category)}}
                   className="mt-3"
                 />{" "}
               </div>
@@ -42,8 +51,22 @@ const CategoryList = ({ categories }) => {
   return (
     <div>
       {categories ? makeUI() : <Loading />}
-      {categoryForm && (
-        <CategoryForm show={categoryForm} handleClose={closeForm} />
+      {handleCategoryForm.show=== 1 ? (
+        <CategoryForm
+          show={handleCategoryForm.show}
+          handleClose={closeForm}
+        />
+      ) : (
+        <></>
+      )}
+      {handleCategoryForm.show === 2 ? (
+        <CategoryForm
+          show={handleCategoryForm.show}
+          handleClose={closeForm}
+          category_={handleCategoryForm.category}
+        />
+      ) : (
+        <></>
       )}
     </div>
   );

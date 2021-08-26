@@ -37,23 +37,25 @@ const Orders = () => {
             ordersPerPage={orderPerPage}
             setOrdersPerPage={setOrderPerPage}
           />
-          <Pagination size="lg" style={{ marginLeft: "85%" }}>
-            <Pagination.Prev
-              disabled={currentPage === 1}
-              onClick={() => {
-                setCurrentPage(currentPage - 1);
-              }}
-            />
-            <Pagination.Item active>{currentPage}</Pagination.Item>
-            <Pagination.Next
-              disabled={
-                currentPage === Math.round(orders.length / orderPerPage)
-              }
-              onClick={() => {
-                setCurrentPage(currentPage + 1);
-              }}
-            />
-          </Pagination>
+          <div style={{marginRight:"50%"}}>
+            <Pagination size="lg" style={{ marginLeft: "85%" }}>
+              <Pagination.Prev
+                disabled={currentPage === 1}
+                onClick={() => {
+                  setCurrentPage(currentPage - 1);
+                }}
+              />
+              <Pagination.Item active>{currentPage}</Pagination.Item>
+              <Pagination.Next
+                disabled={
+                  currentPage === Math.round(orders.length / orderPerPage)
+                }
+                onClick={() => {
+                  setCurrentPage(currentPage + 1);
+                }}
+              />
+            </Pagination>
+          </div>
         </>
       )}
       {open && <FullOrderPage />}

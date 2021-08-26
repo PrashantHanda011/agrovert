@@ -39,19 +39,13 @@ export const updateProductWithId = async (
   updateProductWithGivenId,
   setClose
 ) => {
-  const updateProduct = updatedProduct
-
-  console.log(updatedProduct)
-  console.log(updateProduct)
+  const updateProduct = updatedProduct;
   if (photo) {
   } else {
-    await firestore
-      .collection("products")
-      .doc(id)
-      .update(updateProduct)
-    
-      updateProductWithGivenId(id, updateProduct);
-      setClose(true);
+    await firestore.collection("products").doc(id).update(updateProduct);
+
+    updateProductWithGivenId(id, updateProduct);
+    setClose(true);
   }
 };
 
@@ -60,17 +54,46 @@ export const deleteProductWithId = (id, imageUrl) => {
 };
 
 //* Logic For Categories
-export const uploadCategory = (image, category, setCategory, setFile) => {
-  const storageRef = storage.ref(image.name);
-  const uploadTask = storageRef.put(image);
+export const uploadCategory = (photo, category, addCategory, setClose) => {
+  const storageRef = storage.ref(photo.name);
+  const uploadTask = storageRef.put(photo);
   uploadTask.on("state_changed", console.log(), console.error, () => {
     storageRef.getDownloadURL().then((url) => {
-      const category_ = { category_name: category, image_url: url };
-      firestore.collection("categories").add(category_);
-      setCategory("");
-      setFile("");
+      return firestore
+        .collection("categories")
+        .add({ category_name:category, image_url: url })
+        .then(
+          async (category) =>
+            await category.get(category.id).then((category) => {
+              const id = category.id;
+              const data = category.data();
+              addCategory({ id, ...data });
+              setClose(true);
+            })
+        );
     });
   });
+};
+
+export const deleteCategoryWithId = (id) => {
+  firestore.collection("categories").doc(id).delete();
+};
+
+export const updateCategory = async (
+  id,
+  photo,
+  updatedCategory,
+  updateCategoryWithGivenId,
+  setClose
+) => {
+  const updateCategory = updatedCategory;
+  if (photo) {
+  } else {
+    await firestore.collection("categories").doc(id).update(updateCategory);
+
+    updateCategoryWithGivenId(id, updateCategory);
+    setClose(true);
+  }
 };
 
 export const fetchCategories = async () => {

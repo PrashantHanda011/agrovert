@@ -6,18 +6,17 @@ import AddButton from "./AddButton";
 import ProductForm from "./ProductForm";
 const ProductList = ({ products, categories }) => {
   const [productForm, setShowProductForm] = useState(0);
-  const [product,setProduct] = useState(null);
+  const [product, setProduct] = useState(null);
 
   useEffect(() => {}, [products]);
 
   const openForm = () => {
-    console.log(productForm);
     setShowProductForm(1);
   };
 
-  const openUpdateForm = () =>{
+  const openUpdateForm = () => {
     setShowProductForm(2);
-  }
+  };
 
   const closeForm = () => {
     setShowProductForm(0);
@@ -33,24 +32,20 @@ const ProductList = ({ products, categories }) => {
         />
         <div className="row mt-5">
           {products.map((product) => {
-      
             return (
-
-                <div className="col-xl-3 col-md-6 mb-2 my-2">
-                  <ProductTile
-                    className="mt-3"
-                    id={product.id}
-                    productName={product.name}
-                    imageUrl={product.image_url}
-                    price={product.price}
-                    description={product.description}
-                    file_name={product.file_name}
-                    handleShowProduct={openUpdateForm}
-                    setProduct = {setProduct}
-                    product= {product}
-                  />{" "}
-                </div>
-            
+              <div className="col-xl-3 col-md-6 mb-2 my-2">
+                <ProductTile
+                  className="mt-3"
+                  id={product.id}
+                  productName={product.name}
+                  imageUrl={product.image_url}
+                  price={product.price}
+                  description={product.description}
+                  handleShowProduct={openUpdateForm}
+                  setProduct={setProduct}
+                  product={product}
+                />{" "}
+              </div>
             );
           })}
         </div>
@@ -59,23 +54,26 @@ const ProductList = ({ products, categories }) => {
   };
   return (
     <div>
-      {/* <AddButton className="mb-5" handleShowProduct = {openForm}/> */}
       {products ? makeUI() : <Loading />}
-      {productForm ===1 ? (
+      {productForm === 1 ? (
         <ProductForm
           show={productForm}
           handleClose={closeForm}
           categories={categories}
         />
-      ):<></>}
-      {productForm ===2 ? (
+      ) : (
+        <></>
+      )}
+      {productForm === 2 ? (
         <ProductForm
           show={productForm}
           handleClose={closeForm}
           categories={categories}
           product={product}
         />
-      ):<></>}
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

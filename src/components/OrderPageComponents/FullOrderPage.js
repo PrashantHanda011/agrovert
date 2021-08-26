@@ -72,7 +72,7 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
                 <tr>
                     <th>Total: </th>
                     <th></th>
-                    <th>₹ {order.amount}</th>
+                    <th>₹ {order.amount.toFixed(2)}</th>
                 </tr>
             </thead>
         </table>

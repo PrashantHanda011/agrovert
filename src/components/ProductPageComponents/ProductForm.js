@@ -8,18 +8,17 @@ import { storage } from "../../Firebase";
 
 const ProductForm = ({ show, handleClose, product={}, categories }) => {
   const {appState,addProduct,updateProductWithGivenId} = useContext(AppContext)
+
   const [values, setValues] = useState({
     name: product.name?product.name:"",
     description: product.description?product.description:"",
     price: product.price?product.price:"",
     quantity: product.quantity?product.quantity:"",
     margin: product.margin?product.margin:"",
-    slabs: [],
     weight: product.weight?product.weight:"",
     image_url: product.image_url?product.image_url:"",
     photo: "",
-    slab1: product.slabs?product.slabs[0].slab1:"",
-    slab2: product.slabs?product.slabs[1].slab2:"",
+    offered_price: product.offered_price?product.offered_price:"",
     category_id: product.category_id?product.category_id:"",
     error: {
       isthere: false,
@@ -30,8 +29,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
       margin: false,
       weight: false,
       photo: false,
-      slab1: false,
-      slab2: false,
+      offered_price: false,
     },
   });
   const [close,setClose] = useState(false)
@@ -42,12 +40,10 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     price,
     quantity,
     margin,
-    slabs,
     weight,
     image_url,
     photo,
-    slab1,
-    slab2,
+    offered_price,
     error,
     category_id,
 
@@ -81,12 +77,10 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     if (weight === "") {
       return "weight";
     }
-    if (slab1 === "") {
-      return "slab1";
+    if (offered_price === "") {
+      return "offered_price";
     }
-    if (slab2 === "") {
-      return "slab2";
-    }
+    
     if (category_id === "") {
       return "category";
     }
@@ -112,7 +106,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
           description,
           quantity,
           price,
-          slabs: [{ slab1: slab1 }, { slab2: slab2 }],
+          offered_price,
           image_url: "",
           file_name:photo.name,
           weight,
@@ -129,7 +123,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         description,
         quantity,
         price,
-        slabs: [{ slab1: slab1 }, { slab2: slab2 }],
+        offered_price,
         image_url: image_url,
         weight,
         margin,
@@ -283,37 +277,21 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         )}
       </div>
       <span>
-        <h6>Slabs</h6>
+        <h6>Offered Price</h6>
       </span>
       <div className="form-group my-3">
-        <label>Slab 1</label>
         <input
           type="number"
           name="slab1"
           step={0.01}
           className="form-control form-control-user"
-          value={slab1}
-          placeholder="Slab1 Price"
-          onChange={changeHandler("slab1")}
+          value={offered_price}
+          placeholder="Offered Price"
+          onChange={changeHandler("offered_price")}
         />
-        {!slab1 && error === "slab1" && (
+        {!offered_price && error === "offered_price" && (
           <div className="text-danger text-sm mb-3">
-            Please add slab1 amount
-          </div>
-        )}
-        <label>Slab 2</label>
-        <input
-          type="number"
-          name="slab2"
-          step={0.01}
-          className="form-control form-control-user"
-          value={slab2}
-          placeholder="Slab2 Price"
-          onChange={changeHandler("slab2")}
-        />
-        {!slab2 && error === "slab2" && (
-          <div className="text-danger text-sm mb-3">
-            Please add slab2 amount
+            Please add offered price
           </div>
         )}
       </div>

@@ -57,7 +57,7 @@ const TableRow = ({ Order, index }) => {
           </td>
           <td>
             <button
-              className="btn btn-primary"
+              className="btn btn-sm btn-primary"
               onClick={() => {
                 handleOpen();
               }}>
@@ -66,7 +66,7 @@ const TableRow = ({ Order, index }) => {
           </td>
           <td>
             <button
-              className="btn btn-success"
+              className="btn btn-sm btn-success"
               disabled={order_.status === "DELIVERED" ? true : false}
               onClick={() => {
                 approveOrder();
@@ -76,7 +76,7 @@ const TableRow = ({ Order, index }) => {
           </td>
           <td>
             <button
-              className="btn btn-danger"
+              className="btn btn-sm btn-danger"
               disabled={order_.status === "CANCELLED" ? true : false}
               onClick={() => {
                 cancelOrder();
