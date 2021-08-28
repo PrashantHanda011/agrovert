@@ -7,7 +7,7 @@ import Loading from "../components/Base/Loading";
 
 
 const Login = () => {
-  const { appState, addUser } = useContext(AppContext);
+  const { appState, addUser,getCategoriesFromBackend,getProductsFromBackend } = useContext(AppContext);
   const [number, setnumber] = useState("");
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState("");
@@ -100,6 +100,11 @@ const Login = () => {
             else{
               sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
               addUser(snapshot.docs[0].data())
+              const callBack = async () => {
+                await getProductsFromBackend();
+                await getCategoriesFromBackend();
+              };
+              callBack();
               history.push("/");
             }
             
