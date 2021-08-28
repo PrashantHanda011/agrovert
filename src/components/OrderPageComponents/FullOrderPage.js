@@ -35,8 +35,8 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
           <strong>Phone No.:</strong> {user.phone_number}
         </p>
         <p>
-          <strong>Address:</strong> {user.street_address} {user.state} -{" "}
-          {user.pin_code}
+          <strong>Address:</strong> {order.delivery_address.street_address}, near {order.delivery_address.landmark}, {order.delivery_address.district}, {order.delivery_address.state} -{" "}
+          {order.delivery_address.pin_code}
         </p>
         <hr />
         <h4>Products</h4>

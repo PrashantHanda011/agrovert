@@ -24,10 +24,10 @@ function App() {
     <Router>
       <Switch>
         <Route component={Login} path="/login" exact />
-        <Route component={Users} path="/" exact />
-        <Route component={Products} path="/products" exact />
-        <Route component={Orders} path="/orders" exact />
-        <Route component={Pincodes} path="/pincodes" exact />
+        <PrivateRoute component={Users} path="/" exact />
+        <PrivateRoute component={Products} path="/products" exact />
+        <PrivateRoute component={Orders} path="/orders" exact />
+        <PrivateRoute component={Pincodes} path="/pincodes" exact />
       </Switch>
     </Router>
   );

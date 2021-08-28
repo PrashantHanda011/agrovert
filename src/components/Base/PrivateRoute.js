@@ -9,7 +9,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        auth.currentUser ? (
+        JSON.parse(sessionStorage.getItem("user")) ? (
           <Component {...props} />
         ) : (
           <Redirect

@@ -8,7 +8,6 @@ export const uploadProduct = async (photo, product, addProduct, setClose) => {
   uploadTask.on("state_changed", console.log(), console.error, () => {
     storageRef.getDownloadURL().then((url) => {
       product.image_url = url;
-      product.file_name = photo.name;
       return firestore
         .collection("products")
         .add(product)
@@ -41,6 +40,21 @@ export const updateProductWithId = async (
 ) => {
   const updateProduct = updatedProduct;
   if (photo) {
+    const storageRef = storage.ref(photo.name);
+    const uploadTask = storageRef.put(photo);
+    uploadTask.on("state_changed", console.log(), console.error, () => {
+      storageRef.getDownloadURL().then((url) => {
+        updatedProduct.image_url = url;
+        return firestore
+          .collection("products")
+          .doc(id)
+          .update(updatedProduct)
+          .then(() => {
+            updateProductWithGivenId(id, updatedProduct);
+            setClose(true);
+          });
+      });
+    });
   } else {
     await firestore.collection("products").doc(id).update(updateProduct);
 
@@ -88,6 +102,21 @@ export const updateCategory = async (
 ) => {
   const updateCategory = updatedCategory;
   if (photo) {
+    const storageRef = storage.ref(photo.name);
+    const uploadTask = storageRef.put(photo);
+    uploadTask.on("state_changed", console.log(), console.error, () => {
+      storageRef.getDownloadURL().then((url) => {
+        updateCategory.image_url = url;
+        return firestore
+          .collection("categories")
+          .doc(id)
+          .update(updateCategory)
+          .then(() => {
+            updateCategoryWithGivenId(id, updateCategory);
+            setClose(true);
+          });
+      });
+    });
   } else {
     await firestore.collection("categories").doc(id).update(updateCategory);
 

@@ -40,7 +40,10 @@ const CategoryForm = ({ show, handleClose, category_={} }) => {
         return;
       }
     }else{
-      if(file){}
+      if(file){
+        const newCategory = {category_name:category,image_url:imageUrl}
+        updateCategory(category_.id,file,newCategory,updateCategoryWithId,setClose)
+      }
       else{
         const newCategory = {category_name:category,image_url:imageUrl}
         updateCategory(category_.id,file,newCategory,updateCategoryWithId,setClose)
@@ -103,7 +106,7 @@ const CategoryForm = ({ show, handleClose, category_={} }) => {
           type="submit"
           onClick={onSubmit}
           className="btn btn-success my-3 mb-3">
-          {category_?"Update Category":"Create Category"}
+          {Object.keys(category_).length>1?"Update Category":"Create Category"}
         </button>
       </Modal.Footer>
     </Modal>

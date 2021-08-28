@@ -81,9 +81,6 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
       return "offered_price";
     }
     
-    if (category_id === "") {
-      return "category";
-    }
     if (description === "") {
       return "description";
     }

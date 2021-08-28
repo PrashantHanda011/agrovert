@@ -1,14 +1,19 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../context/Context";
 import firebase from "firebase";
-import { auth } from "../Firebase";
+import { auth, firestore } from "../Firebase";
 import { useHistory } from "react-router-dom";
+import Loading from "../components/Base/Loading";
+
 
 const Login = () => {
   const { appState, addUser } = useContext(AppContext);
   const [number, setnumber] = useState("");
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage,setErrorMessage] = useState("")
+  const [loading,setLoading] = useState(false)
   const history = useHistory();
 
   const handleNumber = (e) => {
@@ -37,43 +42,73 @@ const Login = () => {
     );
   };
 
+
+
   const onSignInSubmit = (e) => {
     e.preventDefault();
-    setUpRecaptcha();
-    let phoneNumber = "+91" + number;
-    console.log(phoneNumber);
-    let appVerifier = window.recaptchaVerifier;
-    auth
-      .signInWithPhoneNumber(phoneNumber, appVerifier)
-      .then(function (confirmationResult) {
-        // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
-        window.confirmationResult = confirmationResult;
-        // console.log(confirmationResult);
-        console.log("OTP is sent");
-        toggleOtpShow();
-      })
-      .catch(function (error) {
-        console.log(error);
+    firestore.collection("admins").where("number","==",number).get().then(snapshot=>{
+      console.log(snapshot)
+      if(snapshot.docs.length>=1){
+        setLoading(true)
+        setUpRecaptcha();
+      let phoneNumber = "+91" + number;
+      let appVerifier = window.recaptchaVerifier;
+      auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
+        return auth
+          .signInWithPhoneNumber(phoneNumber, appVerifier)
+          .then(function (confirmationResult) {
+            // SMS sent. Prompt user to type the code from the message, then sign the
+            // user in with confirmationResult.confirm(code).
+            window.confirmationResult = confirmationResult;
+            // console.log(confirmationResult);
+            console.log("OTP is sent");
+            setLoading(false)
+            toggleOtpShow();
+          })
+          .catch(function (error) {
+            console.log(error);
+            setLoading(false)
+            setError(true)
+            if(error.message.includes("reCAPTCHA")){
+              setErrorMessage(error.message+ ". Please Reload Page")
+            }
+            else{
+              setErrorMessage(error.message)
+            }
+            
+          });
       });
+      }else{
+        setError(true)
+        const number_ = number
+        setErrorMessage(`User with number ${number} doesn't exists`)
+      }
+    })
+    
+      
+    
   };
 
   const onSubmitOtp = (e) => {
     e.preventDefault();
+    setLoading(true)
     let otpInput = otp;
     let optConfirm = window.confirmationResult;
     // console.log(codee);
     optConfirm
       .confirm(otpInput)
       .then(function (result) {
+        setLoading(false)
         // User signed in successfully.
         // console.log("Result" + result.verificationID);
         let user = result.user;
         console.log(user);
         addUser(user);
-        history.push("/products");
+        sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
+        history.push("/");
       })
       .catch(function (error) {
+        setLoading(false)
         console.log(error);
         alert("Incorrect OTP");
       });
@@ -146,11 +181,19 @@ const Login = () => {
                       </div>
                     </div>
                   )}
+
+                  {error && (
+                    <div className="alert alert-danger alert-dismissible">
+                    <div  className="close" data-dismiss="alert" aria-label="close" onClick={()=>{setError(false)}}>&times;</div>
+                    <strong>Error!</strong> {errorMessage}
+                  </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {loading && <Loading color="warning"/>}
       </div>
     </div>
   );

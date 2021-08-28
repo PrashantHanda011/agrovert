@@ -17,16 +17,16 @@ const UsersTable = () => {
   };
 
   const getAdmins = async () => {
-    const admins_ = await fetchAdmins()
-    setAdmins(admins_)
+    const admins_ = await fetchAdmins();
+    setAdmins(admins_);
   };
 
   const deleteUser = async (id) => {
-    console.log(id)
-    const filteredAdmin = admins.filter(admin=> admin.id!==id)
-    setAdmins(filteredAdmin)
-    deleteAdmin(id)
-  }
+    console.log(id);
+    const filteredAdmin = admins.filter((admin) => admin.id !== id);
+    setAdmins(filteredAdmin);
+    deleteAdmin(id);
+  };
 
   useEffect(() => {
     getAdmins();
@@ -54,23 +54,70 @@ const UsersTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                {admins.map((admin,index)=> {
-                    return (
-                      <tr>
-                      <td>{index+1}</td>
-                      <td>{admin.name}</td>
-                      <td>{admin.number}</td>
-                      <td><Badge className={admin.type==="ADMIN"?"badge-success":"badge-primary"}>{admin.type}</Badge></td>
-                      {admin.type!=="SUPERADMIN"?<td><div className="btn btn-danger" onClick={()=>{deleteUser(admin.id)}}><i class="fa fa-trash" aria-hidden="true"></i></div></td>:""}
-                    </tr>
-                    )
-                })}
-              </tbody>
+                    {admins.map((admin, index) => {
+                      return (
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{admin.name}</td>
+                          <td>{admin.number}</td>
+                          <td>
+                            <Badge
+                              className={
+                                admin.type === "ADMIN"
+                                  ? "badge-success"
+                                  : "badge-primary"
+                              }>
+                              {admin.type}
+                            </Badge>
+                          </td>
+                          {admin.type !== "SUPERADMIN" ? (
+                            admin.id !==
+                            JSON.parse(sessionStorage.getItem("user")).uid ? (
+                              <td>
+                                <div
+                                  className="btn btn-danger"
+                                  onClick={() => {
+                                    deleteUser(admin.id);
+                                  }}>
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                </div>
+                              </td>
+                            ) : (
+                              <td>
+                                <button
+                                  className="btn btn-danger"
+                                  disabled
+                                  onClick={() => {}}>
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                              </td>
+                            )
+                          ) : (
+                            <td>
+                              <button
+                                className="btn btn-danger"
+                                disabled
+                                onClick={() => {}}>
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                              </button>
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
                 </table>
               </div>
             </div>
           </div>
-          {openForm && <UserForm show={openForm} handleClose={handleClose} admins={admins} updateAdmins={setAdmins}/>}
+          {openForm && (
+            <UserForm
+              show={openForm}
+              handleClose={handleClose}
+              admins={admins}
+              updateAdmins={setAdmins}
+            />
+          )}
         </div>
       )}
     </>
