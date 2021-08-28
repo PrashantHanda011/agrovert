@@ -94,8 +94,9 @@ const Login = () => {
           snapshot => {
             if(!snapshot.docs[0]){
               auth.signOut()
-              history.push("/login");
-              window.location.reload();
+              setError(true)
+              const number_ = number
+              setErrorMessage(`User with number ${number_} doesn't exists`)
             }
             else{
               sessionStorage.setItem("user", JSON.stringify(auth.currentUser));

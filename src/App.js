@@ -9,10 +9,11 @@ import Pincodes from "./pages/Pincodes/Pincodes";
 import Users from "./pages/Users/Users";
 
 function App() {
-  const { appState, getProductsFromBackend, getCategoriesFromBackend } =
+  const { appState, getProductsFromBackend, getCategoriesFromBackend, addUser } =
     useContext(AppContext);
   useEffect(() => {
     if(sessionStorage.getItem("user")){
+      addUser(sessionStorage.getItem("user"))
       const callBack = async () => {
         await getProductsFromBackend();
         await getCategoriesFromBackend();

@@ -4,12 +4,13 @@ import { AppContext } from "../../context/Context";
 import { auth } from "../../Firebase";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { appState } = useContext(AppContext);
+  const sessUser = JSON.parse(sessionStorage.getItem("user"))
+  const firebaseSessUser = JSON.parse(sessionStorage.getItem(`firebase:authUser:${process.env.REACT_APP_apiKey}:[DEFAULT]`))
   return (
     <Route
       {...rest}
       render={(props) =>
-        JSON.parse(sessionStorage.getItem("user")) ? (
+        sessUser && firebaseSessUser && firebaseSessUser.uid===sessUser.uid? (
           <Component {...props} />
         ) : (
           <Redirect
