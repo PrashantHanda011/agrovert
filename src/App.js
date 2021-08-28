@@ -11,7 +11,15 @@ import Users from "./pages/Users/Users";
 function App() {
   const { appState, getProductsFromBackend, getCategoriesFromBackend } =
     useContext(AppContext);
-  
+  useEffect(() => {
+    if(sessionStorage.getItem("user")){
+      const callBack = async () => {
+        await getProductsFromBackend();
+        await getCategoriesFromBackend();
+      };
+      callBack();
+    }
+  }, []);
   return (
     <Router>
       <Switch>

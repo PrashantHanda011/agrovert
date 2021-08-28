@@ -14,7 +14,7 @@ const Header = () => {
           }}>
           <i className="fa fa-bars"></i>
         </button>
-        <div align="center" className="text-center"><strong>Welcome {appState.user.name}</strong></div>
+        
       </nav>
      
     </div>
