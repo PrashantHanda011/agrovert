@@ -22,7 +22,7 @@ const UsersTable = () => {
   };
 
   const deleteUser = async (id) => {
-    console.log(id);
+
     const filteredAdmin = admins.filter((admin) => admin.id !== id);
     setAdmins(filteredAdmin);
     deleteAdmin(id);

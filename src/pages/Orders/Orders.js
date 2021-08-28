@@ -23,7 +23,7 @@ const Orders = () => {
   const indexOfLastPost = currentPage * orderPerPage;
   const indexOfFirstPost = indexOfLastPost - orderPerPage;
 
-  console.log(indexOfFirstPost, indexOfLastPost);
+
 
   return (
     <Base>

@@ -10,19 +10,19 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
   const [products, setProducts] = useState(null);
 
   useEffect(() => {
-    console.log(order);
+   
     let productIds = [];
     order.products.forEach((product) => {
       productIds.push(product.product_id);
     });
     const getProducts = async () => {
       let fetchedProducts = await getProductsFromId(productIds);
-      console.log(fetchedProducts)
+     
       setProducts(fetchedProducts);
     };
     getProducts();
   }, []);
-  console.log(products);
+  
   const createOrderDetail = () => {
     return (
       <div>

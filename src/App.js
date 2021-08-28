@@ -15,11 +15,9 @@ function App() {
     const callBack = async () => {
       await getProductsFromBackend();
       await getCategoriesFromBackend();
-      //console.log(getRefToImageInStorage("https://firebasestorage.googleapis.com/v0/b/ecommerce-app-d0b68.appspot.com/o/20210211_122230.jpg?alt=media&token=3b1682fe-7805-45d9-ac27-ce9c19c72bee"))
     };
     callBack();
   }, []);
-  console.log(appState);
   return (
     <Router>
       <Switch>

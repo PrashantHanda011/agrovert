@@ -34,7 +34,7 @@ const Login = () => {
       {
         size: "invisible",
         callback: function (response) {
-          console.log("Captcha Resolved");
+         
           onSignInSubmit();
         },
         defaultCountry: "IN",
@@ -46,11 +46,8 @@ const Login = () => {
 
   const onSignInSubmit = (e) => {
     e.preventDefault();
-    firestore.collection("admins").where("number","==",number).get().then(snapshot=>{
-      console.log(snapshot)
-      if(snapshot.docs.length>=1){
-        setLoading(true)
-        setUpRecaptcha();
+    setLoading(true)
+      setUpRecaptcha();
       let phoneNumber = "+91" + number;
       let appVerifier = window.recaptchaVerifier;
       auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
@@ -60,13 +57,10 @@ const Login = () => {
             // SMS sent. Prompt user to type the code from the message, then sign the
             // user in with confirmationResult.confirm(code).
             window.confirmationResult = confirmationResult;
-            // console.log(confirmationResult);
-            console.log("OTP is sent");
             setLoading(false)
             toggleOtpShow();
           })
           .catch(function (error) {
-            console.log(error);
             setLoading(false)
             setError(true)
             if(error.message.includes("reCAPTCHA")){
@@ -78,12 +72,6 @@ const Login = () => {
             
           });
       });
-      }else{
-        setError(true)
-        const number_ = number
-        setErrorMessage(`User with number ${number} doesn't exists`)
-      }
-    })
     
       
     
@@ -94,18 +82,30 @@ const Login = () => {
     setLoading(true)
     let otpInput = otp;
     let optConfirm = window.confirmationResult;
-    // console.log(codee);
+  
     optConfirm
       .confirm(otpInput)
       .then(function (result) {
         setLoading(false)
         // User signed in successfully.
-        // console.log("Result" + result.verificationID);
+    
         let user = result.user;
-        console.log(user);
-        addUser(user);
-        sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
-        history.push("/");
+        firestore.collection("admins").where("id","==",user.uid).get().then(
+          snapshot => {
+            if(!snapshot.docs[0]){
+              auth.signOut()
+              history.push("/login");
+              window.location.reload();
+            }
+            else{
+              sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
+              addUser(snapshot.docs[0].data())
+              history.push("/");
+            }
+            
+          }
+        )
+        
       })
       .catch(function (error) {
         setLoading(false)

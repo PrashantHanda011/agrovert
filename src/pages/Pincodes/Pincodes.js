@@ -18,7 +18,7 @@ const Pincodes = () => {
 
   const formSubmit = (event) =>{
       event.preventDefault()
-      console.log(pincodes)
+    
       handleClose()
       addPincode(values,setPincodes,pincodes)
   }
@@ -148,7 +148,7 @@ const makeModal = ()  =>{
     };
     getPincodes();
   }, []);
-  console.log(pincodes);
+
   return <Base>{pincodes ? makeUI() : <Loading />}</Base>;
 };
 

@@ -167,7 +167,7 @@ export const getUserFromUserId = (userId) => {
 };
 
 export const getProductsFromId = async (productIds) => {
-  console.log(productIds);
+
   let products = [];
   for (let productId of productIds) {
     await firestore
@@ -175,18 +175,17 @@ export const getProductsFromId = async (productIds) => {
       .doc(productId)
       .get()
       .then((data) => {
-        console.log(data.data());
         products.push(data.data());
       });
   }
-  console.log(products);
+
   return products;
 };
 
 export const updateOrderStatus = async (updatedOrder, id, status) => {
-  console.log(id);
+  
   delete updatedOrder.id;
-  console.log(updatedOrder);
+
 
   await firestore.collection("orders").doc(id).update({
     status: status,
@@ -250,6 +249,6 @@ export const fetchAdmins = async () => {
 };
 
 export const deleteAdmin = async (uid) => {
-  console.log(uid);
+  
   await firestore.collection("admins").doc(uid).delete();
 };

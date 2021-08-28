@@ -36,7 +36,7 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
       {
         size: "invisible",
         callback: function (response) {
-          console.log("Captcha Resolved");
+          
           onSignInSubmit();
         },
         defaultCountry: "IN",
@@ -49,13 +49,13 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
     setLoading(true)
     setUpRecaptcha();
     let phoneNumber = "+91" + number;
-    console.log(phoneNumber);
+    
     let appVerifier = window.recaptchaVerifier;
     auth
       .signInWithPhoneNumber(phoneNumber, appVerifier)
       .then(function (confirmationResult) {
         window.confirmationResult = confirmationResult;
-        console.log("OTP is sent");
+        
         setLoading(false)
         toggleOtpShow();
       })
@@ -69,7 +69,7 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
     setLoading(true)
     let otpInput = otp;
     let optConfirm = window.confirmationResult;
-    // console.log(codee);
+   
     optConfirm
       .confirm(otpInput)
       .then(async function (result) {

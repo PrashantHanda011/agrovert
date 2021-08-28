@@ -8,9 +8,7 @@ import {
   fetchProducts,
   updateProductWithId,
 } from "../utils/utils";
-// import { db } from './Firebase'
 
-// console.log(db)
 const initialState = {
   toggle: false,
   user: null,
@@ -84,7 +82,7 @@ export const Context = ({ children }) => {
   }
 
   async function deleteCategoryWithGivenId(index,id) {
-    console.log(id)
+  
     dispatch({
       type: "DELETE_CATEGORY",
       payload: index,

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { AppContext } from "../../context/Context";
 import { Link, withRouter } from "react-router-dom";
+import { auth } from "../../Firebase";
 const Sidebar = ({ history }) => {
   const { appState, toggleSideBar } = useContext(AppContext);
 
@@ -55,6 +56,14 @@ const Sidebar = ({ history }) => {
         <li className="nav-link">
           <i className="fas fa-fw fa-map-pin"></i>
           <span>Pincodes</span>
+        </li>
+      </Link>
+
+      <Link to="/login" className={currentTab(history, "/login")} onClick={()=>{sessionStorage.removeItem("user");auth.signOut()}}>
+        {" "}
+        <li className="nav-link">
+          <i className="fas fa-fw fa-times"></i>
+          <span>Logout</span>
         </li>
       </Link>
 

@@ -15,12 +15,12 @@ const TableRow = ({ Order, index }) => {
   };
   const approveOrder = () => {
     setOrder({ ...order_, status: "DELIVERED" });
-    console.log(order_);
+    
     updateOrderStatus(order_, order_.id, "DELIVERED");
   };
   const cancelOrder = () => {
     setOrder({ ...order_, status: "CANCELLED" });
-    console.log(order_);
+    
     updateOrderStatus(order_, order_.id, "CANCELLED");
   };
   useEffect(() => {
