@@ -65,3 +65,5 @@ class CategoryModule {
     });
   }
 }
+
+export default CategoryModule
