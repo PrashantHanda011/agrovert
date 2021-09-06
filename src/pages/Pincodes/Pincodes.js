@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Loading from "../../components/Base/Loading";
 import AddButton from "../../components/PincodePageComponents/AddButton";
-import { deletePinCode, fetchPincodes } from "../../utils/utils";
 import Base from "../Base";
-import { addPincode } from "../../utils/utils";
 import { Modal } from "react-bootstrap";
+import PincodeModule from '../../modules/pincodeModule'
 
 const Pincodes = () => {
   const [pincodes, setPincodes] = useState([]);
   const [open, setOpen] = useState(false);
   const types = ["SERVICABLE","NON-SERVICABLE"]
   const [values,setValues] = useState({pincode:"",type:""})
+  const pincodeModule = new PincodeModule()
+
 
   const changeHandler = (name) => (event) =>{
       setValues({...values,[name]:event.target.value})
@@ -20,13 +21,13 @@ const Pincodes = () => {
       event.preventDefault()
     
       handleClose()
-      addPincode(values,setPincodes,pincodes)
+      pincodeModule.addPincode(values,setPincodes,pincodes)
   }
 
   const deletePincode = (id) => {
     const updatedPincodes = pincodes.filter(pincode=>pincode.id!==id)
     setPincodes(updatedPincodes)
-    deletePinCode(id)
+    pincodeModule.deletePinCode(id)
   }
 
   const makeForm = () =>{
@@ -143,7 +144,7 @@ const makeModal = ()  =>{
   };
   useEffect(() => {
     const getPincodes = async () => {
-      const pincodes = await fetchPincodes();
+      const pincodes = await pincodeModule.fetchPincodes();
       setPincodes(pincodes);
     };
     getPincodes();
