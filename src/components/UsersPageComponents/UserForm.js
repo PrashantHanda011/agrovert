@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import Loading from "../Base/Loading";
 import { auth,firestore } from "../../Firebase";
 import firebase from "firebase";
-import { makeAdminFirestore } from "../../utils/utils";
+import AdminModule from "../../modules/adminModule";
 
 const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
   const [number, setnumber] = useState("");
@@ -13,6 +13,7 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
   const [otp, setOtp] = useState("");
   const history = useHistory();
   const [loading, setLoading] = useState(false);
+  const adminModule = new AdminModule();
 
   const handleNumber = (e) => {
     setnumber(e.target.value);
@@ -76,7 +77,7 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
         let user = result.user;
         const doc = await firestore.collection("admins").doc(user.uid)
         if (result.additionalUserInfo.isNewUser||!doc.exists) {
-          await makeAdminFirestore(user.uid, name, number);
+          await adminModule.makeAdminFirestore(user.uid, name, number);
         }
         setLoading(false)
         const id = user.uid

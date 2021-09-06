@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Badge } from "react-bootstrap";
-import { fetchAdmins, deleteAdmin } from "../../utils/utils";
 import AddButton from "./AddButton";
 import UserForm from "./UserForm";
+import AdminModule from "../../modules/adminModule";
 
 const UsersTable = () => {
   const [openForm, setOpenForm] = useState(false);
   const [admins, setAdmins] = useState(null);
+  const adminModule = new AdminModule()
 
   const handleOpen = () => {
     setOpenForm(true);
@@ -17,7 +18,7 @@ const UsersTable = () => {
   };
 
   const getAdmins = async () => {
-    const admins_ = await fetchAdmins();
+    const admins_ = await adminModule.fetchAdmins();
     setAdmins(admins_);
   };
 
@@ -25,7 +26,7 @@ const UsersTable = () => {
 
     const filteredAdmin = admins.filter((admin) => admin.id !== id);
     setAdmins(filteredAdmin);
-    deleteAdmin(id);
+    adminModule.deleteAdmin(id);
   };
 
   useEffect(() => {
