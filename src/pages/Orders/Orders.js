@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import Base from "../Base";
-import { fetchOrders } from "../../utils/utils";
 import OrderTable from "../../components/OrderPageComponents/OrderTable";
 import Loading from "../../components/Base/Loading";
-import { firestore } from "../../Firebase";
 import FullOrderPage from "../../components/OrderPageComponents/FullOrderPage";
 import { Pagination } from "react-bootstrap";
+import OrderModule from '../../modules/orderModule'
 
 const Orders = () => {
   const [orders, setOrders] = useState(null);
   const [open, setOpen] = useState(false);
+  const orderModule = new OrderModule()
 
   useState(async () => {
     const getOrders = async () => {
-      return await fetchOrders();
+      return await orderModule.fetchOrders();
     };
     const fetchedOrders = await getOrders();
     setOrders(fetchedOrders);

@@ -1,8 +1,6 @@
-import { Button, Pagination } from "react-bootstrap";
 import React from "react";
-import { getUserFromUserId } from "../../utils/utils";
 import TableRow from "./TableRow";
-import { useState } from "react";
+
 
 const OrderTable = ({ orders, ordersPerPage, setOrdersPerPage }) => {
   const recordsList = [10, 15, 20];

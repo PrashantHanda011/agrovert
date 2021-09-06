@@ -2,12 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import Orders from "../../pages/Orders/Orders";
-import { getProductsFromId } from "../../utils/utils";
 import Loading from "../Base/Loading";
+import OrderModule from '../../modules/orderModule'
 
 const FullOrderPage = ({ order, user, show, handleClose }) => {
   const [products, setProducts] = useState(null);
+  const orderModule =  new OrderModule()
 
   useEffect(() => {
    
@@ -16,7 +16,7 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
       productIds.push(product.product_id);
     });
     const getProducts = async () => {
-      let fetchedProducts = await getProductsFromId(productIds);
+      let fetchedProducts = await orderModule.getProductsFromId(productIds);
      
       setProducts(fetchedProducts);
     };
