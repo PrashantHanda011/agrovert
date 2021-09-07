@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { uploadCategory,updateCategory } from "../../utils/utils";
+import CategoryModule from '../../modules/categoryModule'
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 
@@ -11,7 +11,7 @@ const CategoryForm = ({ show, handleClose, category_={} }) => {
   const [close, setClose] = useState(false);
   const [imageUrl, setImageUrl] = useState(!category_.image_url?"":category_.image_url);
   const { appState, addCategory,updateCategoryWithId } = useContext(AppContext);
-
+  const categoryModule = new CategoryModule()
   
   const handleInput = (e) => {
     setCategory(e.target.value);
@@ -35,18 +35,18 @@ const CategoryForm = ({ show, handleClose, category_={} }) => {
     if (Object.keys(category_).length < 1) {
       checkMissing();
       if (!(error.image && error.category_name)) {
-        uploadCategory(file, category, addCategory, setClose);
+        categoryModule.uploadCategory(file, category, addCategory, setClose);
       } else {
         return;
       }
     }else{
       if(file){
         const newCategory = {category_name:category,image_url:imageUrl}
-        updateCategory(category_.id,file,newCategory,updateCategoryWithId,setClose)
+        categoryModule.updateCategory(category_.id,file,newCategory,updateCategoryWithId,setClose)
       }
       else{
         const newCategory = {category_name:category,image_url:imageUrl}
-        updateCategory(category_.id,file,newCategory,updateCategoryWithId,setClose)
+        categoryModule.updateCategory(category_.id,file,newCategory,updateCategoryWithId,setClose)
       }
     }
   };

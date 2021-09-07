@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { uploadProduct,updateProductWithId} from "../../utils/utils";
+import ProductModule from "../../modules/productModule.js";
 import { Modal } from "react-bootstrap";
-import Loading from "../Base/Loading";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
-import { storage } from "../../Firebase";
+
 
 const ProductForm = ({ show, handleClose, product={}, categories }) => {
   const {appState,addProduct,updateProductWithGivenId} = useContext(AppContext)
+  const productModule = new ProductModule();
 
   const [values, setValues] = useState({
     name: product.name?product.name:"",
@@ -110,7 +110,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
           margin,
           category_id,
         };
-        await uploadProduct(photo, newProduct,addProduct,setClose);
+        await productModule.uploadProduct(photo, newProduct,addProduct,setClose);
         
         return;
     }}
@@ -126,7 +126,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         margin,
         category_id,
       };
-      await updateProductWithId(product.id,photo, updatedProduct,updateProductWithGivenId,setClose);
+      await productModule.updateProduct(product.id,photo, updatedProduct,updateProductWithGivenId,setClose);
       return;
     }
   };

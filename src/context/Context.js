@@ -1,13 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import reducer from "./AppReducer";
-import {
-  deleteCategoryWithId,
-  deleteProductWithId,
-  fetchCategories,
-  fetchOrders,
-  fetchProducts,
-  updateProductWithId,
-} from "../utils/utils";
+import ProductModule from "../modules/productModule";
+import CategoryModule from "../modules/categoryModule";
 
 const initialState = {
   toggle: false,
@@ -16,6 +10,9 @@ const initialState = {
   pincodes: [],
   orders: [],
 };
+
+const productModule = new ProductModule();
+const categoryModule = new CategoryModule();
 
 export const AppContext = createContext(initialState);
 
@@ -51,14 +48,14 @@ export const Context = ({ children }) => {
   }
 
   async function getProductsFromBackend() {
-    let products = await fetchProducts();
+    let products = await productModule.fetchProducts();
     dispatch({
       type: "GET_PRODUCTS",
       payload: products,
     });
   }
   async function getCategoriesFromBackend() {
-    let categories = await fetchCategories();
+    let categories = await categoryModule.fetchCategories();
     dispatch({
       type: "GET_CATEGORIES",
       payload: categories,
@@ -66,7 +63,7 @@ export const Context = ({ children }) => {
   }
 
   async function deleteProductWithGivenId(id) {
-    await deleteProductWithId(id);
+    await productModule.deleteProduct(id);
 
     dispatch({
       type: "DELETE_PRODUCT",
@@ -74,31 +71,26 @@ export const Context = ({ children }) => {
     });
   }
 
-  async function updateProductWithGivenId(id,product) {
+  async function updateProductWithGivenId(id, product) {
     dispatch({
       type: "UPDATE_PRODUCT",
-      payload: {id,product},
+      payload: { id, product },
     });
   }
 
-  async function deleteCategoryWithGivenId(index,id) {
-  
+  async function deleteCategoryWithGivenId(index, id) {
     dispatch({
       type: "DELETE_CATEGORY",
       payload: index,
     });
-    await deleteCategoryWithId(id);
-
-    
+    await categoryModule.deleteCategoryWithId(id);
   }
-  
-  async function updateCategoryWithId(id,category) {
+
+  async function updateCategoryWithId(id, category) {
     dispatch({
       type: "UPDATE_CATEGORY",
-      payload: {id,category},
+      payload: { id, category },
     });
-
-    
   }
 
   return (
