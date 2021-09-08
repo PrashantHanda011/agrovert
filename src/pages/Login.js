@@ -100,6 +100,7 @@ const Login = () => {
             }
             else{
               sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
+              localStorage.setItem("currentLogin",JSON.stringify({time:new Date()}))
               addUser(snapshot.docs[0].data())
               const callBack = async () => {
                 await getProductsFromBackend();

@@ -59,7 +59,11 @@ const Sidebar = ({ history }) => {
         </li>
       </Link>
 
-      <Link to="/login" className={currentTab(history, "/login")} onClick={()=>{sessionStorage.removeItem("user");auth.signOut()}}>
+      <Link to="/login" className={currentTab(history, "/login")} onClick={()=>{
+        const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
+        localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
+        sessionStorage.removeItem("user");auth.signOut()
+        }}>
         {" "}
         <li className="nav-link">
           <i className="fas fa-fw fa-times"></i>

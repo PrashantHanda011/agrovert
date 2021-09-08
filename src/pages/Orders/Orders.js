@@ -5,7 +5,6 @@ import Loading from "../../components/Base/Loading";
 import FullOrderPage from "../../components/OrderPageComponents/FullOrderPage";
 import { Pagination } from "react-bootstrap";
 import OrderModule from '../../modules/orderModule'
-import { firestore } from "../../Firebase";
 
 const Orders = () => {
   const [orders, setOrders] = useState(null);

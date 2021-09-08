@@ -2,13 +2,13 @@ import React, { createContext, useReducer } from "react";
 import reducer from "./AppReducer";
 import ProductModule from "../modules/productModule";
 import CategoryModule from "../modules/categoryModule";
+import { firestore } from "../Firebase";
 
 const initialState = {
   toggle: false,
-  user: null,
   products: [],
-  pincodes: [],
-  orders: [],
+  categories: [],
+  notifications:0
 };
 
 const productModule = new ProductModule();
