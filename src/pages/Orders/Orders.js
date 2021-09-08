@@ -1,22 +1,26 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Base from "../Base";
 import OrderTable from "../../components/OrderPageComponents/OrderTable";
 import Loading from "../../components/Base/Loading";
 import FullOrderPage from "../../components/OrderPageComponents/FullOrderPage";
 import { Pagination } from "react-bootstrap";
 import OrderModule from '../../modules/orderModule'
+import { firestore } from "../../Firebase";
 
 const Orders = () => {
   const [orders, setOrders] = useState(null);
   const [open, setOpen] = useState(false);
   const orderModule = new OrderModule()
 
-  useState(async () => {
-    const getOrders = async () => {
-      return await orderModule.fetchOrders();
-    };
-    const fetchedOrders = await getOrders();
-    setOrders(fetchedOrders);
+  useEffect(() => {
+    const unsubscribe = firestore.collection('orders').orderBy("timestamp", "desc").onSnapshot((querySanpshot)=>{
+      let orders_ = []
+      querySanpshot.forEach(order=>{
+        orders_.push(order.data())
+      })
+      setOrders(orders_)
+    })
+    return () => unsubscribe()
   }, []);
   const [currentPage, setCurrentPage] = useState(1);
   const [orderPerPage, setOrderPerPage] = useState(10);
