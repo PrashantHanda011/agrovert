@@ -1,17 +1,14 @@
 import { storage, firestore } from "../Firebase";
 
 class OrderModule {
-  async fetchOrders() {
-    var ordersRef = firestore.collection("orders").orderBy("timestamp", "desc");
-    var orders = [];
-    var allOrders = await ordersRef.get();
-    allOrders.forEach((doc) => {
-      const id = doc.id;
-      const data = doc.data();
-      orders.push({ id, ...data });
-    });
-
-    return orders;
+  fetchOrders(setOrders) {
+    return firestore.collection('orders').orderBy("timestamp", "desc").onSnapshot((querySanpshot)=>{
+      let orders_ = []
+      querySanpshot.forEach(order=>{
+        orders_.push(order.data())
+      })
+      setOrders(orders_)
+    })
   }
 
   async getUserFromUserIdPromise(userId) {

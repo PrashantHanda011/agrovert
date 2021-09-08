@@ -13,13 +13,7 @@ const Orders = () => {
   const orderModule = new OrderModule()
 
   useEffect(() => {
-    const unsubscribe = firestore.collection('orders').orderBy("timestamp", "desc").onSnapshot((querySanpshot)=>{
-      let orders_ = []
-      querySanpshot.forEach(order=>{
-        orders_.push(order.data())
-      })
-      setOrders(orders_)
-    })
+    const unsubscribe = orderModule.fetchOrders(setOrders)
     return () => unsubscribe()
   }, []);
   const [currentPage, setCurrentPage] = useState(1);
