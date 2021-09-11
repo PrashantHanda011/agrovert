@@ -43,6 +43,15 @@ const Sidebar = ({ history }) => {
           <span>Products</span>
         </li>
       </Link>
+
+      <Link to="/categories" className={currentTab(history, "/categories")}>
+        {" "}
+        <li className="nav-link">
+          <i className="fas fa-fw fa-list-alt"></i>
+          <span>Categories</span>
+        </li>
+      </Link>
+
       <Link to="/orders" className={currentTab(history, "/orders")}>
         {" "}
         <li className="nav-link">

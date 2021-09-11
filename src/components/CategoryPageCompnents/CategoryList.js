@@ -6,9 +6,6 @@ import CategoryTile from "./CategoryTile";
 
 const CategoryList = ({ categories }) => {
   const [handleCategoryForm,setHandleCategoryForm] = useState({show:0,category:null})
-
-  useEffect(() => {}, [categories]);
-
   const openForm = () => {
     setHandleCategoryForm({...handleCategoryForm,show:1});
   };
@@ -29,7 +26,7 @@ const CategoryList = ({ categories }) => {
           name="Add Cagtegory"
           handleShowProduct={openForm}
         />
-        <div className="row mt-5">
+        <div className="row mt-5 mx-3">
           {categories.map((category,index) => {
             return (
               <div className="col-lg-4 col-md-12 my-2">
