@@ -67,7 +67,6 @@ class ProductModule {
   }
 
    fetchProductsByCategory(categoryId,setProducts){
-     console.log(categoryId)
     return firestore.collection('products').where("category_id","==",categoryId).onSnapshot((querySanpshot)=>{
       let products_ = []
       querySanpshot.forEach(order=>{

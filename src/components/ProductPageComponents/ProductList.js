@@ -11,7 +11,6 @@ const ProductList = ({ categories, category }) => {
   const [products, setProducts] = useState(null);
 
   const productModule = new ProductModule();
-
   useEffect(() => {
     const unsub = productModule.fetchProductsByCategory(
       category.id,
@@ -50,7 +49,7 @@ const ProductList = ({ categories, category }) => {
 
     return result;
   };
-
+  console.log(products)
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;

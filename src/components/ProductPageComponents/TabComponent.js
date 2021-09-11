@@ -5,39 +5,39 @@ import ProductModule from "../../modules/productModule";
 import Loading from "../Base/Loading";
 import ProductList from "./ProductList";
 
-const TabComponent = () => {
-  const [key, setKey] = useState("");
-  const [categories,setCategories] = useState(null)
-  const categoryModule =  new CategoryModule()
-
-  
+const TabComponent = ({categories}) => {
+   console.log(categories)
+   const [category,setCategory] = useState(categories[0])
   useEffect(()=>{
-    
-    const getCategories = async () => {
-      const result = await categoryModule.fetchCategories().then(data=>data)
-      setCategories(result)
-      setKey(result[0].id)
-    }
-    getCategories()
-  },[])
+  },[categories])
 
-  
+  console.log(category)
   return (
+    
     <div className="container mx-2 my-2">
       {categories?(
         
-      <Tabs
-        id="controlled-tab"
-        activeKey={key}
-        onSelect={(k) => setKey(k)}
-        className="mb-3 mx-3">
-        {categories.map((cate,index)=>{
-          return (<Tab key={index} eventKey={cate.id} title={cate.category_name}>
-          <ProductList products={[]} categories={categories} category={cate}/>
-          </Tab>)
-        })}
-        
-      </Tabs>):<Loading/>}
+        <>
+        <div>Select Category</div>
+        <select
+          className="ml-2 form-control"
+          width="10%"
+          onChange={(e) => {
+            setCategory(e.target.value);
+          }}
+          placeholder="Category"
+          value={category}>
+          <option>Select</option>
+          {categories &&
+            categories.map((category, index) => (
+              <option id={index} value={category}>
+                {category.category_name}
+              </option>
+            ))}
+        </select>
+         {category!==null &&  <ProductList categories={categories} category={category}/>}
+        </>
+          ):<Loading/>}
     </div>
   );
 };
