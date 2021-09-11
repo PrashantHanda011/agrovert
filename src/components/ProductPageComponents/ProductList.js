@@ -17,7 +17,6 @@ const ProductList = ({ categories, category }) => {
       category.id,
       setProducts
     );
-    return () => unsub();
   }, []);
 
   const openForm = () => {

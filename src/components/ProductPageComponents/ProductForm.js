@@ -20,6 +20,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     photo: "",
     offered_price: product.offered_price?product.offered_price:"",
     category_id: product.category_id?product.category_id:"",
+    rank: product.rank?product.rank:"",
     error: {
       isthere: false,
       name: false,
@@ -46,7 +47,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     offered_price,
     error,
     category_id,
-
+    rank
   } = values;
 
   const changeHandler = (name) => (event) => {
@@ -84,6 +85,10 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     if (description === "") {
       return "description";
     }
+
+    if (rank === "") {
+      return "rank";
+    }
   };
 
   useEffect(()=>{
@@ -109,6 +114,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
           weight,
           margin,
           category_id,
+          rank
         };
         await productModule.uploadProduct(photo, newProduct,addProduct,setClose);
         
@@ -125,6 +131,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         weight,
         margin,
         category_id,
+        rank
       };
       await productModule.updateProduct(product.id,photo, updatedProduct,updateProductWithGivenId,setClose);
       return;
@@ -289,6 +296,24 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         {!offered_price && error === "offered_price" && (
           <div className="text-danger text-sm mb-3">
             Please add offered price
+          </div>
+        )}
+      </div>
+      <span>
+        <h6>Rank</h6>
+      </span>
+      <div className="form-group my-3">
+        <input
+          type="number"
+          name="rank"
+          className="form-control form-control-user"
+          value={rank}
+          placeholder="Rank"
+          onChange={changeHandler("rank")}
+        />
+        {!offered_price && error === "rank" && (
+          <div className="text-danger text-sm mb-3">
+            Please add rank
           </div>
         )}
       </div>
