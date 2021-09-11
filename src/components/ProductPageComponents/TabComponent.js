@@ -33,7 +33,7 @@ const TabComponent = () => {
         className="mb-3 mx-3">
         {categories.map((cate,index)=>{
           return (<Tab key={index} eventKey={cate.id} title={cate.category_name}>
-          <ProductList products={[]} categories={categories} categoryId={cate.id}/>
+          <ProductList products={[]} categories={categories} category={cate}/>
           </Tab>)
         })}
         

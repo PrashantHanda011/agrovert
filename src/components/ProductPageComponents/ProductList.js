@@ -4,11 +4,19 @@ import Loading from "../Base/Loading";
 import ProductTile from "./ProductTile";
 import AddButton from "./AddButton";
 import ProductForm from "./ProductForm";
-const ProductList = ({ products, categories, categoryId}) => {
+import ProductModule from "../../modules/productModule";
+const ProductList = ({ categories, category }) => {
+
   const [productForm, setShowProductForm] = useState(0);
   const [product, setProduct] = useState(null);
+  const [products,setProducts] = useState(null)
 
-  useEffect(() => {}, [products]);
+  const productModule =  new ProductModule()
+
+  useEffect(()=>{
+    const unsub = productModule.fetchProductsByCategory(category.id,setProducts)
+    return () =>  unsub()
+  },[])
 
   const openForm = () => {
     setShowProductForm(1);
@@ -53,7 +61,7 @@ const ProductList = ({ products, categories, categoryId}) => {
         <div className="m-4">
           <div className="card shadow mb-4 mt-4">
             <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Admins</h6>
+              <h6 className="m-0 font-weight-bold text-primary">Product</h6>
             </div>
             <div className="card-body">
               <div className="table-responsive">
@@ -70,19 +78,41 @@ const ProductList = ({ products, categories, categoryId}) => {
                     </tr>
                   </thead>
                   <tbody>
-                  <td>S No.</td>
-                      <td></td>
-                      <td>Product Name</td>
-                      <td>MRP</td>
-                      <td>Offered Price</td>
-                      <td></td>
-                      <td></td>
+                  {products.map((product,ind)=>{
+                    return (                    <tr>
+
+                      <td>{ind+1}</td>
+                      <td><img src={product.image_url} height="100px" width="100px" alt="product image"/></td>
+                      <td>{product.name}</td>
+                      <td>{product.price}</td>
+                      <td>{product.offered_price}</td>
+  
+                      <td>
+                        <button
+                          className="btn btn-sm btn-success"
+                          onClick={() => {
+                            setProduct(product)
+                            openUpdateForm()
+                          }}>
+                          Update
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => {}}>
+                          Delete
+                        </button>
+                      </td>
+                      </tr>)
+                  })}
+                    
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
-          </div>
+        </div>
       </>
     );
   };
