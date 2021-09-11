@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { firestore } from "../../Firebase";
 import Loading from "../Base/Loading";
-import ProductTile from "./ProductTile";
 import AddButton from "./AddButton";
 import ProductForm from "./ProductForm";
 import ProductModule from "../../modules/productModule";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
 const ProductList = ({ categories, category }) => {
   const [productForm, setShowProductForm] = useState(0);
   const [product, setProduct] = useState(null);
@@ -31,6 +31,40 @@ const ProductList = ({ categories, category }) => {
     setShowProductForm(0);
   };
 
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    if (endIndex > startIndex) {
+      result[startIndex].rank = endIndex + 1;
+      for (let i = startIndex + 1; i <= endIndex; ++i) {
+        result[i].rank -= 1;
+      }
+    } else if (startIndex - endIndex === 1) {
+      result[startIndex].rank -= 1;
+      result[endIndex].rank += 1;
+    } else if (startIndex - endIndex > 1) {
+      result[startIndex].rank = endIndex;
+      for (let i = endIndex; i <= startIndex; ++i) {
+        result[i].rank += 1;
+      }
+    }
+
+    return result;
+  };
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const items_ = reorder(
+      products,
+      result.source.index,
+      result.destination.index
+    );
+    setProducts(items_);
+    console.log(products);
+  };
+
   const makeUI = () => {
     return (
       <>
@@ -46,59 +80,81 @@ const ProductList = ({ categories, category }) => {
             </div>
             <div className="card-body">
               <div className="table-responsive">
-                <table className="table" width="100%">
-                  <thead>
-                    <tr>
-                      <th>S No.</th>
-                      <th></th>
-                      <th>Product Name</th>
-                      <th>MRP</th>
-                      <th>Offered Price</th>
-                      <th>Quantity</th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {products.map((product, ind) => {
-                      return (
-                        <tr>
-                          <td>{ind + 1}</td>
-                          <td>
-                            <img
-                              src={product.image_url}
-                              height="100px"
-                              width="100px"
-                              alt="product image"
-                            />
-                          </td>
-                          <td>{product.name}</td>
-                          <td>{product.price}</td>
-                          <td>{product.offered_price}</td>
-                          <td>{product.quantity}</td>
+                <DragDropContext onDragEnd={onDragEnd}>
+                  <table className="table" width="100%">
+                    <thead>
+                      <tr>
+                        <th>S No.</th>
+                        <th></th>
+                        <th>Product Name</th>
+                        <th>MRP</th>
+                        <th>Offered Price</th>
+                        <th>Quantity</th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <Droppable droppableId="droppable">
+                      {(provided, snapshot) => (
+                        <tbody
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}>
+                          {products
+                            .sort((a, b) =>
+                              a.rank > b.rank ? 1 : a.rank < b.rank ? -1 : 0
+                            )
+                            .map((product, ind) => {
+                              return (
+                                <Draggable
+                                  key={product.rank}
+                                  draggableId={`${product.rank}-id`}
+                                  index={ind}>
+                                  {(provided, snapshot) => (
+                                    <tr
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}>
+                                      <td>{ind + 1}</td>
+                                      <td>
+                                        <img
+                                          src={product.image_url}
+                                          height="100px"
+                                          width="100px"
+                                          alt="product image"
+                                        />
+                                      </td>
+                                      <td>{product.name}</td>
+                                      <td>{product.price}</td>
+                                      <td>{product.offered_price}</td>
+                                      <td>{product.quantity}</td>
 
-                          <td>
-                            <button
-                              className="btn btn-sm btn-success"
-                              onClick={() => {
-                                setProduct(product);
-                                openUpdateForm();
-                              }}>
-                              Update
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-sm btn-danger"
-                              onClick={() => {}}>
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                                      <td>
+                                        <button
+                                          className="btn btn-sm btn-success"
+                                          onClick={() => {
+                                            setProduct(product);
+                                            openUpdateForm();
+                                          }}>
+                                          Update
+                                        </button>
+                                      </td>
+                                      <td>
+                                        <button
+                                          className="btn btn-sm btn-danger"
+                                          onClick={() => {}}>
+                                          Delete
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  )}
+                                </Draggable>
+                              );
+                            })}
+                        </tbody>
+                      )}
+                    </Droppable>
+                  </table>
+                </DragDropContext>
               </div>
             </div>
           </div>
