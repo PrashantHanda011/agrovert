@@ -54,6 +54,7 @@ const ProductList = ({ categories, category }) => {
                       <th>Product Name</th>
                       <th>MRP</th>
                       <th>Offered Price</th>
+                      <th>Quantity</th>
                       <th></th>
                       <th></th>
                     </tr>
@@ -74,6 +75,7 @@ const ProductList = ({ categories, category }) => {
                           <td>{product.name}</td>
                           <td>{product.price}</td>
                           <td>{product.offered_price}</td>
+                          <td>{product.quantity}</td>
 
                           <td>
                             <button
