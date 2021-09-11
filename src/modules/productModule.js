@@ -65,6 +65,17 @@ class ProductModule {
   async deleteProduct(id, imageUrl) {
     firestore.collection("products").doc(id).delete();
   }
+
+   fetchProductsByCategory(categoryId,setProducts){
+    return firestore.collection('products').where("category_id","==",categoryId).onSnapshot((querySanpshot)=>{
+      let products_ = []
+      querySanpshot.forEach(order=>{
+        products_.push({id:order.id,...order.data()})
+      })
+      console.log(products_)
+      setProducts(products_)
+    })
+  }
 }
 
 export default ProductModule;
