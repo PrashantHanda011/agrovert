@@ -31,8 +31,12 @@ const Sidebar = ({ history }) => {
       <Link to="/" className={currentTab(history, "/")}>
         {" "}
         <li className="nav-link">
-          <i className="fas fa-fw fa-user"></i>
-          <span>Users</span>
+          
+          <span class="fa-layers fa-fw">
+    <i class="fas fa-fw fa-user"></i>
+    <span class="fa-layers-counter"><i className=" fa-layers-counter fas fa-plus" style={{marginLeft:"-5px",fontSize:"10px",marginTop:"-12px", marginRight:"10px"}}></i></span>
+  </span>
+          <span>Admins</span>
         </li>
       </Link>
       
@@ -65,6 +69,14 @@ const Sidebar = ({ history }) => {
         <li className="nav-link">
           <i className="fas fa-fw fa-map-pin"></i>
           <span>Pincodes</span>
+        </li>
+      </Link>
+
+      <Link to="/customers" className={currentTab(history, "/customers")}>
+        {" "}
+        <li className="nav-link">
+          <i className="fas fa-fw fa-user"></i>
+          <span>Customers</span>
         </li>
       </Link>
 

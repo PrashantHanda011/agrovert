@@ -8,6 +8,7 @@ import Orders from "./pages/Orders/Orders"
 import Pincodes from "./pages/Pincodes/Pincodes";
 import Users from "./pages/Users/Users";
 import Category from "./pages/Categories/Category";
+import Customer from "./pages/Customers/Customer";
 
 function App() {
   const { appState, getProductsFromBackend, getCategoriesFromBackend, addUser } =
@@ -35,6 +36,7 @@ function App() {
         <PrivateRoute component={Orders} path="/orders" exact />
         <PrivateRoute component={Pincodes} path="/pincodes" exact />
         <PrivateRoute component={Category} path="/categories" exact />
+        <PrivateRoute component={Customer} path="/customers" exact />
       </Switch>
     </Router>
   );
