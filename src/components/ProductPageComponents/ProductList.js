@@ -9,14 +9,15 @@ const ProductList = ({ categories, category }) => {
   const [productForm, setShowProductForm] = useState(0);
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState(null);
-
+  console.log(`Inside Product List ${category.id}`)
   const productModule = new ProductModule();
   useEffect(() => {
     const unsub = productModule.fetchProductsByCategory(
       category.id,
       setProducts
     );
-  }, []);
+    return () => unsub()
+  }, [category]);
 
   const openForm = () => {
     setShowProductForm(1);
@@ -61,7 +62,6 @@ const ProductList = ({ categories, category }) => {
       result.destination.index
     );
     setProducts(items_);
-    console.log(products);
   };
 
   const makeUI = () => {

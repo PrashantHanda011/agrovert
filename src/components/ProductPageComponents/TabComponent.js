@@ -6,12 +6,11 @@ import Loading from "../Base/Loading";
 import ProductList from "./ProductList";
 
 const TabComponent = ({categories}) => {
-   console.log(categories)
+   
    const [category,setCategory] = useState(categories[0])
-  useEffect(()=>{
-  },[categories])
+  
 
-  console.log(category)
+  console.log('HERE @ 14:',Object.keys(category))
   return (
     
     <div className="container mx-2 my-2">
@@ -20,22 +19,23 @@ const TabComponent = ({categories}) => {
         <>
         <div>Select Category</div>
         <select
-          className="ml-2 form-control"
+          className="ml-2 mb-3 form-control"
           width="10%"
           onChange={(e) => {
-            setCategory(e.target.value);
+            e.preventDefault()
+            setCategory(categories[e.target.value]);
           }}
           placeholder="Category"
-          value={category}>
-          <option>Select</option>
+          value={category.id}>
+          <option disabled>Select</option>
           {categories &&
             categories.map((category, index) => (
-              <option id={index} value={category}>
+              <option id={index} value={index}>
                 {category.category_name}
               </option>
             ))}
         </select>
-         {category!==null &&  <ProductList categories={categories} category={category}/>}
+         {Object.keys(category).length>0 &&  <ProductList categories={categories} category={category}/>}
         </>
           ):<Loading/>}
     </div>

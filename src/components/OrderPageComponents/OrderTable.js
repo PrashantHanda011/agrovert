@@ -20,7 +20,7 @@ const OrderTable = ({ orders, ordersPerPage, setOrdersPerPage }) => {
             }}
             placeholder="Category"
             value={ordersPerPage}>
-            <option>Select</option>
+            <option disabled>Select</option>
             {recordsList &&
               recordsList.map((numRecords, index) => (
                 <option id={index} value={numRecords}>
