@@ -67,12 +67,23 @@ class ProductModule {
   }
 
    fetchProductsByCategory(categoryId,setProducts){
-    return firestore.collection('products').where("category_id","==",categoryId).onSnapshot((querySanpshot)=>{
-      let products_ = []
-      querySanpshot.forEach(order=>{
-        products_.push({id:order.id,...order.data()})
-      })
-      setProducts(products_)
+    firestore.collection('products').where("category_id","==",categoryId).get().then(
+      data=>{
+        let products_ = []
+        data.docs.forEach(doc=>{
+          products_.push({id:doc.id,...doc.data()})
+        })
+
+        setProducts(products_)
+      }
+    )
+  }
+
+  updateProuductsInBulk(productList){
+    productList.forEach(product=>{
+      const id = product.id
+      delete product.id
+      firestore.collection('products').doc(id).update(product)
     })
   }
 }

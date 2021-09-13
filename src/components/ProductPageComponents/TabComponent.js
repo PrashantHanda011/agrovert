@@ -7,7 +7,7 @@ import ProductList from "./ProductList";
 
 const TabComponent = ({categories}) => {
    
-   const [category,setCategory] = useState(categories[0])
+   const [category,setCategory] = useState({})
   return (
     
     <div className="container mx-2 my-2">
@@ -24,7 +24,7 @@ const TabComponent = ({categories}) => {
           }}
           placeholder="Category"
           value={category.category_name}>
-          <option disabled>Select</option>
+          <option>Select</option>
           {categories &&
             categories.map((category, index) => (
               <option id={index} value={index}>

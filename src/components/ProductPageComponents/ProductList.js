@@ -12,12 +12,14 @@ const ProductList = ({ categories, category }) => {
   console.log(`Inside Product List ${category.id}`)
   const productModule = new ProductModule();
   useEffect(() => {
-    const unsub = productModule.fetchProductsByCategory(
+    productModule.fetchProductsByCategory(
       category.id,
       setProducts
     );
-    return () => unsub()
+    
   }, [category]);
+
+  useEffect(()=>{},[products])
 
   const openForm = () => {
     setShowProductForm(1);
@@ -62,6 +64,7 @@ const ProductList = ({ categories, category }) => {
       result.destination.index
     );
     setProducts(items_);
+    productModule.updateProuductsInBulk(products)
   };
 
   const makeUI = () => {
