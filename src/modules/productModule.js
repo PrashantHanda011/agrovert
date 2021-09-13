@@ -71,6 +71,7 @@ class ProductModule {
       data=>{
         let products_ = []
         data.docs.forEach(doc=>{
+          console.log(doc.id)
           products_.push({id:doc.id,...doc.data()})
         })
 
@@ -80,9 +81,8 @@ class ProductModule {
   }
 
   updateProuductsInBulk(productList){
-    productList.forEach(product=>{
-      const id = product.id
-      delete product.id
+    productList.forEach(product_=>{
+      const {id,...product} = product_
       firestore.collection('products').doc(id).update(product)
     })
   }
