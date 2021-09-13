@@ -83,7 +83,7 @@ const ProductList = ({ categories, category }) => {
                   <table className="table" width="100%">
                     <thead>
                       <tr>
-                        <th>S No.</th>
+                        <th>Rank</th>
                         <th></th>
                         <th>Product Name</th>
                         <th>MRP</th>
@@ -113,7 +113,7 @@ const ProductList = ({ categories, category }) => {
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}>
-                                      <td>{ind + 1}</td>
+                                      <td>{product.rank}</td>
                                       <td>
                                         <img
                                           src={product.image_url}
