@@ -114,7 +114,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
           weight,
           margin,
           category_id,
-          rank
+          rank:parseInt(rank)
         };
         await productModule.uploadProduct(photo, newProduct,addProduct,setClose);
         
@@ -131,7 +131,7 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         weight,
         margin,
         category_id,
-        rank
+        rank:parseInt(rank)
       };
       await productModule.updateProduct(product.id,photo, updatedProduct,updateProductWithGivenId,setClose);
       return;
