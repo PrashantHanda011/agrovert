@@ -1,5 +1,5 @@
 import React from 'react'
-import UsersTable from '../../components/UsersPageComponents/UsersTable'
+import UsersTable from '../../components/AdminPageComponents/UsersTable'
 import Base from '../Base'
 
 const Users = () => {

@@ -1,10 +1,10 @@
 import React from 'react'
 import Base from '../Base'
-
+import CustomerTable from '../../components/CustomerPageComponents/CustomerTable'
 const Customer = () => {
     return (
         <Base>
-        <h1>Hello World</h1>
+       <CustomerTable/>
         </Base>
     )
 }

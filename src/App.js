@@ -25,6 +25,7 @@ function App() {
   }, []);
   window.addEventListener('beforeunload',()=>{
     const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
+    
     localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
   })
   return (

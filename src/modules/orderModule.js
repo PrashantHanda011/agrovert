@@ -5,7 +5,7 @@ class OrderModule {
     return firestore.collection('orders').orderBy("timestamp", "desc").onSnapshot((querySanpshot)=>{
       let orders_ = []
       querySanpshot.forEach(order=>{
-        orders_.push(order.data())
+        orders_.push({id:order.id,...order.data()})
       })
       setOrders(orders_)
     })
