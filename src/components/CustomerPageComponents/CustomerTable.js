@@ -9,6 +9,8 @@ const CustomerTable = () => {
     const getCustomers = async() => {
       const customers_ = await customerModule.fetchCustomer()
       setCustomers(customers_)
+      const orders = await customerModule.fetchOrdersByCustomerUid(customers[35].uid)
+      console.log(orders)
     }
     getCustomers()
   },[])
