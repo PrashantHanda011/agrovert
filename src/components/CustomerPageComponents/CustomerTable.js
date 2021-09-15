@@ -1,27 +1,77 @@
-import React, { useState, useEffect } from "react";
-import { Badge } from "react-bootstrap";
+import jsonexport from "jsonexport";
+import React, { useState, useEffect, useRef } from "react";
+import { CSVLink } from "react-csv";
 import CustomerModule from "../../modules/customerModule";
+import Loading from "../Base/Loading";
+
 
 const CustomerTable = () => {
   const [customers, setCustomers] = useState(null);
-  const customerModule=  new CustomerModule()
-  useEffect(()=>{
-    const getCustomers = async() => {
-      const customers_ = await customerModule.fetchCustomer()
-      setCustomers(customers_)
-      const orders = await customerModule.fetchOrdersByCustomerUid(customers[35].uid)
-      console.log(orders)
-    }
-    getCustomers()
-  },[])
-  console.log(customers)
+  const [data,setData] = useState("")
+  const [products,setProducts] = useState(null)
+  const csvLink = useRef();
+  const customerModule = new CustomerModule();
+  useEffect(() => {
+    const getCustomersAndProducts = async () => {
+      const customers_ = await customerModule.fetchCustomers();
+      setCustomers(customers_);
+      const products_ = await customerModule.fetchProducts()
+      setProducts(products_)
+    };
+    getCustomersAndProducts();
+  }, []);
+  
+  const makeDataForCSV = () => {
+    let result = [];
+    customers.forEach((customer) => {
+      let addresses = [];
+      customer.addresses.forEach((address) => {
+        addresses.push(
+          `${address.street_address}, near ${address.landmark}, ${address.district}, ${address.state} - ${address.pin_code}`
+        );
+      });
+      result.push({
+        id: customer.uid,
+        name: customer.name,
+        phone_number: customer.phone_number,
+        addresses: addresses,
+      });
+    });
+   jsonexport(result,async (err,csv)=>{
+     if(err){throw err}
+    await setData(csv)
+    csvLink.current.link.click()
+   })
+  };
+  const makeAndDownloadMainCSV = () => {
+    makeDataForCSV();
+  };
   return (
     <>
-      {customers && (
+      {customers && products &&(
         <div className="m-4">
           <div className="card shadow mb-4 mt-4">
             <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Customers</h6>
+              <span className="ml-3">
+                <h6
+                  className="font-weight-bold text-primary mr-3 display-inline"
+                  style={{ display: "inline-block" }}>
+                  Customers
+                </h6>
+
+                <div>
+                  <button className="btn btn-primary" onClick={()=>{makeAndDownloadMainCSV()}}>
+                    Download Master Excel
+                  </button>
+                  {<CSVLink
+                    data={data}
+                    filename="Master.csv"
+                    className="hidden"
+                    ref={csvLink}
+                    target="_blank"
+                  />}
+                </div>
+              </span>
             </div>
             <div className="card-body">
               <div className="table-responsive">
@@ -41,10 +91,14 @@ const CustomerTable = () => {
                           <td>{index + 1}</td>
                           <td>{customer.name}</td>
                           <td>{customer.phone_number}</td>
-                          <td>{Array.isArray(customer.addresses) && customer.addresses[0] && `${customer.addresses[0].street_address}, 
+                          <td>
+                            {Array.isArray(customer.addresses) &&
+                              customer.addresses[0] &&
+                              `${customer.addresses[0].street_address}, 
                            near ${customer.addresses[0].landmark}, 
                            ${customer.addresses[0].district}, 
-                           ${customer.addresses[0].state} - ${customer.addresses[0].pin_code}`}</td>
+                           ${customer.addresses[0].state} - ${customer.addresses[0].pin_code}`}
+                          </td>
                         </tr>
                       );
                     })}

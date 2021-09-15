@@ -1,8 +1,8 @@
 import {firestore} from '../Firebase'
 class CustomerModule{
 
-    async fetchCustomer(){
-        const snapshot = await firestore.collection("users").get();
+    async fetchCustomers(){
+        const snapshot = await firestore.collection("users").where("addresses","!=",null).get()
     return snapshot.docs.map((doc) => {
       return { id: doc.id, ...doc.data() };
     });
@@ -15,20 +15,14 @@ class CustomerModule{
         })
     }
 
-    async getProductsFromId(productIds) {
-        let products = [];
-        for (let productId of productIds) {
-          await firestore
-            .collection("products")
-            .doc(productId)
-            .get()
-            .then((data) => {
-              products.push(data.data());
-            });
-        }
-    
-        return products;
-      }
+    async fetchProducts(){
+      const snapshot = await firestore.collection("products").get()
+      let result = {}
+      snapshot.docs.forEach(doc=>{
+        result[doc.id] = doc.data()
+      })
+      return result
+    }
 }
 
 export default CustomerModule
