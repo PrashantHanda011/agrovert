@@ -9,7 +9,6 @@ const ProductList = ({ categories, category }) => {
   const [productForm, setShowProductForm] = useState(0);
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState(null);
-  console.log(`Inside Product List ${category.id}`)
   const productModule = new ProductModule();
   useEffect(() => {
     productModule.fetchProductsByCategory(
@@ -52,7 +51,7 @@ const ProductList = ({ categories, category }) => {
 
     return result;
   };
-  console.log(products)
+
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;

@@ -12,6 +12,7 @@ const CustomerTable = () => {
   const csvLink = useRef();
   const csvLink2 = useRef();
   const customerModule = new CustomerModule();
+  
   useEffect(() => {
     const getCustomersAndProducts = async () => {
       const customers_ = await customerModule.fetchCustomers();
@@ -49,11 +50,9 @@ const CustomerTable = () => {
   const makeAndDownloadMasterCSV = () => {
     makeDataForCSV();
   };
-  console.log(products);
   const makeAndDownloadCustomerOrderCSV = async (uid) => {
     const orders = await customerModule.fetchOrdersByCustomerUid(uid);
     let resultOrders = [];
-    console.log(orders);
     if (orders.length > 0) {
       orders.forEach((order) => {
         if (order.status !== "CART") {

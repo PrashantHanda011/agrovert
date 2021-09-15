@@ -71,7 +71,6 @@ class ProductModule {
       data=>{
         let products_ = []
         data.docs.forEach(doc=>{
-          console.log(doc.id)
           products_.push({id:doc.id,...doc.data()})
         })
 

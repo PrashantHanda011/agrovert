@@ -21,10 +21,6 @@ const Header = () => {
             doc.type === "added" &&
             (doc.doc.data().timestamp.toDate().getTime() > lastLoginTime && doc.doc.data().timestamp.toDate().getTime() <currentLoginTime))
             {
-              console.log(doc.doc.data().timestamp.toDate().getTime() > lastLoginTime)
-              console.log(doc.doc.data().timestamp.toDate().getTime() <currentLoginTime)
-              console.log(currentLogin)
-              console.log(lastLogin)
             number_+=1
           }
           if (
