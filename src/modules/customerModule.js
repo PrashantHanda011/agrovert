@@ -9,7 +9,9 @@ class CustomerModule{
     }
 
     async fetchOrdersByCustomerUid(uid){
-        const snapshot = await firestore.collection("orders").where("user_id",'==',uid).get()
+        const snapshot = await firestore.collection("orders")
+        .where("user_id",'==',uid)
+        .get()
         return snapshot.docs.map(doc=>{
             return {id:doc.id,...doc.data()}
         })
