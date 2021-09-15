@@ -60,8 +60,10 @@ const CustomerTable = () => {
           order.timestamp = order.timestamp.toDate().toDateString();
           order.delivery_address = `${order.delivery_address.street_address}, near ${order.delivery_address.landmark}, ${order.delivery_address.district}, ${order.delivery_address.state} - ${order.delivery_address.pin_code}`;
           order.products.forEach((product) => {
-            product.name = products[product.product_id].name;
+            if(products[product.product_id]){
+              product.name = products[product.product_id].name;
             delete product.product_id;
+            }
           });
           customers.forEach((customer) => {
             if (customer.uid === order.user_id) {
