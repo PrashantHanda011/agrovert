@@ -8,6 +8,7 @@ const CustomerTable = () => {
   const [data, setData] = useState("");
   const [dataCustomer, setDataCustomer] = useState("");
   const [products, setProducts] = useState(null);
+  const[fileName,setFileName] = useState("")
   const csvLink = useRef();
   const csvLink2 = useRef();
   const customerModule = new CustomerModule();
@@ -64,8 +65,9 @@ const CustomerTable = () => {
           });
           customers.forEach((customer) => {
             if (customer.uid === order.user_id) {
-              order.user_name = customer.name;
+              order.user_name = customer.name?customer.name:"";
               order.user_number = customer.phone_number;
+              setFileName(`${customer.name}.csv`)
               delete order.user_id;
             }
           });
@@ -158,7 +160,7 @@ const CustomerTable = () => {
                               {
                                 <CSVLink
                                   data={dataCustomer}
-                                  filename={`${customers[index].uid}.csv`}
+                                  filename={fileName}
                                   className="hidden"
                                   ref={csvLink2}
                                   target="_blank"
