@@ -2,17 +2,22 @@ import { storage, firestore } from "../Firebase";
 
 class OrderModule {
   fetchOrders(setOrders) {
-    return firestore.collection('orders').orderBy("timestamp", "desc").onSnapshot((querySanpshot)=>{
-      let orders_ = []
-      querySanpshot.forEach(order=>{
-        orders_.push({id:order.id,...order.data()})
+    try {
+      return firestore.collection('orders').orderBy("timestamp", "desc").onSnapshot((querySanpshot)=>{
+        let orders_ = []
+        querySanpshot.forEach(order=>{
+          orders_.push({id:order.id,...order.data()})
+        })
+        setOrders(orders_)
       })
-      setOrders(orders_)
-    })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async getUserFromUserIdPromise(userId) {
-    const res = await firestore
+    try {
+      const res = await firestore
       .collection("users")
       .where("uid", "==", userId)
       .get();
@@ -22,16 +27,24 @@ class OrderModule {
       return { id, ...data };
     });
     return data[0];
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   getUserFromUserId(userId) {
-    return this.getUserFromUserIdPromise(userId).then((data) => {
-      return data;
-    });
+    try {
+      return this.getUserFromUserIdPromise(userId).then((data) => {
+        return data;
+      });
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async getProductsFromId(productIds) {
-    let products = [];
+    try {
+      let products = [];
     for (let productId of productIds) {
       await firestore
         .collection("products")
@@ -43,12 +56,19 @@ class OrderModule {
     }
 
     return products;
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async updateOrderStatus(id, status) {
-    await firestore.collection("orders").doc(id).update({
-      status: status,
-    });
+    try {
+      await firestore.collection("orders").doc(id).update({
+        status: status,
+      });
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
