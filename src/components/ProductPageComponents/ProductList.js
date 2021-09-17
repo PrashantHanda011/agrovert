@@ -66,6 +66,27 @@ const ProductList = ({ categories, category }) => {
     productModule.updateProuductsInBulk(products)
   };
 
+  const updateProduct = (id,updatedProduct) => {
+    const newProductList = products.map(product=>{
+      if(product.id===id){
+        product=updatedProduct
+        product.id=id
+      }
+      return product
+    })
+    setProducts(newProductList)
+  }
+
+  const changeProductStock = (id,value)=>{
+    const newProducts = products.map(product=>{
+      if(product.id===id){
+        product.in_stock = value
+      }
+      return product
+    })
+    setProducts(newProducts)
+    productModule.updateProductStock(id,value)
+  }
   const makeUI = () => {
     return (
       <>
@@ -91,6 +112,7 @@ const ProductList = ({ categories, category }) => {
                         <th>MRP</th>
                         <th>Offered Price</th>
                         <th>Quantity</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                       </tr>
@@ -128,7 +150,11 @@ const ProductList = ({ categories, category }) => {
                                       <td>{product.price}</td>
                                       <td>{product.offered_price}</td>
                                       <td>{product.quantity}</td>
-
+                                      <td><button className="btn btn-sm btn-primary"
+                                      onClick = {()=>{
+                                        changeProductStock(product.id,!product.in_stock)
+                                      }}
+                                      >{product.in_stock===true?"Out of Stock":"In Stock"}</button></td>
                                       <td>
                                         <button
                                           className="btn btn-sm btn-success"
@@ -181,6 +207,7 @@ const ProductList = ({ categories, category }) => {
           handleClose={closeForm}
           categories={categories}
           product={product}
+          updateProduct={updateProduct}
         />
       ) : (
         <></>

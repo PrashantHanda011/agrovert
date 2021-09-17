@@ -5,7 +5,7 @@ import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 
 
-const ProductForm = ({ show, handleClose, product={}, categories }) => {
+const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }) => {
   const {appState,addProduct,updateProductWithGivenId} = useContext(AppContext)
   const productModule = new ProductModule();
 
@@ -47,11 +47,12 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
     offered_price,
     error,
     category_id,
-    rank
+    rank,
+
   } = values;
 
   const changeHandler = (name) => (event) => {
-    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    let value = name === "photo" ? event.target.files[0] : name==="in_stock"?event.target.value==="on"?true:false:event.target.value;
 
     setValues({ ...values, [name]: value });
   };
@@ -114,7 +115,8 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
           weight,
           margin,
           category_id,
-          rank:parseInt(rank)
+          rank:parseInt(rank),
+          in_stock:true
         };
         await productModule.uploadProduct(photo, newProduct,addProduct,setClose);
         
@@ -131,8 +133,10 @@ const ProductForm = ({ show, handleClose, product={}, categories }) => {
         weight,
         margin,
         category_id,
-        rank:parseInt(rank)
+        rank:parseInt(rank),
+        in_stock:product.in_stock
       };
+      updateProduct(product.id,updatedProduct)
       await productModule.updateProduct(product.id,photo, updatedProduct,updateProductWithGivenId,setClose);
       return;
     }

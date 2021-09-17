@@ -85,6 +85,12 @@ class ProductModule {
       firestore.collection('products').doc(id).update(product)
     })
   }
+
+  updateProductStock(id,stockBool){
+    firestore.collection("products").doc(id).update({
+      in_stock:stockBool
+    })
+  }
 }
 
 export default ProductModule;

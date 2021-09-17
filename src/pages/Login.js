@@ -99,7 +99,7 @@ const Login = () => {
               setErrorMessage(`User with number ${number_} doesn't exists`)
             }
             else{
-              if(JSON.parse(localStorage.getItem("currentLogin")).time){
+              if(JSON.parse(localStorage.getItem("currentLogin"))){
               const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
               localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
               }
