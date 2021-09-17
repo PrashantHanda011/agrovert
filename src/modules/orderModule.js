@@ -45,9 +45,7 @@ class OrderModule {
     return products;
   }
 
-  async updateOrderStatus(updatedOrder, id, status) {
-    delete updatedOrder.id;
-
+  async updateOrderStatus(id, status) {
     await firestore.collection("orders").doc(id).update({
       status: status,
     });
