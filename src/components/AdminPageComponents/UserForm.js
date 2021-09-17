@@ -5,6 +5,7 @@ import Loading from "../Base/Loading";
 import { auth,firestore } from "../../Firebase";
 import firebase from "firebase";
 import AdminModule from "../../modules/adminModule";
+import CustomerModule from "../../modules/customerModule";
 
 const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
   const [number, setnumber] = useState("");
@@ -14,6 +15,7 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const adminModule = new AdminModule();
+  const customerModule = new CustomerModule();
 
   const handleNumber = (e) => {
     setnumber(e.target.value);
@@ -78,6 +80,7 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
         const doc = await firestore.collection("admins").doc(user.uid)
         if (result.additionalUserInfo.isNewUser||!doc.exists) {
           await adminModule.makeAdminFirestore(user.uid, name, number);
+          await customerModule.makeCustomerAdminFirestore(user.uid, name, number);
         }
         setLoading(false)
         const id = user.uid
