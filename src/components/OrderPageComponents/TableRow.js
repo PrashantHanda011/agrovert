@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Badge, Button } from "react-bootstrap";
 import FullOrderPage from "./FullOrderPage";
 import OrderModule from '../../modules/orderModule';
+import CustomerModule from "../../modules/customerModule";
 
 const TableRow = ({ Order, index }) => {
   const [order_, setOrder] = useState(Order);
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
   const orderModule = new OrderModule();
+  const customerModule =  new CustomerModule()
 
   const handleOpen = () => {
     setOpen(true);
@@ -18,12 +20,13 @@ const TableRow = ({ Order, index }) => {
   const approveOrder = () => {
     setOrder({ ...order_, status: "DELIVERED" });
     
-    orderModule.updateOrderStatus(order_, order_.id, "DELIVERED");
+    orderModule.updateOrderStatus(order_.id, "DELIVERED");
+    customerModule.updateCustomerTotalAmount(order_.user_id,order_.amount)
   };
   const cancelOrder = () => {
     setOrder({ ...order_, status: "CANCELLED" });
     
-    orderModule.updateOrderStatus(order_, order_.id, "CANCELLED");
+    orderModule.updateOrderStatus(order_.id, "CANCELLED");
   };
   useEffect(() => {
     const getUser = async (id) => {
