@@ -77,6 +77,23 @@ const ProductList = ({ categories, category }) => {
     setProducts(newProductList)
   }
 
+  const addNewProduct = (newProduct) => {
+    if(newProduct.category_id===category.id){
+      const newProductList = [...products,newProduct]
+      setProducts(newProductList)
+    }
+  }
+
+  const deleteProduct = (id) =>{
+    const newProducts = products.filter(product=>{
+      if(product.id!==id){
+        return product
+      }
+    })
+    setProducts(newProducts)
+    productModule.deleteProduct(id)
+  }
+
   const changeProductStock = (id,value)=>{
     const newProducts = products.map(product=>{
       if(product.id===id){
@@ -168,7 +185,7 @@ const ProductList = ({ categories, category }) => {
                                       <td>
                                         <button
                                           className="btn btn-sm btn-danger"
-                                          onClick={() => {}}>
+                                          onClick={() => {deleteProduct(product.id)}}>
                                           Delete
                                         </button>
                                       </td>
@@ -197,6 +214,7 @@ const ProductList = ({ categories, category }) => {
           show={productForm}
           handleClose={closeForm}
           categories={categories}
+          addNewProduct={addNewProduct}
         />
       ) : (
         <></>
