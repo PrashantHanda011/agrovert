@@ -16,7 +16,7 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
   const [loading, setLoading] = useState(false);
   const adminModule = new AdminModule();
   const customerModule = new CustomerModule();
-
+  const sessUser = JSON.parse(sessionStorage.getItem("user"))
   const handleNumber = (e) => {
     setnumber(e.target.value);
   };
@@ -78,13 +78,16 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
       .then(async function (result) {
         let user = result.user;
         const doc = await firestore.collection("admins").doc(user.uid)
+        console.log(doc)
+        console.log(result)
         if (result.additionalUserInfo.isNewUser||!doc.exists) {
           await adminModule.makeAdminFirestore(user.uid, name, number);
-          await customerModule.makeCustomerAdminFirestore(user.uid, name, number);
+          await customerModule.makeCustomerAdminFirestore(user.uid, number);
         }
         setLoading(false)
         const id = user.uid
         updateAdmins([...admins,{id,name,number,type:"ADMIN"}])
+        localStorage.setItem(`firebase:authUser:${process.env.REACT_APP_apiKey}:[DEFAULT]`,JSON.stringify(sessUser))
         handleClose()
       })
       .catch(function (error) {

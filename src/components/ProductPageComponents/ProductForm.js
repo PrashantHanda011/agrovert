@@ -3,9 +3,10 @@ import ProductModule from "../../modules/productModule.js";
 import { Modal } from "react-bootstrap";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
+import { firestore } from "../../Firebase.js";
 
 
-const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }) => {
+const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,addNewProduct }) => {
   const {appState,addProduct,updateProductWithGivenId} = useContext(AppContext)
   const productModule = new ProductModule();
 
@@ -20,7 +21,6 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }
     photo: "",
     offered_price: product.offered_price?product.offered_price:"",
     category_id: product.category_id?product.category_id:"",
-    rank: product.rank?product.rank:"",
     error: {
       isthere: false,
       name: false,
@@ -47,7 +47,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }
     offered_price,
     error,
     category_id,
-    rank,
+    
 
   } = values;
 
@@ -87,9 +87,9 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }
       return "description";
     }
 
-    if (rank === "") {
-      return "rank";
-    }
+   
+
+    if(category_id===""){return "category"}
   };
 
   useEffect(()=>{
@@ -104,6 +104,8 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }
       if (checkMissing()) {
         setValues({ ...values, error: checkMissing() });
       } else {
+        const productsInCategory = await firestore.collection('products').where("category_id","==",category_id).get()
+        const rankNew = productsInCategory.docs.length+1
         const newProduct = {
           name,
           description,
@@ -115,10 +117,10 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }
           weight,
           margin,
           category_id,
-          rank:parseInt(rank),
+          rank:rankNew,
           in_stock:true
         };
-        await productModule.uploadProduct(photo, newProduct,addProduct,setClose);
+        await productModule.uploadProduct(photo, newProduct,addNewProduct,setClose);
         
         return;
     }}
@@ -133,7 +135,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }
         weight,
         margin,
         category_id,
-        rank:parseInt(rank),
+        rank:product.rank,
         in_stock:product.in_stock
       };
       updateProduct(product.id,updatedProduct)
@@ -233,6 +235,9 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }
               </option>
             ))}
         </select>
+        {!category_id && error === "category" && (
+          <div className="text-danger text-sm">Please add category</div>
+        )}
       </div>
       <span>
         <h6>MRP</h6>
@@ -300,24 +305,6 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct }
         {!offered_price && error === "offered_price" && (
           <div className="text-danger text-sm mb-3">
             Please add offered price
-          </div>
-        )}
-      </div>
-      <span>
-        <h6>Rank</h6>
-      </span>
-      <div className="form-group my-3">
-        <input
-          type="number"
-          name="rank"
-          className="form-control form-control-user"
-          value={rank}
-          placeholder="Rank"
-          onChange={changeHandler("rank")}
-        />
-        {!offered_price && error === "rank" && (
-          <div className="text-danger text-sm mb-3">
-            Please add rank
           </div>
         )}
       </div>

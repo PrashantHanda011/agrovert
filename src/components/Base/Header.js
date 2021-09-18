@@ -10,7 +10,7 @@ const Header = () => {
   const lastLoginTime = new Date(lastLogin.time);
 
   useEffect(() => {
-    firestore
+    const unsub = firestore
       .collection("orders")
       .orderBy("timestamp", "desc")
       .onSnapshot((querySnapshot) => {
@@ -26,6 +26,7 @@ const Header = () => {
             number_+=1
           }
           if (
+            read &&
             doc.doc.data().status==="PENDING" &&
             sessionStorage.getItem("user") &&
             doc.type === "added" &&
@@ -35,6 +36,7 @@ const Header = () => {
             number_+=1
           }
           if (
+            read &&
             doc.doc.data().status==="PENDING" &&
             sessionStorage.getItem("user") &&
             doc.type === "added" &&
@@ -45,6 +47,8 @@ const Header = () => {
         });
         setNumber(number_)
       });
+
+      return () => unsub()
   }, [number]);
   const { appState, toggleSideBar } = useContext(AppContext);
   return (

@@ -8,24 +8,27 @@ const CustomerTable = () => {
   const [data, setData] = useState("");
   const [dataCustomer, setDataCustomer] = useState("");
   const [products, setProducts] = useState(null);
-  const[fileName,setFileName] = useState("")
+  const [categories, setCategories] = useState(null);
+  const [fileName, setFileName] = useState("");
   const csvLink = useRef();
   const csvLink2 = useRef();
   const customerModule = new CustomerModule();
-  
+
   useEffect(() => {
     const getCustomersAndProducts = async () => {
       const customers_ = await customerModule.fetchCustomers();
       setCustomers(customers_);
       const products_ = await customerModule.fetchProducts();
       setProducts(products_);
+      const categories_ = await customerModule.fetchCategories();
+      setCategories(categories_);
     };
     getCustomersAndProducts();
   }, []);
-
+  console.log(products);
   const makeDataForCSV = () => {
     let result = [];
-    customers.forEach((customer) => {
+    customers.forEach((customer, index) => {
       let addresses = [];
       customer.addresses.forEach((address) => {
         addresses.push(
@@ -33,10 +36,11 @@ const CustomerTable = () => {
         );
       });
       result.push({
-        id: customer.uid,
+        sno: index + 1,
         name: customer.name,
         phone_number: customer.phone_number,
         addresses: addresses,
+        amount_spent: customer.amount_spent,
       });
     });
     jsonexport(result, async (err, csv) => {
@@ -54,25 +58,35 @@ const CustomerTable = () => {
     const orders = await customerModule.fetchOrdersByCustomerUid(uid);
     let resultOrders = [];
     if (orders.length > 0) {
-      orders.forEach((order) => {
+      orders.forEach((order, index) => {
         if (order.status !== "CART") {
           order.timestamp = order.timestamp.toDate().toDateString();
           order.delivery_address = `${order.delivery_address.street_address}, near ${order.delivery_address.landmark}, ${order.delivery_address.district}, ${order.delivery_address.state} - ${order.delivery_address.pin_code}`;
-          order.products.forEach((product) => {
-            if(products[product.product_id]){
-              product.name = products[product.product_id].name;
-            delete product.product_id;
-            }
-          });
+
           customers.forEach((customer) => {
             if (customer.uid === order.user_id) {
-              order.user_name = customer.name?customer.name:"";
-              order.user_number = customer.phone_number;
-              setFileName(`${customer.name}.csv`)
+              setFileName(`${customer.name}-${customer.phone_number}.csv`);
               delete order.user_id;
             }
           });
-          resultOrders.push(order);
+
+          const products_ = order.products;
+          const orderDate = order.timestamp;
+          products_.forEach((product) => {
+            resultOrders.push({
+              "Serial No.": index + 1,
+              "Order Date": orderDate,
+              Category:
+                categories[products[product.product_id].category_id]
+                  .category_name,
+              Item: products[product.product_id].name,
+              Quantity: product.quantity,
+              "Selling Price": products[product.product_id].offered_price,
+              Sale:
+                parseInt(products[product.product_id].offered_price) *
+                product.quantity,
+            });
+          });
         }
       });
       jsonexport(resultOrders, async (err, csv) => {

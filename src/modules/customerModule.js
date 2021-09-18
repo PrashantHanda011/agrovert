@@ -10,20 +10,24 @@ class CustomerModule {
     });
   }
 
-  async makeCustomerAdminFirestore(uid, name, number) {
-    const data = firestore
+  async makeCustomerAdminFirestore(uid, number) {
+    const data = await firestore
       .collection("users")
-      .where("phone_number", "==", number)
+      .where("uid", "==", uid)
       .get()
-      .data();
-    if (data === null) {
+
+    if (data.docs.length===0) {
       await firestore
         .collection("users")
         .doc(uid)
-        .set({ uid: uid, name, phone_number: number });
+        .set({ uid: uid, phone_number: number });
     } else {
       console.log("already exists");
     }
+  }
+
+  deleteCustomerAdmin(uid){
+    firestore.collection("users").doc(uid).delete()
   }
 
   async fetchOrdersByCustomerUid(uid) {
@@ -43,6 +47,18 @@ class CustomerModule {
   async fetchProducts() {
     try {
       const snapshot = await firestore.collection("products").get();
+      let result = {};
+      snapshot.docs.forEach((doc) => {
+        result[doc.id] = doc.data();
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async fetchCategories() {
+    try {
+      const snapshot = await firestore.collection("categories").get();
       let result = {};
       snapshot.docs.forEach((doc) => {
         result[doc.id] = doc.data();

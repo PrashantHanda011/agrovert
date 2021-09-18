@@ -102,9 +102,15 @@ const Login = () => {
               if(JSON.parse(localStorage.getItem("currentLogin"))){
               const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
               localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
-              }
               sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
               localStorage.setItem("currentLogin",JSON.stringify({time:new Date()}))
+              }else{
+                sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
+              localStorage.setItem("currentLogin",JSON.stringify({time:new Date()}))
+              const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
+              localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
+              }
+              
               addUser(snapshot.docs[0].data())
               const callBack = async () => {
                 await getProductsFromBackend();

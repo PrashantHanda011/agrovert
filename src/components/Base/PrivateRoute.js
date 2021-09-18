@@ -10,7 +10,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        sessUser && firebaseSessUser && firebaseSessUser.uid===sessUser.uid? (
+        sessUser ? (
           <Component {...props} />
         ) : (
           <Redirect
