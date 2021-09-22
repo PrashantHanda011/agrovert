@@ -48,6 +48,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true)
       setUpRecaptcha();
+
       let phoneNumber = "+91" + number;
       let appVerifier = window.recaptchaVerifier;
       auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
@@ -88,40 +89,40 @@ const Login = () => {
       .then(function (result) {
         setLoading(false)
         // User signed in successfully.
-    
-        let user = result.user;
-        firestore.collection("admins").where("id","==",user.uid).get().then(
-          snapshot => {
-            if(!snapshot.docs[0]){
-              auth.signOut()
-              setError(true)
-              const number_ = number
-              setErrorMessage(`User with number ${number_} doesn't exists`)
-            }
-            else{
-              if(JSON.parse(localStorage.getItem("currentLogin"))){
-              const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
-              localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
-              sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
-              localStorage.setItem("currentLogin",JSON.stringify({time:new Date()}))
-              }else{
-                sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
-              localStorage.setItem("currentLogin",JSON.stringify({time:new Date()}))
-              const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
-              localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
-              }
-              
-              addUser(snapshot.docs[0].data())
-              const callBack = async () => {
-                await getProductsFromBackend();
-                await getCategoriesFromBackend();
-              };
-              callBack();
-              history.push("/");
-            }
-            
+        firebase.auth().currentUser.getIdTokenResult()
+        .then(async (idTokenResult)=>{
+          console.log(idTokenResult)
+          if(idTokenResult.claims.user_type!=="ADMIN"){
+            auth.signOut()
+            setError(true)
+            const number_ = number
+            setErrorMessage(`User with number ${number_} doesn't exists`)
           }
-        )
+          else{
+            if(JSON.parse(localStorage.getItem("currentLogin"))){
+            const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
+            localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
+            sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
+            localStorage.setItem("currentLogin",JSON.stringify({time:new Date()}))
+            }else{
+              sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
+            localStorage.setItem("currentLogin",JSON.stringify({time:new Date()}))
+            const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
+            localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
+            }
+            const admin = await firestore.collection("users").where("uid","==",auth.currentUser.uid).get()
+            const adminData = admin.docs[0].data()
+            addUser(adminData)
+            const callBack = async () => {
+              await getProductsFromBackend();
+              await getCategoriesFromBackend();
+            };
+            callBack();
+            history.push("/");
+          }
+        })
+       
+        
         
       })
       .catch(function (error) {

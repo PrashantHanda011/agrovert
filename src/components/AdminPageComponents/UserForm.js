@@ -77,16 +77,27 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
       .confirm(otpInput)
       .then(async function (result) {
         let user = result.user;
-        const doc = await firestore.collection("admins").doc(user.uid)
-        console.log(doc)
-        console.log(result)
-        if (result.additionalUserInfo.isNewUser||!doc.exists) {
-          await adminModule.makeAdminFirestore(user.uid, name, number);
-          await customerModule.makeCustomerAdminFirestore(user.uid, number);
-        }
+        fetch("https://us-central1-ecommerce-app-d0b68.cloudfunctions.net/createAdmin",{
+          method:"POST",
+          headers:{
+            Accept: "application/json",
+          "Content-Type": "application/json",
+          },
+          body:JSON.stringify({uid:user.uid})
+        }).then(async ()=>{
+            if (result.additionalUserInfo.isNewUser){
+            await customerModule.makeCustomerAdminFirestore(user.uid, number)}
+            else{
+              firestore.collection("users").doc(user.uid).update({user_type:"ADMIN"})
+            }
+          }
+          ).catch(err=>{
+            console.log(err)
+          })
         setLoading(false)
         const id = user.uid
-        updateAdmins([...admins,{id,name,number,type:"ADMIN"}])
+        console.log(number)
+        updateAdmins([...admins,{uid:id,phone_number: number,user_type:"ADMIN"}])
         localStorage.setItem(`firebase:authUser:${process.env.REACT_APP_apiKey}:[DEFAULT]`,JSON.stringify(sessUser))
         handleClose()
       })

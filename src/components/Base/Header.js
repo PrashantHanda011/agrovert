@@ -3,11 +3,14 @@ import { AppContext } from "../../context/Context";
 import { firestore } from "../../Firebase";
 const Header = () => {
   const [number, setNumber] = useState(0);
-  const [read, setRead] = useState(localStorage.getItem("readTime")?new Date(JSON.parse(localStorage.getItem("readTime")).time):null);
+  const [read, setRead] = useState(
+    localStorage.getItem("readTime")?
+    new Date(JSON.parse(localStorage.getItem("readTime")).time)
+    :new Date(JSON.parse(localStorage.getItem("currentLogin")).time));
   const currentLogin = JSON.parse(localStorage.getItem("currentLogin"));
   const lastLogin = JSON.parse(localStorage.getItem("lastLogin"));
-  const currentLoginTime = new Date(currentLogin.time);
-  const lastLoginTime = new Date(lastLogin.time);
+  const currentLoginTime = new Date(currentLogin.time).getTime();
+  const lastLoginTime = new Date(lastLogin.time).getTime();
 
   useEffect(() => {
     const unsub = firestore
@@ -49,7 +52,7 @@ const Header = () => {
       });
 
       return () => unsub()
-  }, [number]);
+  }, []);
   const { appState, toggleSideBar } = useContext(AppContext);
   return (
     <div>

@@ -24,7 +24,7 @@ const UsersTable = () => {
 
   const deleteUser = async (id) => {
 
-    const filteredAdmin = admins.filter((admin) => admin.id !== id);
+    const filteredAdmin = admins.filter((admin) => admin.uid !== id);
     setAdmins(filteredAdmin);
     adminModule.deleteAdmin(id);
   };
@@ -60,25 +60,25 @@ const UsersTable = () => {
                         <tr>
                           <td>{index + 1}</td>
                           <td>{admin.name}</td>
-                          <td>{admin.number}</td>
+                          <td>{admin.phone_number}</td>
                           <td>
                             <Badge
                               className={
-                                admin.type === "ADMIN"
+                                admin.user_type === "ADMIN"
                                   ? "badge-success"
                                   : "badge-primary"
                               }>
-                              {admin.type}
+                              {admin.user_type}
                             </Badge>
                           </td>
-                          {admin.type !== "SUPERADMIN" ? (
-                            admin.id !==
+                          { 
+                            admin.uid !==
                             JSON.parse(sessionStorage.getItem("user")).uid ? (
                               <td>
                                 <div
                                   className="btn btn-danger"
                                   onClick={() => {
-                                    deleteUser(admin.id);
+                                    deleteUser(admin.uid);
                                   }}>
                                   <i class="fa fa-trash" aria-hidden="true"></i>
                                 </div>
@@ -93,16 +93,7 @@ const UsersTable = () => {
                                 </button>
                               </td>
                             )
-                          ) : (
-                            <td>
-                              <button
-                                className="btn btn-danger"
-                                disabled
-                                onClick={() => {}}>
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                              </button>
-                            </td>
-                          )}
+                           }
                         </tr>
                       );
                     })}

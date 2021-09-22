@@ -20,7 +20,7 @@ class CustomerModule {
       await firestore
         .collection("users")
         .doc(uid)
-        .set({ uid: uid, phone_number: number });
+        .set({ uid: uid, phone_number: number, user_type:"ADMIN" });
     } else {
       console.log("already exists");
     }
