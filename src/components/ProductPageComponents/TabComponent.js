@@ -24,7 +24,7 @@ const TabComponent = ({categories}) => {
           }}
           placeholder="Category"
           value={category.category_name}>
-          <option>Select</option>
+          <option>{Object.keys(category).length>0?category.category_name:"Select"}</option>
           {categories &&
             categories.map((category, index) => (
               <option id={index} value={index}>
