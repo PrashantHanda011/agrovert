@@ -86,39 +86,34 @@ const Login = () => {
   
     optConfirm
       .confirm(otpInput)
-      .then(function (result) {
+      .then(async function (result) {
         setLoading(false)
         // User signed in successfully.
         firebase.auth().currentUser.getIdTokenResult()
         .then(async (idTokenResult)=>{
-          console.log(idTokenResult)
+          
           if(idTokenResult.claims.user_type!=="ADMIN"){
             auth.signOut()
             setError(true)
             const number_ = number
             setErrorMessage(`User with number ${number_} doesn't exists`)
           }
+          
           else{
-            if(JSON.parse(localStorage.getItem("currentLogin"))){
-            const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
-            localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
-            sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
-            localStorage.setItem("currentLogin",JSON.stringify({time:new Date()}))
-            }else{
-              sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
-            localStorage.setItem("currentLogin",JSON.stringify({time:new Date()}))
-            const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
-            localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
-            }
+           
             const admin = await firestore.collection("users").where("uid","==",auth.currentUser.uid).get()
             const adminData = admin.docs[0].data()
-            addUser(adminData)
-            const callBack = async () => {
-              await getProductsFromBackend();
-              await getCategoriesFromBackend();
-            };
-            callBack();
+            if(adminData.user_type!=="ADMIN"){
+              auth.signOut()
+            setError(true)
+            const number_ = number
+            setErrorMessage(`User with number ${number_} is not Admin`)
+            }
+            else{
+              sessionStorage.setItem("user", JSON.stringify(auth.currentUser));
+              addUser(adminData)
             history.push("/");
+            }
           }
         })
        
