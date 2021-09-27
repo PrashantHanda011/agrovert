@@ -3,8 +3,9 @@ import { Modal } from "react-bootstrap";
 import CategoryModule from '../../modules/categoryModule'
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
+import { firestore } from "../../Firebase";
 
-const CategoryForm = ({ show, handleClose, category_={} }) => {
+const CategoryForm = ({ show, handleClose, category_={},addNewCategory,updateCategory }) => {
   const [category, setCategory] = useState(!category_.category_name?"":category_.category_name);
   const [file, setFile] = useState("");
   const [error, setError] = useState({ image: false, category_name: false });
@@ -30,23 +31,25 @@ const CategoryForm = ({ show, handleClose, category_={} }) => {
       setError({ ...error, category_name: true });
     }
   };
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (Object.keys(category_).length < 1) {
       checkMissing();
       if (!(error.image && error.category_name)) {
-        categoryModule.uploadCategory(file, category, addCategory, setClose);
+        const categoryRankPromise = await firestore.collection('categories').get()
+        const rankNew = categoryRankPromise.docs.length+1
+        categoryModule.uploadCategory(file, category, rankNew ,addNewCategory, setClose);
       } else {
         return;
       }
     }else{
       if(file){
-        const newCategory = {category_name:category,image_url:imageUrl}
-        categoryModule.updateCategory(category_.id,file,newCategory,updateCategoryWithId,setClose)
+        const newCategory = {category_name:category,image_url:imageUrl,rank:category_.rank}
+        categoryModule.updateCategory(category_.id,file,newCategory,updateCategory,setClose)
       }
       else{
-        const newCategory = {category_name:category,image_url:imageUrl}
-        categoryModule.updateCategory(category_.id,file,newCategory,updateCategoryWithId,setClose)
+        const newCategory = {category_name:category,image_url:imageUrl,rank:category_.rank}
+        categoryModule.updateCategory(category_.id,file,newCategory,updateCategory,setClose)
       }
     }
   };
