@@ -13,21 +13,7 @@ import Customer from "./pages/Customers/Customer";
 function App() {
   const { appState, getProductsFromBackend, getCategoriesFromBackend, addUser } =
     useContext(AppContext);
-  useEffect(() => {
-    if(sessionStorage.getItem("user")){
-      addUser(sessionStorage.getItem("user"))
-      const callBack = async () => {
-        await getProductsFromBackend();
-        await getCategoriesFromBackend();
-      };
-      callBack();
-    }
-  }, []);
-  window.addEventListener('beforeunload',()=>{
-    const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
-    
-    localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
-  })
+  
   return (
     <Router>
       <Switch>
