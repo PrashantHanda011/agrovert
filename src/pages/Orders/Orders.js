@@ -5,57 +5,48 @@ import Loading from "../../components/Base/Loading";
 import FullOrderPage from "../../components/OrderPageComponents/FullOrderPage";
 import { Pagination } from "react-bootstrap";
 import OrderModule from '../../modules/orderModule'
+import OrderPageReusable from "../../components/OrderPageComponents/OrderPageReusable";
+import { firestore } from "../../Firebase";
 
 const Orders = () => {
   const [orders, setOrders] = useState(null);
   const [open, setOpen] = useState(false);
   const orderModule = new OrderModule()
 
+  const handleOpen = () => {
+    setOpen(true)
+  }
+  const handleClose = () => {
+    setOpen(false)
+  }
+  
   useEffect(() => {
     const unsubscribe = orderModule.fetchOrders(setOrders)
     return () => unsubscribe()
   }, []);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [orderPerPage, setOrderPerPage] = useState(10);
-  const indexOfLastPost = currentPage * orderPerPage;
-  const indexOfFirstPost = indexOfLastPost - orderPerPage;
+ 
 
 
 
   return (
     <Base>
-      {!orders && <Loading />}
-      {orders && (
+      {!orders &&  <Loading />}
+      {orders &&  (
         <>
-          <OrderTable
-            orders={orders
-              .filter((order) => order.status !== "CART")
-              .slice(indexOfFirstPost, indexOfLastPost)}
-            ordersPerPage={orderPerPage}
-            setOrdersPerPage={setOrderPerPage}
+        <OrderPageReusable orders={orders
+          .filter(order=>order.status!=="CART")
+          .filter(order=>!Object.keys(order).includes("read"))
+        } 
+        name="Pending Orders"
           />
-          <div style={{marginRight:"50%"}}>
-            <Pagination size="lg" style={{ marginLeft: "85%" }}>
-              <Pagination.Prev
-                disabled={currentPage === 1}
-                onClick={() => {
-                  setCurrentPage(currentPage - 1);
-                }}
-              />
-              <Pagination.Item active>{currentPage}</Pagination.Item>
-              <Pagination.Next
-                disabled={
-                  currentPage === Math.round(orders.length / orderPerPage)
-                }
-                onClick={() => {
-                  setCurrentPage(currentPage + 1);
-                }}
-              />
-            </Pagination>
-          </div>
+        <OrderPageReusable orders={orders
+          .filter(order=>order.status!=="CART")
+          .filter(order=>order.read===true)
+        }
+        name="Order History"
+          />
         </>
       )}
-      {open && <FullOrderPage />}
     </Base>
   );
 };
