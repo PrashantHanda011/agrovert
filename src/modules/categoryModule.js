@@ -1,14 +1,14 @@
 import { storage, firestore } from "../Firebase";
 
 class CategoryModule {
-  async uploadCategory(photo, category, addCategory, setClose) {
+  async uploadCategory(photo, category, rank, addCategory, setClose) {
     const storageRef = storage.ref(photo.name);
     const uploadTask = storageRef.put(photo);
     uploadTask.on("state_changed", console.log(), console.error, () => {
       storageRef.getDownloadURL().then((url) => {
         return firestore
           .collection("categories")
-          .add({ category_name: category, image_url: url })
+          .add({ category_name: category, image_url: url,rank:rank })
           .then(
             async (category) =>
               await category.get(category.id).then((category) => {
@@ -63,6 +63,13 @@ class CategoryModule {
     return snapshot.docs.map((doc) => {
       return { id: doc.id, ...doc.data() };
     });
+  }
+
+  updateCategoriesInBulk(categoryList){
+    categoryList.forEach(category_=>{
+      const {id,...category} = category_
+      firestore.collection('categories').doc(id).update(category)
+    })
   }
 }
 
