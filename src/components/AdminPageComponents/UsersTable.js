@@ -47,7 +47,7 @@ const UsersTable = () => {
                   <thead>
                     <tr>
                       <th>S No.</th>
-                      <th>Name</th>
+               
                       <th>Phone Number</th>
                       <th>Type</th>
                       <th></th>
@@ -59,7 +59,7 @@ const UsersTable = () => {
                       return (
                         <tr>
                           <td>{index + 1}</td>
-                          <td>{admin.name}</td>
+                        
                           <td>{admin.phone_number}</td>
                           <td>
                             <Badge
