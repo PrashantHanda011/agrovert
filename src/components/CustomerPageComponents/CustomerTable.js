@@ -1,5 +1,6 @@
 import jsonexport from "jsonexport";
 import React, { useState, useEffect, useRef } from "react";
+import { Pagination } from "react-bootstrap";
 import { CSVLink } from "react-csv";
 import CustomerModule from "../../modules/customerModule";
 
@@ -13,6 +14,11 @@ const CustomerTable = () => {
   const csvLink = useRef();
   const csvLink2 = useRef();
   const customerModule = new CustomerModule();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ordersPerPage, setOrdersPerPage] = useState(10);
+  const indexOfLastPost = currentPage * ordersPerPage;
+  const indexOfFirstPost = indexOfLastPost - ordersPerPage;
+  const recordsList = [10, 15, 20];
 
   useEffect(() => {
     const getCustomersAndProducts = async () => {
@@ -25,7 +31,7 @@ const CustomerTable = () => {
     };
     getCustomersAndProducts();
   }, []);
-  console.log(products);
+ 
   const makeDataForCSV = () => {
     let result = [];
     customers.forEach((customer, index) => {
@@ -133,6 +139,23 @@ const CustomerTable = () => {
               </span>
             </div>
             <div className="card-body">
+            Per Page Records:
+          <select
+            className="ml-2"
+            width="10%"
+            onChange={(e) => {
+              setOrdersPerPage(e.target.value);
+            }}
+            placeholder="Category"
+            value={ordersPerPage}>
+            <option disabled>Select</option>
+            {recordsList &&
+              recordsList.map((numRecords, index) => (
+                <option id={index} value={numRecords}>
+                  {numRecords}
+                </option>
+              ))}
+              </select>
               <div className="table-responsive">
                 <table className="table" width="100%">
                   <thead>
@@ -145,7 +168,7 @@ const CustomerTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {customers.map((customer, index) => {
+                    {customers.slice(indexOfFirstPost,indexOfLastPost).map((customer, index) => {
                       return (
                         <tr>
                           <td>{index + 1}</td>
@@ -190,6 +213,26 @@ const CustomerTable = () => {
                 </table>
               </div>
             </div>
+          </div>
+
+          <div style={{marginRight:"50%"}}>
+            <Pagination size="lg" style={{ marginLeft: "85%" }}>
+              <Pagination.Prev
+                disabled={currentPage === 1}
+                onClick={() => {
+                  setCurrentPage(currentPage - 1);
+                }}
+              />
+              <Pagination.Item active>{currentPage}</Pagination.Item>
+              <Pagination.Next
+                disabled={
+                  currentPage === Math.ceil(customers.length / ordersPerPage)
+                }
+                onClick={() => {
+                  setCurrentPage(currentPage + 1);
+                }}
+              />
+            </Pagination>
           </div>
         </div>
       )}
