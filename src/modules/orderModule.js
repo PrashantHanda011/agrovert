@@ -65,6 +65,7 @@ class OrderModule {
     try {
       await firestore.collection("orders").doc(id).update({
         status: status,
+        read:true,
       });
     } catch (error) {
       console.log(error)
