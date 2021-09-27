@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import Loading from "../Base/Loading";
 import OrderModule from '../../modules/orderModule'
+import { firestore } from "../../Firebase";
 
 const FullOrderPage = ({ order, user, show, handleClose }) => {
   const [products, setProducts] = useState(null);
@@ -52,6 +53,9 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
                         Quantity
                     </th>
                     <th>
+                        Offered Price
+                    </th>
+                    <th>
                         Amount
                     </th>
                 </tr>
@@ -63,7 +67,8 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
                         <tr>
                             <td>{product.name}</td>
                             <td>{order.products[index].quantity}</td>
-                            <td>₹ {order.products[index].quantity*product.price}</td>
+                            <td>₹ {product.offered_price}</td>
+                            <td>₹ {order.products[index].quantity*product.offered_price}</td>
                         </tr>
                     )
                 })}
@@ -71,6 +76,7 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
             <thead>
                 <tr>
                     <th>Total: </th>
+                    <th></th>
                     <th></th>
                     <th>₹ {order.amount.toFixed(2)}</th>
                 </tr>
@@ -81,7 +87,7 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
     );
   };
   return (
-    <Modal show={show} onHide={handleClose} size="lg" centered>
+    <Modal show={show} onHide={()=>{handleClose();}} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title>Order Details</Modal.Title>
       </Modal.Header>
