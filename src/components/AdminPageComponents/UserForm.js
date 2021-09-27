@@ -124,16 +124,7 @@ const UserForm = ({ show, handleClose, admins, updateAdmins }) => {
                           </h1>
                         </div>
 
-                        <div className="form-group">
-                          <input
-                            type="text"
-                            className="form-control form-control-user"
-                            id="exampleInputEmail"
-                            placeholder="Enter Name"
-                            value={name}
-                            onChange={handleName}
-                          />
-                        </div>
+                        
                         <div className="user">
                           <div className="form-group">
                             <input
