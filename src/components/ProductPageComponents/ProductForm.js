@@ -58,38 +58,40 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
   };
 
   const checkMissing = () => {
+    const errors= {}
     if (photo === "") {
-      return "photo";
+      error["isthere"]=true;
+      errors["photo"] = true
     }
-    if (name === "") {
-      return "name";
+    if (name === "") {error["isthere"]=true;
+      errors["name"] = true
     }
-    if (price === "") {
-      return "price";
-    }
-    if (name === "") {
-      return "name";
-    }
-    if (quantity === "") {
-      return "quantity";
-    }
-    if (margin === "") {
-      return "margin";
-    }
-    if (weight === "") {
-      return "weight";
-    }
-    if (offered_price === "") {
-      return "offered_price";
+    if (price === "") {error["isthere"]=true;
+     errors["price"] = true
     }
     
-    if (description === "") {
-      return "description";
+    if (quantity === "") {error["isthere"]=true;
+      errors["quantity"] = true
+    }
+    if (margin === "") {error["isthere"]=true;
+     errors["margin"] = true
+    }
+    if (weight === "") {error["isthere"]=true;
+     errors["weight"] = true
+    }
+    if (offered_price === "") {error["isthere"]=true;
+      errors["offered_price"]=true;
     }
 
-   
+    if (description === "") {error["isthere"]=true;
+      errors["description"]=true
+    }
+    if(category_id===""){error["isthere"]=true;errors["category_id"]=true}
 
-    if(category_id===""){return "category"}
+   setValues({
+     ...values,
+     error:errors
+   })
   };
 
   useEffect(()=>{
@@ -101,29 +103,31 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
   const onSubmit = async (event) => {
     event.preventDefault();
     if(Object.keys(product).length===0){
-      if (checkMissing()) {
-        setValues({ ...values, error: checkMissing() });
-      } else {
-        const productsInCategory = await firestore.collection('products').where("category_id","==",category_id).get()
-        const rankNew = productsInCategory.docs.length+1
-        const newProduct = {
-          name,
-          description,
-          quantity,
-          price,
-          offered_price,
-          image_url: "",
-          file_name:photo.name,
-          weight,
-          margin,
-          category_id,
-          rank:rankNew,
-          in_stock:true
-        };
-        await productModule.uploadProduct(photo, newProduct,addNewProduct,setClose);
-        
-        return;
-    }}
+       checkMissing()
+        if(error.isthere===true){
+          return
+        }else{
+          const productsInCategory = await firestore.collection('products').where("category_id","==",category_id).get()
+          const rankNew = productsInCategory.docs.length+1
+          const newProduct = {
+            name,
+            description,
+            quantity,
+            price,
+            offered_price,
+            image_url: "",
+            file_name:photo.name,
+            weight,
+            margin,
+            category_id,
+            rank:rankNew,
+            in_stock:true
+          };
+          await productModule.uploadProduct(photo, newProduct,addNewProduct,setClose);
+          
+          return;
+        }
+    }
     else{
       const updatedProduct = {
         name,
@@ -168,7 +172,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
             placeholder="choose a file"
             className="form-control form-control-user"
           />
-          {!photo && error === "photo" && (
+          {!photo && error.photo === true && (
             <div className="text-danger text-sm">Please upload a photo</div>
           )}
         </label>
@@ -185,7 +189,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
           placeholder="Name"
           onChange={changeHandler("name")}
         />
-        {!name && error === "name" && (
+        {!name && error.name === true && (
           <div className="text-danger text-sm">Please add name</div>
         )}
       </div>
@@ -201,7 +205,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
           placeholder="Description ..."
           onChange={changeHandler("description")}
         />
-        {!description && error === "description" && (
+        {!description && error.description===true && (
           <div className="text-danger text-sm">Please add description</div>
         )}
       </div>
@@ -217,7 +221,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
           placeholder="Quantity"
           onChange={changeHandler("quantity")}
         />
-        {!quantity && error === "quantity" && (
+        {!quantity && error.quantity===true && (
           <div className="text-danger text-sm">Please add quantity</div>
         )}
       </div>
@@ -235,7 +239,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
               </option>
             ))}
         </select>
-        {!category_id && error === "category" && (
+        {!category_id && error.category_id===true && (
           <div className="text-danger text-sm">Please add category</div>
         )}
       </div>
@@ -252,7 +256,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
           placeholder="MRP"
           onChange={changeHandler("price")}
         />
-        {!price && error === "price" && (
+        {!price && error.price===true && (
           <div className="text-danger text-sm">Please add MRP</div>
         )}
       </div>
@@ -269,7 +273,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
           placeholder="Margin (only numeric)"
           onChange={changeHandler("margin")}
         />
-        {!margin && error === "margin" && (
+        {!margin && error.margin===true && (
           <div className="text-danger text-sm">Please add margin</div>
         )}
       </div>
@@ -285,7 +289,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
           placeholder="Weight (gm)"
           onChange={changeHandler("weight")}
         />
-        {!weight && error === "weight" && (
+        {!weight && error.weight===true && (
           <div className="text-danger text-sm">Please add weight</div>
         )}
       </div>
@@ -302,7 +306,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
           placeholder="Offered Price"
           onChange={changeHandler("offered_price")}
         />
-        {!offered_price && error === "offered_price" && (
+        {!offered_price && error.offered_price===true && (
           <div className="text-danger text-sm mb-3">
             Please add offered price
           </div>
