@@ -12,7 +12,7 @@ class AdminModule {
   }
 
   async deleteAdmin(uid) {
-    await firestore.collection("users").doc(uid).delete();
+    await firestore.collection("users").doc(uid).update({user_type:""});
   }
 }
 
