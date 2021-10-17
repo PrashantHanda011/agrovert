@@ -81,8 +81,6 @@ const Sidebar = ({ history }) => {
       </Link>
 
       <Link to="/login" className={currentTab(history, "/login")} onClick={()=>{
-        const loginTime = JSON.parse(localStorage.getItem("currentLogin")).time
-        localStorage.setItem("lastLogin",JSON.stringify({time:loginTime}))
         sessionStorage.removeItem("user");auth.signOut()
         }}>
         {" "}
