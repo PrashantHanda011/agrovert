@@ -1,10 +1,11 @@
 import { storage, firestore } from "../Firebase";
 
 class OrderModule {
-  fetchOrders(setOrders) {
+  fetchOrders(setOrders,setPlay) {
     try {
       return firestore.collection('orders').orderBy("timestamp", "desc").onSnapshot((querySanpshot)=>{
         let orders_ = []
+        querySanpshot.docs[0].data().status==="PENDING"?setPlay(true):setPlay(false)
         querySanpshot.forEach(order=>{
           orders_.push({id:order.id,...order.data()})
         })

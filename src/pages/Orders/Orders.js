@@ -11,6 +11,7 @@ import { firestore } from "../../Firebase";
 const Orders = () => {
   const [orders, setOrders] = useState(null);
   const [open, setOpen] = useState(false);
+  const [play,setPlay] = useState(false)
   const orderModule = new OrderModule()
 
   const handleOpen = () => {
@@ -21,7 +22,7 @@ const Orders = () => {
   }
   
   useEffect(() => {
-    const unsubscribe = orderModule.fetchOrders(setOrders)
+    const unsubscribe = orderModule.fetchOrders(setOrders,setPlay)
     return () => unsubscribe()
   }, []);
  
@@ -38,6 +39,8 @@ const Orders = () => {
           .filter(order=>!Object.keys(order).includes("read"))
         } 
         name="Pending Orders"
+        play={play}
+        setPlay={setPlay}
           />
         <OrderPageReusable orders={orders
           .filter(order=>order.status!=="CART")
