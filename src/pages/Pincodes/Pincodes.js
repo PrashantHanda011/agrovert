@@ -111,7 +111,7 @@ const makeModal = ()  =>{
                     
                   </thead>
                   <tbody>
-                    {pincodes.length>0 &&
+                    {pincodes.length>0 ?
                       pincodes.map((pincode, index) => {
                         return (
                           <tr>
@@ -129,7 +129,7 @@ const makeModal = ()  =>{
                             <td><div className="btn btn-danger" onClick={()=>{deletePincode(pincode.id)}}><i class="fa fa-trash" aria-hidden="true"></i></div></td>
                           </tr>
                         );
-                      })}
+                      }) : <h4>No Pincodes to load</h4>}
                   </tbody>
                 </table>
               </div>
