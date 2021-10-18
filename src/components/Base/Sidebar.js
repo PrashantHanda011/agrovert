@@ -72,6 +72,14 @@ const Sidebar = ({ history }) => {
         </li>
       </Link>
 
+      <Link to="/districts" className={currentTab(history, "/districts")}>
+        {" "}
+        <li className="nav-link">
+          <i className="fas fa-fw fa-map-pin"></i>
+          <span>Districts</span>
+        </li>
+      </Link>
+
       <Link to="/customers" className={currentTab(history, "/customers")}>
         {" "}
         <li className="nav-link">
@@ -79,6 +87,8 @@ const Sidebar = ({ history }) => {
           <span>Customers</span>
         </li>
       </Link>
+
+      
 
       <Link to="/login" className={currentTab(history, "/login")} onClick={()=>{
         sessionStorage.removeItem("user");auth.signOut()
