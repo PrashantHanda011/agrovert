@@ -9,6 +9,7 @@ import Pincodes from "./pages/Pincodes/Pincodes";
 import Users from "./pages/Users/Users";
 import Category from "./pages/Categories/Category";
 import Customer from "./pages/Customers/Customer";
+import Districts from "./pages/Districts/Districts";
 
 function App() {
   const { appState, getProductsFromBackend, getCategoriesFromBackend, addUser } =
@@ -24,6 +25,7 @@ function App() {
         <PrivateRoute component={Pincodes} path="/pincodes" exact />
         <PrivateRoute component={Category} path="/categories" exact />
         <PrivateRoute component={Customer} path="/customers" exact />
+        <PrivateRoute component={Districts} path="/districts" exact />
       </Switch>
     </Router>
   );
