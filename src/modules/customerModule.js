@@ -14,20 +14,20 @@ class CustomerModule {
     const data = await firestore
       .collection("users")
       .where("uid", "==", uid)
-      .get()
+      .get();
 
-    if (data.docs.length===0) {
+    if (data.docs.length === 0) {
       await firestore
         .collection("users")
         .doc(uid)
-        .set({ uid: uid, phone_number: number, user_type:"ADMIN" });
+        .set({ uid: uid, phone_number: number, user_type: "ADMIN" });
     } else {
       console.log("already exists");
     }
   }
 
-  deleteCustomerAdmin(uid){
-    firestore.collection("users").doc(uid).delete()
+  deleteCustomerAdmin(uid) {
+    firestore.collection("users").doc(uid).delete();
   }
 
   async fetchOrdersByCustomerUid(uid) {
@@ -78,6 +78,17 @@ class CustomerModule {
       firestore.collection("users").doc(uid).update({
         amount_spent: totalAmount,
       });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async resetCustomer(user) {
+    try {
+      firestore.collection('users').doc(user.uid).set({
+        uid:user.uid, 
+        phone_number: user.phone_number,
+      })
     } catch (error) {
       console.log(error);
     }
