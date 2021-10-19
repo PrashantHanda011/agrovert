@@ -31,7 +31,7 @@ const CustomerTable = () => {
     };
     getCustomersAndProducts();
   }, []);
- 
+
   const makeDataForCSV = () => {
     let result = [];
     customers.forEach((customer, index) => {
@@ -104,6 +104,16 @@ const CustomerTable = () => {
       });
     }
   };
+
+  const deleteCustomer = (customer) => {
+    const newCustomers = customers.filter((customer_) => {
+      if (customer.uid !== customer_.uid) {
+        return customer_;
+      }
+    });
+    setCustomers(newCustomers)
+    customerModule.resetCustomer(customer);
+  };
   return (
     <>
       {customers && products && (
@@ -113,7 +123,8 @@ const CustomerTable = () => {
               <span className="ml-3">
                 <h6
                   className="font-weight-bold text-primary mr-3 display-inline"
-                  style={{ display: "inline-block" }}>
+                  style={{ display: "inline-block" }}
+                >
                   Customers
                 </h6>
 
@@ -122,7 +133,8 @@ const CustomerTable = () => {
                     className="btn btn-primary"
                     onClick={() => {
                       makeAndDownloadMasterCSV();
-                    }}>
+                    }}
+                  >
                     <i class="fa fa-download mr-2" aria-hidden="true"></i>{" "}
                     Download Master Excel
                   </button>
@@ -139,22 +151,23 @@ const CustomerTable = () => {
               </span>
             </div>
             <div className="card-body">
-            Per Page Records:
-          <select
-            className="ml-2"
-            width="10%"
-            onChange={(e) => {
-              setOrdersPerPage(e.target.value);
-            }}
-            placeholder="Category"
-            value={ordersPerPage}>
-            <option disabled>Select</option>
-            {recordsList &&
-              recordsList.map((numRecords, index) => (
-                <option id={index} value={numRecords}>
-                  {numRecords}
-                </option>
-              ))}
+              Per Page Records:
+              <select
+                className="ml-2"
+                width="10%"
+                onChange={(e) => {
+                  setOrdersPerPage(e.target.value);
+                }}
+                placeholder="Category"
+                value={ordersPerPage}
+              >
+                <option disabled>Select</option>
+                {recordsList &&
+                  recordsList.map((numRecords, index) => (
+                    <option id={index} value={numRecords}>
+                      {numRecords}
+                    </option>
+                  ))}
               </select>
               <div className="table-responsive">
                 <table className="table" width="100%">
@@ -165,57 +178,74 @@ const CustomerTable = () => {
                       <th>Phone Number</th>
                       <th>Address</th>
                       <th></th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {customers.slice(indexOfFirstPost,indexOfLastPost).map((customer, index) => {
-                      return (
-                        <tr>
-                          <td>{index + 1}</td>
-                          <td>{customer.name}</td>
-                          <td>{customer.phone_number}</td>
-                          <td>
-                            {Array.isArray(customer.addresses) &&
-                              customer.addresses[0] &&
-                              `${customer.addresses[0].street_address}, 
+                    {customers
+                      .filter((customer) => {
+                        if (Object.keys(customer).includes("addresses")) {
+                          return customer;
+                        }
+                      })
+                      .slice(indexOfFirstPost, indexOfLastPost)
+                      .map((customer, index) => {
+                        return (
+                          <tr>
+                            <td>{index + 1}</td>
+                            <td>{customer.name}</td>
+                            <td>{customer.phone_number}</td>
+                            <td>
+                              {Array.isArray(customer.addresses) &&
+                                customer.addresses[0] &&
+                                `${customer.addresses[0].street_address}, 
                            near ${customer.addresses[0].landmark}, 
                            ${customer.addresses[0].district}, 
                            ${customer.addresses[0].state} - ${customer.addresses[0].pin_code}`}
-                          </td>
-                          <td>
-                            <span>
-                              <button
-                                className="btn btn-primary"
-                                onClick={() => {
-                                  makeAndDownloadCustomerOrderCSV(customer.uid);
-                                }}>
-                                <i
-                                  class="fa fa-download mr-2"
-                                  aria-hidden="true"></i>{" "}
-                                Download Data
-                              </button>
+                            </td>
+                            <td>
+                              <span>
+                                <button
+                                  className="btn btn-primary btn-sm"
+                                  onClick={() => {
+                                    makeAndDownloadCustomerOrderCSV(
+                                      customer.uid
+                                    );
+                                  }}
+                                >
+                                  <i
+                                    class="fa fa-download mr-2"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Download Data
+                                </button>
 
-                              {
-                                <CSVLink
-                                  data={dataCustomer}
-                                  filename={fileName}
-                                  className="hidden"
-                                  ref={csvLink2}
-                                  target="_blank"
-                                />
-                              }
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                                {
+                                  <CSVLink
+                                    data={dataCustomer}
+                                    filename={fileName}
+                                    className="hidden"
+                                    ref={csvLink2}
+                                    target="_blank"
+                                  />
+                                }
+                              </span>
+                            </td>
+                            <td>
+                              <button className="btn btn-danger btn-sm" onClick={()=>{deleteCustomer(customer)}}>
+                                Delete User
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          <div style={{marginRight:"50%"}}>
+          <div style={{ marginRight: "50%" }}>
             <Pagination size="lg" style={{ marginLeft: "85%" }}>
               <Pagination.Prev
                 disabled={currentPage === 1}
