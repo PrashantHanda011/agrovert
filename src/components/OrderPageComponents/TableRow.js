@@ -30,10 +30,10 @@ const TableRow = ({ Order, index }) => {
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
   };
-  const approveOrder = () => {
-    setOrder({ ...order_, status: "DELIVERED" });
+  const acceptOrder = () => {
+    setOrder({ ...order_, status: "ACCEPTED" });
     
-    orderModule.updateOrderStatus(order_.id, "DELIVERED");
+    orderModule.updateOrderStatus(order_.id, "ACCEPTED");
     customerModule.updateCustomerTotalAmount(order_.user_id,order_.amount)
   };
   const cancelOrder = () => {
@@ -41,6 +41,10 @@ const TableRow = ({ Order, index }) => {
     
     orderModule.updateOrderStatus(order_.id, "CANCELLED");
   };
+  const deliverOrder = () => {
+    setOrder({...order_,status:"DELIVERED"});
+    orderModule.updateOrderStatus(order_.id, "DELIVERED");
+  }
   useEffect(() => {
     const getUsers = async () => {
       const users_ = await firestore.collection("users").get()
@@ -72,6 +76,8 @@ const TableRow = ({ Order, index }) => {
                   ? "badge-success bg-gradient-success"
                   : order_.status === "CANCELLED"
                   ? "badge-danger badge-success bg-gradient-danger"
+                  : order_.status ==='ACCEPTED'
+                  ? "badge-warning bg-gradient-warning"
                   : "badge-primary badge-success bg-gradient-primary"
               }>
               {order_.status}
@@ -117,23 +123,12 @@ const TableRow = ({ Order, index }) => {
           handleClose={handleClose}
         />
       )}
-      {openConfirm && 
-      actionType==="approve"?
-      (
-        <ConfirmModal
-          action={approveOrder}
+      {openConfirm && <ConfirmModal
+          actions={[acceptOrder,cancelOrder,deliverOrder]}
           show={openConfirm}
           handleClose={handleCloseConfirm}
-        />
-      ):
-      actionType==="cancel"?
-      (
-        <ConfirmModal
-          action={cancelOrder}
-          show={openConfirm}
-          handleClose={handleCloseConfirm}
-        />
-      ):<></>}
+          orderState={order_.status}
+        />}
     </>
   );
 };
