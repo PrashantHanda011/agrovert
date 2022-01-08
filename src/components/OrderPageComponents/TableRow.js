@@ -66,13 +66,13 @@ const TableRow = ({ Order, index }) => {
           <td>{users[order_.user_id].phone_number}</td>
           <td>₹{order_.amount.toFixed(2)}</td>
           <td>
-            <Badge
+            <Badge pill
               className={
                 order_.status === "DELIVERED"
-                  ? "badge-success"
+                  ? "badge-success bg-gradient-success"
                   : order_.status === "CANCELLED"
-                  ? "badge-danger"
-                  : "badge-primary"
+                  ? "badge-danger badge-success bg-gradient-danger"
+                  : "badge-primary badge-success bg-gradient-primary"
               }>
               {order_.status}
             </Badge>
@@ -88,26 +88,23 @@ const TableRow = ({ Order, index }) => {
           </td>
           <td>
             <button
-              className="btn btn-sm btn-success"
-              disabled={order_.status === "DELIVERED" ? true : false}
+              className="btn btn-sm btn-warning"
               onClick={() => {
                 handleOpenConfirm()
                 setActionType("approve")
-              
               }}>
-              Approve
+              Change Status
             </button>
           </td>
           <td>
             <button
-              className="btn btn-sm btn-danger"
-              disabled={order_.status === "CANCELLED" ? true : false}
+              className="btn btn-sm btn-success"
               onClick={() => {
                 handleOpenConfirm()
                 setActionType("cancel")
                 
               }}>
-              Cancel
+              <i class="fa fa-download" aria-hidden="true" style={{marginRight:'5px'}}></i> Download 
             </button>
           </td>
         </tr>

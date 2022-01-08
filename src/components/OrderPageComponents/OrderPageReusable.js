@@ -7,7 +7,7 @@ const OrderPageReusable = ({ orders,name,play,setPlay }) => {
   const [orderPerPage, setOrderPerPage] = useState(10);
   const indexOfLastPost = currentPage * orderPerPage;
   const indexOfFirstPost = indexOfLastPost - orderPerPage;
-
+  
   useEffect(() => {
     if(name==="Pending Orders" && orders.length>0 && play===true){
       orders.forEach(order=>{

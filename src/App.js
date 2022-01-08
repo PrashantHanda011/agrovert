@@ -12,9 +12,7 @@ import Customer from "./pages/Customers/Customer";
 import Districts from "./pages/Districts/Districts";
 
 function App() {
-  const { appState, getProductsFromBackend, getCategoriesFromBackend, addUser } =
-    useContext(AppContext);
-  
+
   return (
     <Router>
       <Switch>
