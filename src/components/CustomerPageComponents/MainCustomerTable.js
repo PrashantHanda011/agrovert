@@ -38,7 +38,7 @@ const MainCustomerTable = ({
         let newAddress = event.target.value
         setAddress(newAddress)
     }
-    console.log(name,address)
+
 
     const returnCustomers = () => {
         let finalCustomers = []
