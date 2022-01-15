@@ -4,7 +4,7 @@ import { CSVLink } from "react-csv";
 let styles = {
   customerInput: {
     marginLeft: "5px",
-    width: "310px",
+    width: "270px",
     marginBottom: "10px",
     borderRadius: "5px",
     borderColor: "#a9a9a9",
@@ -44,7 +44,6 @@ const MainCustomerTable = ({
         let finalCustomers = []
             let customersHavingAddressesField = customers
                 .filter((customer) => {
-                    console.log(customer)
                   if (Object.keys(customer).includes("addresses")) {
                     return  customer
                   }
