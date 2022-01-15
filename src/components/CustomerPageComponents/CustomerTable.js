@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Pagination } from "react-bootstrap";
 import { CSVLink } from "react-csv";
 import CustomerModule from "../../modules/customerModule";
+import MainCustomerTable from "./MainCustomerTable";
 
 const CustomerTable = () => {
   const [customers, setCustomers] = useState(null);
@@ -111,140 +112,29 @@ const CustomerTable = () => {
         return customer_;
       }
     });
-    setCustomers(newCustomers)
+    setCustomers(newCustomers);
     customerModule.resetCustomer(customer);
   };
   return (
     <>
       {customers && products && (
         <div className="m-4">
-          <div className="card shadow mb-4 mt-4">
-            <div className="card-header py-3">
-              <span className="ml-3">
-                <h6
-                  className="font-weight-bold text-primary mr-3 display-inline"
-                  style={{ display: "inline-block" }}
-                >
-                  Customers
-                </h6>
-
-                <span>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => {
-                      makeAndDownloadMasterCSV();
-                    }}
-                  >
-                    <i class="fa fa-download mr-2" aria-hidden="true"></i>{" "}
-                    Download Master Excel
-                  </button>
-                  {
-                    <CSVLink
-                      data={data}
-                      filename="Master.csv"
-                      className="hidden"
-                      ref={csvLink}
-                      target="_blank"
-                    />
-                  }
-                </span>
-              </span>
-            </div>
-            <div className="card-body">
-              Per Page Records:
-              <select
-                className="ml-2"
-                width="10%"
-                onChange={(e) => {
-                  setOrdersPerPage(e.target.value);
-                }}
-                placeholder="Category"
-                value={ordersPerPage}
-              >
-                <option disabled>Select</option>
-                {recordsList &&
-                  recordsList.map((numRecords, index) => (
-                    <option id={index} value={numRecords}>
-                      {numRecords}
-                    </option>
-                  ))}
-              </select>
-              <div className="table-responsive">
-                <table className="table" width="100%">
-                  <thead>
-                    <tr>
-                      <th>S No.</th>
-                      <th>Name</th>
-                      <th>Phone Number</th>
-                      <th>Address</th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {customers
-                      .filter((customer) => {
-                        if (Object.keys(customer).includes("addresses")) {
-                          return customer;
-                        }
-                      })
-                      .slice(indexOfFirstPost, indexOfLastPost)
-                      .map((customer, index) => {
-                        return (
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{customer.name}</td>
-                            <td>{customer.phone_number}</td>
-                            <td>
-                              {Array.isArray(customer.addresses) &&
-                                customer.addresses[0] &&
-                                `${customer.addresses[0].street_address}, 
-                           near ${customer.addresses[0].landmark}, 
-                           ${customer.addresses[0].district}, 
-                           ${customer.addresses[0].state} - ${customer.addresses[0].pin_code}`}
-                            </td>
-                            <td>
-                              <span>
-                                <button
-                                  className="btn btn-primary btn-sm"
-                                  onClick={() => {
-                                    makeAndDownloadCustomerOrderCSV(
-                                      customer.uid
-                                    );
-                                  }}
-                                >
-                                  <i
-                                    class="fa fa-download mr-2"
-                                    aria-hidden="true"
-                                  ></i>{" "}
-                                  Download Data
-                                </button>
-
-                                {
-                                  <CSVLink
-                                    data={dataCustomer}
-                                    filename={fileName}
-                                    className="hidden"
-                                    ref={csvLink2}
-                                    target="_blank"
-                                  />
-                                }
-                              </span>
-                            </td>
-                            <td>
-                              <button className="btn btn-danger btn-sm" onClick={()=>{deleteCustomer(customer)}}>
-                                Delete User
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
+          <MainCustomerTable
+            customers={customers}
+            makeAndDownloadMasterCSV={makeAndDownloadMasterCSV}
+            data={data}
+            csvLink={csvLink}
+            ordersPerPage={ordersPerPage}
+            setOrdersPerPage={setOrdersPerPage}
+            recordsList={recordsList}
+            makeAndDownloadCustomerOrderCSV={makeAndDownloadCustomerOrderCSV}
+            indexOfFirstPost={indexOfFirstPost}
+            indexOfLastPost={indexOfLastPost}
+            dataCustomer={dataCustomer}
+            fileName={fileName}
+            csvLink2={csvLink2}
+            deleteCustomer={deleteCustomer}
+          />
           <div style={{ marginRight: "50%" }}>
             <Pagination size="lg" style={{ marginLeft: "85%" }}>
               <Pagination.Prev

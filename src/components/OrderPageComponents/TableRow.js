@@ -97,17 +97,15 @@ const TableRow = ({ Order, index }) => {
               className="btn btn-sm btn-warning"
               onClick={() => {
                 handleOpenConfirm()
-                setActionType("approve")
               }}>
               Change Status
             </button>
           </td>
           <td>
             <button
+              disabled
               className="btn btn-sm btn-success"
               onClick={() => {
-                handleOpenConfirm()
-                setActionType("cancel")
                 
               }}>
               <i class="fa fa-download" aria-hidden="true" style={{marginRight:'5px'}}></i> Download 
