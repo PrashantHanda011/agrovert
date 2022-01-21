@@ -10,6 +10,7 @@ import Users from "./pages/Users/Users";
 import Category from "./pages/Categories/Category";
 import Customer from "./pages/Customers/Customer";
 import Districts from "./pages/Districts/Districts";
+import Coupons from "./pages/Coupons/Coupons";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
         <PrivateRoute component={Category} path="/categories" exact />
         <PrivateRoute component={Customer} path="/customers" exact />
         <PrivateRoute component={Districts} path="/districts" exact />
+        <PrivateRoute component={Coupons} path="/coupons" exact />
       </Switch>
     </Router>
   );

@@ -88,6 +88,13 @@ const Sidebar = ({ history }) => {
         </li>
       </Link>
 
+      <Link to="/coupons" className={currentTab(history, "/coupons")}>
+        {" "}
+        <li className="nav-link">
+          <i className="fas fa-fw fa-tag fa-lg"></i>
+          <span>Coupons</span>
+        </li>
+      </Link>
       
 
       <Link to="/login" className={currentTab(history, "/login")} onClick={()=>{
