@@ -4,25 +4,20 @@ import { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import Loading from "../Base/Loading";
 import OrderModule from '../../modules/orderModule'
+import ProductModule from '../../modules/productModule'
 import { firestore } from "../../Firebase";
 
 const FullOrderPage = ({ order, user, show, handleClose }) => {
   const [products, setProducts] = useState(null);
   const orderModule =  new OrderModule()
+  const productModule = new ProductModule()
   useEffect(() => {
-   
-    let productIds = [];
-    order.products.forEach((product) => {
-      productIds.push(product.product_id);
-    });
-    const getProducts = async () => {
-      let fetchedProducts = await orderModule.getProductsFromId(productIds);
-     
-      setProducts(fetchedProducts);
-    };
-    getProducts();
+   const getProducts = async () => {
+     const fetchedProducts = await productModule.fetchProductsAsObject()
+     setProducts(fetchedProducts)
+   }
+   getProducts()
   }, []);
-  
   const createOrderDetail = () => {
     return (
       <div>
@@ -63,14 +58,14 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
                 </tr>
             </thead>
             <tbody>
-                {products.map((product,index)=>{
+                {order.products.map((product,index)=>{
                     
                     return (
                         <tr>
-                            <td>{product.name}</td>
+                            <td>{products[product.product_id].name}</td>
                             <td>{order.products[index].quantity}</td>
-                            <td>₹ {product.offered_price}</td>
-                            <td>₹ {order.products[index].quantity*product.offered_price}</td>
+                            <td>₹ {products[product.product_id].offered_price}</td>
+                            <td>₹ {order.products[index].quantity*products[product.product_id].offered_price}</td>
                         </tr>
                     )
                 })}

@@ -16,11 +16,12 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
     price: product.price?product.price:"",
     quantity: product.quantity?product.quantity:"",
     margin: product.margin?product.margin:"",
-    weight: product.weight?product.weight:"",
     image_url: product.image_url?product.image_url:"",
     photo: "",
     offered_price: product.offered_price?product.offered_price:"",
     category_id: product.category_id?product.category_id:"",
+    unit: product.unit?product.unit:"g",
+    measurement: product.measurement?product.measurement:"",
     error: {
       isthere: false,
       name: false,
@@ -31,6 +32,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
       weight: false,
       photo: false,
       offered_price: false,
+      measurement:false
     },
   });
   const [close,setClose] = useState(false)
@@ -41,16 +43,16 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
     price,
     quantity,
     margin,
-    weight,
     image_url,
     photo,
     offered_price,
     error,
     category_id,
-    
+    measurement,
+    unit
 
   } = values;
-
+  const units = ['g','kg','mL','L']
   const changeHandler = (name) => (event) => {
     let value = name === "photo" ? event.target.files[0] : name==="in_stock"?event.target.value==="on"?true:false:event.target.value;
 
@@ -76,9 +78,6 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
     if (margin === "") {error["isthere"]=true;
      errors["margin"] = true
     }
-    if (weight === "") {error["isthere"]=true;
-     errors["weight"] = true
-    }
     if (offered_price === "") {error["isthere"]=true;
       errors["offered_price"]=true;
     }
@@ -87,13 +86,14 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
       errors["description"]=true
     }
     if(category_id===""){error["isthere"]=true;errors["category_id"]=true}
+    
+    if(measurement===""){error['isthere']=true;errors['measurement']=true}
 
    setValues({
      ...values,
      error:errors
    })
   };
-
   useEffect(()=>{
     if(close===true){
       handleClose()
@@ -117,7 +117,8 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
             offered_price,
             image_url: "",
             file_name:photo.name,
-            weight,
+            measurement,
+            unit,
             margin,
             category_id,
             rank:rankNew,
@@ -136,7 +137,8 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
         price,
         offered_price,
         image_url: image_url,
-        weight,
+        unit,
+        measurement,
         margin,
         category_id,
         rank:product.rank,
@@ -278,20 +280,35 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
         )}
       </div>
       <span>
-        <h6>Weight</h6>
+        <h6>Measurement</h6>
       </span>
       <div className="form-group my-3">
+        <span>
+        <select
+        style={{width: "50px",display:"inline"}}
+          onChange={changeHandler('unit')}
+          placeholder="Category"
+          className="form-control mr-2"
+          value={unit}>
+            {units.map((unit,index)=>(
+              <option id={index} value={unit} className="form-control">
+              {unit}
+            </option>
+            ))}
+          </select>
         <input
+          style={{width:"407px",display:"inline"}}
           type="number"
-          name="weight"
+          name="measurement"
           className="form-control form-control-user"
-          value={weight}
-          placeholder="Weight (gm)"
-          onChange={changeHandler("weight")}
+          value={measurement}
+          placeholder="Measurement"
+          onChange={changeHandler("measurement")}
         />
-        {!weight && error.weight===true && (
-          <div className="text-danger text-sm">Please add weight</div>
+        {!measurement && error.measurement===true && (
+          <div className="text-danger text-sm">Please add measurement</div>
         )}
+        </span>
       </div>
       <span>
         <h6>Offered Price</h6>

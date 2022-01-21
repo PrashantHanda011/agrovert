@@ -91,6 +91,19 @@ class ProductModule {
       in_stock:stockBool
     })
   }
+
+  async fetchProductsAsObject() {
+    try {
+      const snapshot = await firestore.collection("products").get();
+      let result = {};
+      snapshot.docs.forEach((doc) => {
+        result[doc.id] = doc.data();
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export default ProductModule;

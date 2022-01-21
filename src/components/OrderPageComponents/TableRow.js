@@ -5,6 +5,7 @@ import OrderModule from '../../modules/orderModule';
 import CustomerModule from "../../modules/customerModule";
 import { firestore } from "../../Firebase";
 import ConfirmModal from "./ConfirmModal";
+import ProductModule from "../../modules/productModule";
 
 const TableRow = ({ Order, index }) => {
   const [order_, setOrder] = useState(Order);
@@ -13,7 +14,9 @@ const TableRow = ({ Order, index }) => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [users,setUsers] = useState(null)
   const [actionType,setActionType] = useState("")
+  const [products,setProducts] = useState({})
   const orderModule = new OrderModule();
+  const productModule = new ProductModule()
   const customerModule =  new CustomerModule()
 
   const handleOpen = () => {
@@ -54,7 +57,12 @@ const TableRow = ({ Order, index }) => {
       })
       setUsers(data);
     };
+    const getProducts = async () => {
+      const fetchedProducts = await productModule.fetchProductsAsObject()
+      setProducts(fetchedProducts)
+    }
     getUsers()
+    getProducts()
   }, [Order]);
 
   useEffect(() => {
@@ -62,7 +70,7 @@ const TableRow = ({ Order, index }) => {
   }, [Order]);
   return (
     <>
-      {users && (
+      {users && products && (
         <tr className="align-items-center">
           <td>{index + 1}</td>
           <td>{order_.timestamp.toDate().toDateString()}</td>
