@@ -53,6 +53,11 @@ const TableRow = ({ Order, index }) => {
     
     orderModule.updateOrderStatus(order_.id, "CANCELLED");
   };
+  const pendingOrder = () => {
+    setOrder({ ...order_, status: "PENDING" });
+    
+    orderModule.updateOrderStatus(order_.id, "CANCELLED");
+  };
   const deliverOrder = () => {
     setOrder({...order_,status:"DELIVERED"});
     orderModule.updateOrderStatus(order_.id, "DELIVERED");
@@ -138,7 +143,7 @@ const TableRow = ({ Order, index }) => {
         />
       )}
       {openConfirm && <ConfirmModal
-          actions={[acceptOrder,cancelOrder,deliverOrder]}
+          actions={[pendingOrder,acceptOrder,cancelOrder,deliverOrder]}
           show={openConfirm}
           handleClose={handleCloseConfirm}
           orderState={order_.status}

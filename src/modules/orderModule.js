@@ -64,7 +64,6 @@ class OrderModule {
 
   async updateOrderStatus(id, status,products,order) {
     try {
-
       await firestore.collection("orders").doc(id).update({
         status: status,
         read:true,

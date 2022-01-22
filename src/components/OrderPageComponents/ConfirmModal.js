@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 
 const ConfirmModal = ({ show, handleClose, actions, orderState }) => {
-  const orderStates = ["ACCEPTED", "CANCELLED", "DELIVERED"];
+  const orderStates = ["PENDING","ACCEPTED", "CANCELLED", "DELIVERED"];
   const [orderStateChoice, setOrderStateChoice] = useState(
-    orderState === "PENDING" ? 0 : orderStates.indexOf(orderState)
+    orderStates.indexOf(orderState)
   );
   return (
     <Modal
