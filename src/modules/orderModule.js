@@ -69,17 +69,17 @@ class OrderModule {
         status: status,
         read:true,
       });
-      // if(status===''){
-      //   let promises = []
-      //   order.products.map(product=>{
-      //     promises.push(firestore.collection('products').doc(product.product_id).update({
-      //       quantity: products[product.product_id].quantity-product.quantity,
-      //       in_stock: products[product.product_id].quantity-product.quantity>5
-      //     }))
-      //   })
-      //   const data = await Promise.all(promises)
-      //   console.log(data)
-      // }
+      if(status==='ACCEPTED'){
+        let promises = []
+        order.products.map(product=>{
+          promises.push(firestore.collection('products').doc(product.product_id).update({
+            quantity: products[product.product_id].quantity-product.quantity,
+            in_stock: products[product.product_id].quantity-product.quantity>5
+          }))
+        })
+        const data = await Promise.all(promises)
+        console.log(data)
+      }
     } catch (error) {
       console.log(error)
     }

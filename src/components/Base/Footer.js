@@ -6,7 +6,7 @@ const Footer = () => {
              <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Abhiraj Agrovert Pvt. Ltd. {new Date().getFullYear()}</span>
+                        <span>Copyright &copy; Abhiraj Agrovet Pvt. Ltd. {new Date().getFullYear()}</span>
                     </div>
                 </div>
             </footer>
