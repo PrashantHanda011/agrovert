@@ -15,6 +15,19 @@ class CouponModule{
             ...newCoupon
         })
     }
+
+    async fetchCategories() {
+        try {
+          const snapshot = await firestore.collection("categories").get();
+          let result = {};
+          snapshot.docs.forEach((doc) => {
+            result[doc.id] = doc.data().category_name;
+          });
+          return result;
+        } catch (error) {
+          console.log(error);
+        }
+      }
 }
 
 export default CouponModule
