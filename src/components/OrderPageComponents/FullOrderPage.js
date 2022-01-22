@@ -3,13 +3,11 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import Loading from "../Base/Loading";
-import OrderModule from '../../modules/orderModule'
 import ProductModule from '../../modules/productModule'
-import { firestore } from "../../Firebase";
+
 
 const FullOrderPage = ({ order, user, show, handleClose }) => {
   const [products, setProducts] = useState(null);
-  const orderModule =  new OrderModule()
   const productModule = new ProductModule()
   useEffect(() => {
    const getProducts = async () => {

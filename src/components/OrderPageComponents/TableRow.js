@@ -6,12 +6,14 @@ import CustomerModule from "../../modules/customerModule";
 import { firestore } from "../../Firebase";
 import ConfirmModal from "./ConfirmModal";
 import ProductModule from "../../modules/productModule";
+import Billpage from "./Billpage";
 
 const TableRow = ({ Order, index }) => {
   const [order_, setOrder] = useState(Order);
 
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [openBill,setOpenBill] = useState(false);
   const [users,setUsers] = useState(null)
   const [actionType,setActionType] = useState("")
   const [products,setProducts] = useState({})
@@ -24,6 +26,13 @@ const TableRow = ({ Order, index }) => {
   };
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleOpenBill = () => {
+    setOpenBill(true);
+  };
+  const handleCloseBill = () => {
+    setOpenBill(false);
   };
 
   
@@ -111,12 +120,11 @@ const TableRow = ({ Order, index }) => {
           </td>
           <td>
             <button
-              disabled
-              className="btn btn-sm btn-success"
+              className="btn btn-sm btn-primary"
               onClick={() => {
-                
+                handleOpenBill()
               }}>
-              <i class="fa fa-download" aria-hidden="true" style={{marginRight:'5px'}}></i> Download 
+              View Bill 
             </button>
           </td>
         </tr>
@@ -135,6 +143,12 @@ const TableRow = ({ Order, index }) => {
           handleClose={handleCloseConfirm}
           orderState={order_.status}
         />}
+      {openBill && <Billpage
+      show={openBill}
+      handleClose={handleCloseBill}
+      order={order_}
+      user={users[order_.user_id]}
+      />}
     </>
   );
 };
