@@ -28,6 +28,19 @@ class CouponModule{
           console.log(error);
         }
       }
+
+    async createCoupon(coupon,addCouponToState,handleClose){
+      const res = await firestore.collection('coupons').add(coupon)
+      const id= res.id
+      const data = await (await res.get()).data()
+      addCouponToState({id,...data})
+      handleClose()
+    }
+
+    async deleteCoupon(couponId){
+      await firestore.collection('coupons').doc(couponId).delete()
+    }
 }
+
 
 export default CouponModule

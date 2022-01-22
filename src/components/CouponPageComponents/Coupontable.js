@@ -9,15 +9,15 @@ const Coupontable = () => {
   const couponModule = new CouponModule();
   const [coupons, setCoupons] = useState(null);
   const [categories, setCategories] = useState(null);
-  const [showForm,setShowForm] = useState(false)
+  const [showForm, setShowForm] = useState(false);
 
-  const openForm = ()=> {
-      setShowForm(true)
-  }
-  
-  const closeForm=  () => {
-      setShowForm(false)
-  }
+  const openForm = () => {
+    setShowForm(true);
+  };
+
+  const closeForm = () => {
+    setShowForm(false);
+  };
   useEffect(() => {
     const getCoupons_ = async () => {
       const coupons_ = await couponModule.getCoupons();
@@ -25,82 +25,116 @@ const Coupontable = () => {
     };
 
     const getCategories_ = async () => {
-        const categories_ = await couponModule.fetchCategories()
-        setCategories(categories_)
-    }
+      const categories_ = await couponModule.fetchCategories();
+      setCategories(categories_);
+    };
     getCoupons_();
-    getCategories_()
+    getCategories_();
   }, []);
-  console.log(coupons)
-  console.log(categories)
+
+  const addCouponToState = (newCoupon) => {
+    setCoupons([...coupons, newCoupon]);
+  };
+
+  const deleteCouponFromState = async (couponId) => {
+    const updatedCoupons = coupons.filter(coupon=>{
+      if(coupon.id!==couponId){
+        return coupon
+      }
+    })
+    
+    setCoupons(updatedCoupons)
+    await couponModule.deleteCoupon(couponId)
+  }
   const makeUI = () => (
     <>
-    <AddButton name="Add Coupon" handleShowCouponForm={openForm}/>
-    <div className="m-4">
-    <div className="card shadow mb-4 mt-4">
-      <div className="card-header py-3">
-        <h6 className="m-0 font-weight-bold text-primary">Coupons</h6>
-      </div>
-      <div className="card-body">
-        <div className="table-responsive">
-          <table className="table" width="100%">
-            <thead>
-              <tr>
-                <th>S No.</th>
-                <th></th>
-                <th>Coupon Name</th>
-                <th></th>
-                <th>Discount</th>
-                <th></th>
-                <th>Category</th>
-                <th></th>
-                <th>Active</th>
-              </tr>
-            </thead>
-            <tbody>
-              {coupons.map((coupon, index) => (
-                <tr>
-                  <td>{index + 1}</td>
-                  <td></td>
-                  <td>{coupon.name}</td>
-                  <td></td>
-                  <td>{coupon.discount}</td>
-                  <td></td>
-                  <td>{coupon.category_name}</td>
-                  <td></td>
-                  <td>
-                    <BootstrapSwitchButton
-                      style="w-100"
-                      onlabel="Active"
-                      offlabel="Not Active"
-                      checked={coupon.is_active}
-                      onstyle="success"
-                      offstyle="danger"
-                      onChange={(checked) => {
-                        let newCoupons = coupons;
-                        newCoupons[index] = { ...coupon, is_active: checked };
-                        const newCoupon = { ...coupon, is_active: checked };
-                        const id = newCoupon.id;
-                        delete newCoupon.id;
-                        couponModule.updateCoupon(newCoupon, id);
-                        setCoupons(newCoupons);
-                      }}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <AddButton name="Add Coupon" handleShowCouponForm={openForm} />
+      <div className="m-4">
+        <div className="card shadow mb-4 mt-4">
+          <div className="card-header py-3">
+            <h6 className="m-0 font-weight-bold text-primary">Coupons</h6>
+          </div>
+          <div className="card-body">
+            <div className="table-responsive">
+              <table className="table" width="100%">
+                <thead>
+                  <tr>
+                    <th>S No.</th>
+                    <th></th>
+                    <th>Coupon Name</th>
+                    <th></th>
+                    <th>Discount</th>
+                    <th></th>
+                    <th>Category</th>
+                    <th></th>
+                    <th>Active</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {coupons.map((coupon, index) => (
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td></td>
+                      <td>{coupon.name}</td>
+                      <td></td>
+                      <td>{coupon.discount}</td>
+                      <td></td>
+                      <td>{coupon.category_name}</td>
+                      <td></td>
+                      <td>
+                        <BootstrapSwitchButton
+                          style="w-100"
+                          onlabel="Active"
+                          offlabel="Not Active"
+                          checked={coupon.is_active}
+                          onstyle="success"
+                          offstyle="danger"
+                          onChange={(checked) => {
+                            let newCoupons = coupons;
+                            newCoupons[index] = {
+                              ...coupon,
+                              is_active: checked,
+                            };
+                            const newCoupon = { ...coupon, is_active: checked };
+                            const id = newCoupon.id;
+                            delete newCoupon.id;
+                            couponModule.updateCoupon(newCoupon, id);
+                            setCoupons(newCoupons);
+                          }}
+                        />
+                      </td>
+                      <td></td>
+                      <td><button
+                                  className="btn btn-danger"
+                                  
+                                  onClick={() => {deleteCouponFromState(coupon.id)}}>
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
     </>
-  )
-  return <div>
-      {coupons?makeUI():<Loading/>}
-      {showForm && <CouponForm show={showForm} handleClose={closeForm}/>}
-  </div>
+  );
+  return (
+    <div>
+      {coupons ? makeUI() : <Loading />}
+      {showForm && (
+        <CouponForm
+          show={showForm}
+          handleClose={closeForm}
+          categories={categories}
+          addCouponToState={addCouponToState}
+        />
+      )}
+    </div>
+  );
 };
 
 export default Coupontable;
