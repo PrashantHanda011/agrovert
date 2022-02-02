@@ -9,15 +9,21 @@ const ProductList = ({ categories, category }) => {
   const [productForm, setShowProductForm] = useState(0);
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState(null);
+  const [subCategories,setSubCategories] = useState(null);
   const productModule = new ProductModule();
   useEffect(() => {
     productModule.fetchProductsByCategory(
       category.id,
       setProducts
     );
-    
+    const getSubCategories = async () => {
+      const data = await productModule.fetchSubCategories(category.id)
+      console.log(data)
+      setSubCategories(data)
+    }
+    getSubCategories()
   }, [category]);
-
+  
   useEffect(()=>{},[products])
 
   const openForm = () => {
@@ -208,24 +214,26 @@ const ProductList = ({ categories, category }) => {
   };
   return (
     <div>
-      {products ? makeUI() : <Loading />}
-      {productForm === 1 ? (
+      {products!==null && subCategories!==null ? makeUI() :<Loading/>}
+      {productForm === 1  && subCategories!==null ? (
         <ProductForm
           show={productForm}
           handleClose={closeForm}
           categories={categories}
           addNewProduct={addNewProduct}
+          subCategories = {subCategories}
         />
       ) : (
         <></>
       )}
-      {productForm === 2 ? (
+      {productForm === 2 && subCategories!==null? (
         <ProductForm
           show={productForm}
           handleClose={closeForm}
           categories={categories}
           product={product}
           updateProduct={updateProduct}
+          subCategories = {subCategories}
         />
       ) : (
         <></>

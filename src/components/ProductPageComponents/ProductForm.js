@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { firestore } from "../../Firebase.js";
 
 
-const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,addNewProduct }) => {
+const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,addNewProduct,subCategories }) => {
   const {appState,addProduct,updateProductWithGivenId} = useContext(AppContext)
   const productModule = new ProductModule();
 
@@ -22,6 +22,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
     category_id: product.category_id?product.category_id:"",
     unit: product.unit?product.unit:"g",
     measurement: product.measurement?product.measurement:"",
+    sub_category: product.sub_category? product.sub_category:"",
     error: {
       isthere: false,
       name: false,
@@ -32,7 +33,8 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
       weight: false,
       photo: false,
       offered_price: false,
-      measurement:false
+      measurement:false,
+      sub_category:false
     },
   });
   const [close,setClose] = useState(false)
@@ -49,7 +51,8 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
     error,
     category_id,
     measurement,
-    unit
+    unit,
+    sub_category
 
   } = values;
   const units = ['g','kg','mL','L']
@@ -88,6 +91,7 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
     if(category_id===""){error["isthere"]=true;errors["category_id"]=true}
     
     if(measurement===""){error['isthere']=true;errors['measurement']=true}
+    if(sub_category===""){error['isthere']=true;errors['sub_category']=true}
 
    setValues({
      ...values,
@@ -122,7 +126,8 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
             margin,
             category_id,
             rank:rankNew,
-            in_stock:true
+            in_stock:true,
+            sub_category
           };
           await productModule.uploadProduct(photo, newProduct,addNewProduct,setClose);
           
@@ -142,7 +147,8 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
         margin,
         category_id,
         rank:product.rank,
-        in_stock:product.in_stock
+        in_stock:product.in_stock,
+        sub_category
       };
       updateProduct(product.id,updatedProduct)
       await productModule.updateProduct(product.id,photo, updatedProduct,updateProductWithGivenId,setClose);
@@ -243,6 +249,24 @@ const ProductForm = ({ show, handleClose, product={}, categories,updateProduct,a
         </select>
         {!category_id && error.category_id===true && (
           <div className="text-danger text-sm">Please add category</div>
+        )}
+      </div>
+      <span>Sub Category</span>
+      <div className="form-group my-3">
+        <select
+          onChange={changeHandler("sub_category")}
+          className="form-control"
+          placeholder="Sub Category" value={sub_category}>
+          <option>Select</option>
+          {categories &&
+            subCategories.map((scate, index) => (
+              <option id={index} value={scate.id}>
+                {scate.name}
+              </option>
+            ))}
+        </select>
+        {!sub_category && error.category_id===true && (
+          <div className="text-danger text-sm">Please add sub category</div>
         )}
       </div>
       <span>

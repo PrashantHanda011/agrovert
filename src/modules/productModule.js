@@ -104,6 +104,17 @@ class ProductModule {
       console.log(error);
     }
   }
+
+  async fetchSubCategories(category_id){
+    const dataPromise = await firestore.collection('sub-categories').where('category_id','==',category_id).get()
+    const dataDocs = await dataPromise.docs
+    const finalData = dataDocs.map(doc=>{
+      const id = doc.id
+      const data = doc.data()
+      return {id,...data}
+    })
+    return finalData
+  }
 }
 
 export default ProductModule;
