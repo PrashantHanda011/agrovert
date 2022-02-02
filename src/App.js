@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AppContext, Context } from "./context/Context";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./pages/Login";
 import Products from "./pages/Products/Products";
@@ -11,6 +10,7 @@ import Category from "./pages/Categories/Category";
 import Customer from "./pages/Customers/Customer";
 import Districts from "./pages/Districts/Districts";
 import Coupons from "./pages/Coupons/Coupons";
+import SubCategories from "./pages/Subcategories/SubCategories";
 
 function App() {
 
@@ -23,6 +23,7 @@ function App() {
         <PrivateRoute component={Orders} path="/orders" exact />
         <PrivateRoute component={Pincodes} path="/pincodes" exact />
         <PrivateRoute component={Category} path="/categories" exact />
+        <PrivateRoute component={SubCategories} path="/sub-category/:category_id" exact />
         <PrivateRoute component={Customer} path="/customers" exact />
         <PrivateRoute component={Districts} path="/districts" exact />
         <PrivateRoute component={Coupons} path="/coupons" exact />
