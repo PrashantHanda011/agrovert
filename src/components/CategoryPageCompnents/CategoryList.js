@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { Link } from "react-router-dom";
 import CategoryModule from "../../modules/categoryModule";
 import Loading from "../Base/Loading";
 import AddButton from "./AddButton";
@@ -102,7 +103,7 @@ const CategoryList = () => {
         <div className="m-4">
           <div className="card shadow mb-4 mt-4">
             <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Coupons</h6>
+              <h6 className="m-0 font-weight-bold text-primary">Categories</h6>
             </div>
             <div className="card-body">
               <div className="table-responsive">
@@ -113,6 +114,7 @@ const CategoryList = () => {
                         <th>Rank</th>
                         <th></th>
                         <th>Category Name</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                       </tr>
@@ -163,6 +165,11 @@ const CategoryList = () => {
                                           onClick={() => {deleteCategory(category.id)}}>
                                           Delete
                                         </button>
+                                      </td>
+                                      <td>
+                                          <Link className = "btn btn-sm btn-primary" to={`sub-category/${category.id}`}>
+                                            Show Sub Categories
+                                          </Link>
                                       </td>
                                     </tr>
                                   )}
