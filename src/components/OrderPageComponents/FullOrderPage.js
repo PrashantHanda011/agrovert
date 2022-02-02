@@ -31,6 +31,11 @@ const FullOrderPage = ({ order, user, show, handleClose }) => {
           <strong>Address:</strong> {order.delivery_address.street_address}, near {order.delivery_address.landmark}, {order.delivery_address.district}, {order.delivery_address.state} -{" "}
           {order.delivery_address.pin_code}
         </p>
+        {order.delivery_address.location_url && <p>
+          <strong>Location Map Url: </strong> <i className="fas fa-fw fa-map-pin" onClick={()=>{
+            navigator.clipboard.writeText(order.delivery_address.location_url)
+          }}></i>
+          </p>}
         <p>
           <strong>Ordered At:</strong> {order.timestamp.toDate().toDateString()} {order.timestamp.toDate().toTimeString()}
         </p>
