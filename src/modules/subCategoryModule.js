@@ -31,4 +31,12 @@ export default class SubCategoryModule{
         })
         setSubCategories(finalData)
     }
+
+    async getCategory(categoryId){
+        const dataPromise = await firestore.collection('categories').doc(categoryId).get()
+        const data = dataPromise.data()
+
+        const id = dataPromise.id
+        return {id,...data}
+    }
 }

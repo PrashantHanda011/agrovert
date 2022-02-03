@@ -2,21 +2,26 @@ import React, { useState, useEffect } from "react";
 import AddButton from "./AddButton";
 import SubCategoryModule from "../../modules/subCategoryModule";
 import SubCategoryForm from "../../pages/Subcategories/SubCategoryForm";
+import Loading from "../Base/Loading";
 
-const SubCategoryTable = ({ category_id }) => {
+const SubCategoryTable = ({ category_id}) => {
   const [subCategories, setSubCategories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [subCategoryIndex,setSubCategoryIndex] = useState(null);
   const [update,setUpdate] = useState(false)
-
+  const [category,setCategory] = useState(null)
   const subCategoryModule = new SubCategoryModule();
   useEffect(() => {
     const getSubCategories = async () => {
       await subCategoryModule.getSubCategories(category_id, setSubCategories);
     };
+    const getCategory = async () => {
+      const data = await subCategoryModule.getCategory(category_id);
+      setCategory(data);
+    };
+    getCategory();
     getSubCategories();
   }, []);
-
   const deleteSubCategory = async (id,index) => {
     setSubCategories(subCategories.filter(subCategory=>{
       if(subCategory.id!==id){
@@ -104,11 +109,12 @@ const SubCategoryTable = ({ category_id }) => {
   );
   return (
     <>
-      {subCategories && makeUI()}
-      {showForm && subCategories.length > 0 && (
+      {!subCategories && !category && <Loading/>}
+      {subCategories && category && makeUI()}
+      {showForm && category && (
         <SubCategoryForm
           categoryId={category_id}
-          categoryName={subCategories[0].category_name}
+          categoryName={category.category_name}
           showModal={showForm}
           closeModal={closeForm}
           subCategories={subCategories}
